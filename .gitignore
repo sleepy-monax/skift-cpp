@@ -1,0 +1,5 @@
+build/
+toolchain/local
+
+*.o
+*.elf
