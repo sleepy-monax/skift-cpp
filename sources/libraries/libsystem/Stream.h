@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stddef.h>
-
 #include <libruntime/Types.h>
 #include <libruntime/ErrorOr.h>
 

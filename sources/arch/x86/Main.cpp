@@ -1,6 +1,3 @@
-#include <stddef.h>
-#include <stdint.h>
-
 #include <libsystem/Format.h>
 
 #include <arch/x86/CGAScreen.h>

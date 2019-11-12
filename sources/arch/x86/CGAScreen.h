@@ -1,8 +1,7 @@
 #pragma once
 
-#include <stddef.h>
-
 #include <libruntime/Macros.h>
+#include <libruntime/Types.h>
 
 static const size_t CGA_WIDTH = 80;
 
