@@ -47,7 +47,7 @@ public:
         {
             auto result = read_byte();
 
-            if (result.error() != Error::SUCCEED)
+            if (result != Error::SUCCEED)
             {
                 return (result.error(), readed);
             }
@@ -60,7 +60,7 @@ public:
         return (readed);
     }
 
-    virtual ErrorOr<size_t> write(void *buffer, size_t size)
+    virtual ErrorOr<size_t> write(const void *buffer, size_t size)
     {
         size_t written;
 

@@ -3,3 +3,4 @@ toolchain/local
 
 *.o
 *.elf
+*.out
