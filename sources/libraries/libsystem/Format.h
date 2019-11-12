@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstring>
+#include <libc/string.h>
 #include <libsystem/Stream.h>
 
 namespace libsystem
@@ -8,14 +8,14 @@ namespace libsystem
 
 ErrorOr<size_t> format(Stream &stream, const char *string)
 {
-    return stream.write(static_cast<const void *>(string), strlen(string));
+    return stream.write(static_cast<const void *>(string), libc::strlen(string));
 }
 
 ErrorOr<size_t> format(Stream &stream, int value)
 {
     char buffer[32];
 
-    return stream.write(static_cast<const void *>(buffer), strlen(buffer));
+    return stream.write(static_cast<const void *>(buffer), libc::strlen(buffer));
 }
 
 ErrorOr<size_t> print(Stream &stream, const char *fmt)
