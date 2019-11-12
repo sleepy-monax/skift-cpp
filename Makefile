@@ -19,9 +19,12 @@ DIRECTORY_SYSTEM=$(DIRECTORY_SOURCES)/system
 
 SOURCES_KERNEL=$(wildcard $(DIRECTORY_SYSTEM)/*.cpp) \
 			   $(wildcard $(DIRECTORY_ARCH)/*.cpp) \
+			   $(wildcard $(DIRECTORY_LIBRARIES)/libc/*.cpp) \
+			   $(wildcard $(DIRECTORY_LIBRARIES)/libruntime/*.cpp) \
+			   $(wildcard $(DIRECTORY_LIBRARIES)/libsystem/*.cpp) \
 			   $(wildcard $(DIRECTORY_ARCH)/*.s)
 
-OBJECTS_KERNEL=$(patsubst $(DIRECTORY_SOURCES)/%, $(DIRECTORY_BUILD)/%.o, $(SOURCES_KERNEL))
+OBJECTS_KERNEL=$(patsubst $(DIRECTORY_SOURCES)/%, $(DIRECTORY_BUILD)/%.kernel.o, $(SOURCES_KERNEL))
 
 BINARY_KERNEL=$(DIRECTORY_BUILD)/kernel.elf
 
@@ -60,10 +63,10 @@ $(BINARY_KERNEL): $(OBJECTS_KERNEL)
 	$(DIRCETORY_GUARD)
 	$(LD) -m elf_i386 -T $(DIRECTORY_ARCH)/system.ld -o $@ $^
 
-$(DIRECTORY_BUILD)/%.cpp.o: $(DIRECTORY_SOURCES)/%.cpp
+$(DIRECTORY_BUILD)/%.cpp.kernel.o: $(DIRECTORY_SOURCES)/%.cpp
 	$(DIRCETORY_GUARD)
 	$(CXX) $(CXXFLAGS) -fno-stack-protector -c -o $@ $^
 
-$(DIRECTORY_BUILD)/%.s.o: $(DIRECTORY_SOURCES)/%.s
+$(DIRECTORY_BUILD)/%.s.kernel.o: $(DIRECTORY_SOURCES)/%.s
 	$(DIRCETORY_GUARD)
 	$(AS) -f elf32 $^ -o $@
