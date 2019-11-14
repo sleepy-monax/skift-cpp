@@ -39,16 +39,20 @@ void test_coping_ref()
     assert(object_instance_count == 1);
 
     assert(a.refcount() == 3);
+
+    a = make<Object>(1234);
+    assert(a.refcount() == 1);
+    assert(b.refcount() == 2);
 }
 
-RefPtr<Object> gimmy_that_ref()
+RefPtr<Object> gimme_that_ref()
 {
     return make<Object>(42);
 }
 
 void test_ref_from_function()
 {
-    auto a = gimmy_that_ref();
+    auto a = gimme_that_ref();
 
     assert(a.refcount() == 1);
     assert(object_instance_count == 1);
@@ -57,7 +61,10 @@ void test_ref_from_function()
 int main(int argc, char const *argv[])
 {
     test_coping_ref();
+    assert(object_instance_count == 0);
+
     test_ref_from_function();
+    assert(object_instance_count == 0);
 
     return 0;
 }

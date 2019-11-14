@@ -8,6 +8,8 @@ namespace libruntime
 template <typename T>
 class RefCounted
 {
+    // FIXME: make ref and deref atomics
+
 private:
     int _refcount;
 

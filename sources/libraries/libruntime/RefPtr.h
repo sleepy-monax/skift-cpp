@@ -17,23 +17,45 @@ public:
         Adopt
     };
 
+    RefPtr() : _ptr(nullptr) {}
     RefPtr(T &object) : _ptr(const_cast<T *>(&object)) { _ptr->ref(); }
     RefPtr(AdoptTag, T &object) : _ptr(const_cast<T *>(&object)) {}
 
-    RefPtr(RefPtr &other) : _ptr(other.ptr()) { _ptr->ref(); }
+    RefPtr(RefPtr &other) : _ptr(other.necked()) { _ptr->ref(); }
     RefPtr(AdoptTag, RefPtr &other) : _ptr(other.give_ref()) {}
 
-    RefPtr(RefPtr &&other) : _ptr(other.ptr()) { _ptr->ref(); }
+    RefPtr(RefPtr &&other) : _ptr(other.necked()) { _ptr->ref(); }
     RefPtr(AdoptTag, RefPtr &&other) : _ptr(other.give_ref()) {}
 
     ~RefPtr()
     {
-        _ptr->deref();
+        if (_ptr)
+            _ptr->deref();
     }
 
     T *operator->()
     {
         return _ptr;
+    }
+
+    RefPtr &operator=(RefPtr &&other)
+    {
+        if (necked() != other.necked())
+        {
+            if (_ptr)
+            {
+                necked()->deref();
+            }
+
+            if (other.necked() != nullptr)
+            {
+                other.necked()->ref();
+            }
+
+            _ptr = other.necked();
+        }
+
+        return *this;
     }
 
     int refcount()
@@ -55,7 +77,7 @@ public:
         return *ptr;
     }
 
-    T *ptr()
+    T *necked()
     {
         return _ptr;
     }
@@ -70,8 +92,7 @@ RefPtr<T> adopt(T &object)
 template <typename Type, typename... Args>
 RefPtr<Type> make(Args... args)
 {
-    RefPtr<Type> refptr(adopt(*new Type(args...)));
-    return refptr;
+    return RefPtr<Type>(adopt(*new Type(args...)));
 }
 
 } // namespace libruntime
