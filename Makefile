@@ -17,12 +17,12 @@ DIRECTORY_LIBRARIES=$(DIRECTORY_SOURCES)/libraries
 DIRECTORY_ARCH=$(DIRECTORY_SOURCES)/arch/$(BUILD_ARCH)
 DIRECTORY_SYSTEM=$(DIRECTORY_SOURCES)/system
 
-SOURCES_KERNEL=$(wildcard $(DIRECTORY_SYSTEM)/*.cpp) \
-			   $(wildcard $(DIRECTORY_ARCH)/*.cpp) \
-			   $(wildcard $(DIRECTORY_LIBRARIES)/libc/*.cpp) \
-			   $(wildcard $(DIRECTORY_LIBRARIES)/libruntime/*.cpp) \
-			   $(wildcard $(DIRECTORY_LIBRARIES)/libsystem/*.cpp) \
-			   $(wildcard $(DIRECTORY_ARCH)/*.s)
+SOURCES_KERNEL= $(wildcard $(DIRECTORY_ARCH)/*.s) \
+				$(wildcard $(DIRECTORY_SYSTEM)/*.cpp) \
+				$(wildcard $(DIRECTORY_ARCH)/*.cpp) \
+				$(wildcard $(DIRECTORY_LIBRARIES)/libc/*.cpp) \
+				$(wildcard $(DIRECTORY_LIBRARIES)/libruntime/*.cpp) \
+				$(wildcard $(DIRECTORY_LIBRARIES)/libsystem/*.cpp)
 
 OBJECTS_KERNEL=$(patsubst $(DIRECTORY_SOURCES)/%, $(DIRECTORY_BUILD)/%.kernel.o, $(SOURCES_KERNEL))
 
