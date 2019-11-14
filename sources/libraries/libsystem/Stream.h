@@ -2,6 +2,7 @@
 
 #include <libruntime/Types.h>
 #include <libruntime/ErrorOr.h>
+#include <libruntime/RefCounted.h>
 
 namespace libsystem
 {
@@ -15,7 +16,7 @@ enum SeekOrigine
     END,
 };
 
-class Stream
+class Stream : RefCounted<Stream>
 {
 public:
     Stream() {}
@@ -90,7 +91,7 @@ public:
         return (Error::NOT_IMPLEMENTED);
     }
 
-    virtual ErrorOr<size_t> tell(SeekOrigine origine)
+    virtual ErrorOr<size_t> tell()
     {
         return (Error::NOT_IMPLEMENTED);
     }
