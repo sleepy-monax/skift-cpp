@@ -4,15 +4,10 @@
 #include <libsystem/Format.h>
 #include <libsystem/Stdio.h>
 
-namespace libsystem
-{
-
-Stream *stdin;
-Stream *stdout;
-Stream *stderr;
-Stream *stdlog;
-
-} // namespace libsystem
+libsystem::Stream *libsystem::stdin;
+libsystem::Stream *libsystem::stdout;
+libsystem::Stream *libsystem::stderr;
+libsystem::Stream *libsystem::stdlog;
 
 int main(int argc, char const *argv[])
 {

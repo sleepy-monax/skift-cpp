@@ -23,7 +23,7 @@ public:
         return true;
     }
 
-    virtual libruntime::Error write_byte(byte byte)
+    libruntime::Error write_byte(byte byte) override
     {
         fputc(byte, _file);
 
