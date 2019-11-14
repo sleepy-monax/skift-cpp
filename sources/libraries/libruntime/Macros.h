@@ -5,3 +5,5 @@
 #define __aligned(__align) __attribute__((aligned(__align)))
 
 #define __unused(__arg) (void)(__arg)
+
+#define __str(s) #s
