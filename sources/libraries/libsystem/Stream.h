@@ -16,10 +16,14 @@ enum SeekOrigine
     END,
 };
 
-class Stream : RefCounted<Stream>
+class Stream : public RefCounted<Stream>
 {
 public:
-    Stream() {}
+    typedef int64_t Offset;
+
+    Stream()
+    {
+    }
 
     ~Stream() {}
 

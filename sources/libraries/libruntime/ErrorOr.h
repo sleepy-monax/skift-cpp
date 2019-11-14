@@ -19,6 +19,9 @@ public:
 
     ErrorOr(Error error, T value) : _error(error), _value(value) {}
 
+    template <typename U>
+    ErrorOr(ErrorOr<U> error, T value) : _error(error.error()), _value(value) {}
+
     bool succeed() { return _error == Error::SUCCEED; }
 
     T value() { return _value; }
@@ -33,16 +36,6 @@ public:
     bool operator!=(Error err)
     {
         return _error != err;
-    }
-
-    bool operator==(T val)
-    {
-        return _value == val;
-    }
-
-    bool operator!=(T val)
-    {
-        return _error != val;
     }
 };
 

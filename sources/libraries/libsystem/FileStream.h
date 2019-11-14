@@ -13,7 +13,7 @@ enum FileStreamFlags
     WRITE = 2 << 1,
 };
 
-class FileStream
+class FileStream : public Stream
 {
 private:
     int _fd;
@@ -41,7 +41,7 @@ public:
 
     virtual Error write_byte(byte byte);
 
-    virtual ErrorOr<size_t> seek(size_t offset, SeekOrigine origine);
+    virtual ErrorOr<size_t> seek(Stream::Offset offset, SeekOrigine origine);
 
     virtual ErrorOr<size_t> tell();
 

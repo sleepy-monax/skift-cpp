@@ -56,14 +56,14 @@ Error FileStream::write_byte(byte byte)
     return err.error();
 }
 
-ErrorOr<size_t> FileStream::seek(size_t offset, SeekOrigine origine)
+ErrorOr<size_t> FileStream::seek(Stream::Offset offset, SeekOrigine origine)
 {
-    return (Error::NOT_IMPLEMENTED);
+    return __plugs__::file_seek(_fd, offset, origine);
 }
 
 ErrorOr<size_t> FileStream::tell()
 {
-    return (Error::NOT_IMPLEMENTED);
+    return __plugs__::file_tell(_fd);
 }
 
 void FileStream::flush()
