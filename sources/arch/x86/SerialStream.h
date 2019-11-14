@@ -2,6 +2,7 @@
 
 #include <arch/x86/PortIO.h>
 #include <libsystem/Stream.h>
+#include <libruntime/Types.h>
 
 enum class SerialPort : u16
 {

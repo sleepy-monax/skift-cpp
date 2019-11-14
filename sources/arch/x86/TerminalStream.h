@@ -10,8 +10,8 @@ private:
 
     size_t _row = 0;
     size_t _column = 0;
-    CGAColor _foreground = CGAColor::LIGHT_GREY;
-    CGAColor _background = CGAColor::BLACK;
+    CGAColor _foreground = CGAColor::DARK_GREY;
+    CGAColor _background = CGAColor::WHITE;
 
 public:
     TerminalStream(CGAScreen screen) : _screen(screen)
