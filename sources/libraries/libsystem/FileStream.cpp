@@ -15,7 +15,7 @@ ErrorOr<RefPtr<FileStream>> FileStream::open(const char *path, FileStreamFlags f
     }
     else
     {
-        return (fd.error());
+        return ErrorOr<RefPtr<FileStream>>(fd.error());
     }
 }
 
@@ -45,9 +45,9 @@ ErrorOr<size_t> FileStream::write(const void *buffer, size_t size)
 
 ErrorOr<byte> FileStream::read_byte()
 {
-    byte byte;
-    auto err = __plugs__::file_read(_fd, &byte, 1);
-    return (err, byte);
+    byte b;
+    auto err = __plugs__::file_read(_fd, &b, 1);
+    return ErrorOr<byte>(err, b);
 }
 
 Error FileStream::write_byte(byte byte)

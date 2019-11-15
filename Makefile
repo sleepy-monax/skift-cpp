@@ -32,7 +32,7 @@ LOG=@echo
 DIRCETORY_GUARD=@mkdir -p $(@D)
 
 CXX=i686-elf-g++
-CXXFLAGS=-O3 -fno-rtti -fno-exceptions -std=c++17 -ffreestanding -mno-80387 -mno-mmx -mno-sse -mno-sse2 -nostdlib -nostdinc++ -I$(DIRECTORY_SOURCES) -I$(DIRECTORY_LIBRARIES)
+CXXFLAGS=-Wall -Wextra -Werror -O3 -fno-rtti -fno-exceptions -std=c++17 -ffreestanding -mno-80387 -mno-mmx -mno-sse -mno-sse2 -nostdlib -nostdinc++ -I$(DIRECTORY_SOURCES) -I$(DIRECTORY_LIBRARIES)
 AS=nasm
 LD=i686-elf-ld
 

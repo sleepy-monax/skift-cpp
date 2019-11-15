@@ -15,28 +15,13 @@ ErrorOr<size_t> format(Stream &stream, int value)
 {
     char buffer[32];
 
+    __unused(value);
+
     return stream.write(static_cast<const void *>(buffer), libc::strlen(buffer));
 }
 
-ErrorOr<size_t> print(Stream &stream, const char *fmt)
-{
-    size_t written;
-
-    for (written = 0; fmt[written]; written++)
-    {
-        auto err = stream.write_byte(fmt[written]);
-
-        if (err != Error::SUCCEED)
-        {
-            return (err, written);
-        }
-    }
-
-    return (written);
-}
-
 template <typename First, typename... Args>
-ErrorOr<size_t> print(Stream &stream, const char *fmt, First first, Args... args)
+ErrorOr<size_t> format(Stream &stream, const char *fmt, First first, Args... args)
 {
     size_t written = 0;
 
@@ -50,20 +35,20 @@ ErrorOr<size_t> print(Stream &stream, const char *fmt, First first, Args... args
 
             if (res_format != Error::SUCCEED)
             {
-                return (res_format.error(), written);
+                return ErrorOr<size_t>(res_format.error(), written);
             }
 
-            auto res_print = print(stream, &fmt[i + 1], args...);
+            auto res_print = format(stream, &fmt[i + 1], args...);
 
             written += res_print.value();
 
             if (res_print != Error::SUCCEED)
             {
-                return (res_print.error(), written);
+                return ErrorOr<size_t>(res_print.error(), written);
             }
             else
             {
-                return (written);
+                return ErrorOr<size_t>(written);
             }
         }
         else
@@ -72,25 +57,25 @@ ErrorOr<size_t> print(Stream &stream, const char *fmt, First first, Args... args
 
             if (err != Error::SUCCEED)
             {
-                return (err, written);
+                return ErrorOr<size_t>(err, written);
             }
 
             written += 1;
         }
     }
 
-    return (written);
+    return ErrorOr<size_t>(written);
 }
 
-ErrorOr<size_t> print(Stream *stream, const char *fmt)
+ErrorOr<size_t> format(Stream *stream, const char *fmt)
 {
-    return print(*stream, fmt);
+    return format(*stream, fmt);
 }
 
 template <typename First, typename... Args>
-ErrorOr<size_t> print(Stream *stream, const char *fmt, First first, Args... args)
+ErrorOr<size_t> format(Stream *stream, const char *fmt, First first, Args... args)
 {
-    return print(*stream, fmt, first, args...);
+    return format(*stream, fmt, first, args...);
 }
 
 } // namespace libsystem

@@ -3,9 +3,9 @@
 #include <libruntime/Macros.h>
 #include <libruntime/Types.h>
 
-static const size_t CGA_WIDTH = 80;
+static const int CGA_WIDTH = 80;
 
-static const size_t CGA_HEIGHT = 25;
+static const int CGA_HEIGHT = 25;
 
 /* Hardware text mode color constants. */
 enum CGAColor

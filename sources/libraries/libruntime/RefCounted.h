@@ -19,7 +19,7 @@ public:
         _refcount = 1;
     }
 
-    ~RefCounted()
+    virtual ~RefCounted()
     {
         assert(_refcount == 0);
     }

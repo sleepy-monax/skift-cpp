@@ -27,25 +27,25 @@ public:
 
     ~FileStream();
 
-    virtual bool readable();
+    bool readable();
 
-    virtual bool writable();
+    bool writable();
 
-    virtual bool seekable();
+    bool seekable();
 
-    virtual ErrorOr<size_t> read(void *buffer, size_t size);
+    ErrorOr<size_t> read(void *buffer, size_t size);
 
-    virtual ErrorOr<size_t> write(const void *buffer, size_t size);
+    ErrorOr<size_t> write(const void *buffer, size_t size);
 
-    virtual ErrorOr<byte> read_byte();
+    ErrorOr<byte> read_byte();
 
-    virtual Error write_byte(byte byte);
+    Error write_byte(byte byte);
 
-    virtual ErrorOr<size_t> seek(Stream::Offset offset, SeekOrigine origine);
+    ErrorOr<size_t> seek(Stream::Offset offset, SeekOrigine origine);
 
-    virtual ErrorOr<size_t> tell();
+    ErrorOr<size_t> tell();
 
-    virtual void flush();
+    void flush();
 };
 
 } // namespace libsystem

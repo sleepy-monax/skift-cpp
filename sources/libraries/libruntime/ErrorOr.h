@@ -15,7 +15,7 @@ private:
 public:
     ErrorOr(Error error) : _error(error) {}
 
-    ErrorOr(T value) : _value(value), _error(Error::SUCCEED) {}
+    ErrorOr(T value) : _error(Error::SUCCEED), _value(value) {}
 
     ErrorOr(Error error, T value) : _error(error), _value(value) {}
 
@@ -36,6 +36,16 @@ public:
     bool operator!=(Error err)
     {
         return _error != err;
+    }
+
+    bool operator==(T value)
+    {
+        return _value == value;
+    }
+
+    bool operator!=(T value)
+    {
+        return _value != value;
     }
 };
 

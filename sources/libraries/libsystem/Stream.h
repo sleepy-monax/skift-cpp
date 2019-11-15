@@ -3,6 +3,7 @@
 #include <libruntime/Types.h>
 #include <libruntime/ErrorOr.h>
 #include <libruntime/RefCounted.h>
+#include <libruntime/Macros.h>
 
 namespace libsystem
 {
@@ -52,7 +53,7 @@ public:
 
             if (result != Error::SUCCEED)
             {
-                return (result.error(), readed);
+                return ErrorOr<size_t>(result.error(), readed);
             }
             else
             {
@@ -60,7 +61,7 @@ public:
             }
         }
 
-        return (readed);
+        return ErrorOr<size_t>(readed);
     }
 
     virtual ErrorOr<size_t> write(const void *buffer, size_t size)
@@ -73,31 +74,36 @@ public:
 
             if (result != Error::SUCCEED)
             {
-                return (result, written);
+                return ErrorOr<size_t>(result, written);
             }
         }
 
-        return (written);
+        return ErrorOr<size_t>(written);
     }
 
     virtual ErrorOr<byte> read_byte()
     {
-        return (Error::NOT_IMPLEMENTED);
+        return ErrorOr<byte>(Error::NOT_IMPLEMENTED);
     }
 
     virtual Error write_byte(byte byte)
     {
+        __unused(byte);
+
         return Error::NOT_IMPLEMENTED;
     }
 
     virtual ErrorOr<size_t> seek(size_t offset, SeekOrigine origine)
     {
-        return (Error::NOT_IMPLEMENTED);
+        __unused(offset);
+        __unused(origine);
+
+        return ErrorOr<size_t>(Error::NOT_IMPLEMENTED);
     }
 
     virtual ErrorOr<size_t> tell()
     {
-        return (Error::NOT_IMPLEMENTED);
+        return ErrorOr<size_t>(Error::NOT_IMPLEMENTED);
     }
 
     virtual void flush() {}

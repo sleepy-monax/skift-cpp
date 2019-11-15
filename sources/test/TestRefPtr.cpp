@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <libruntime/RefCounted.h>
 #include <libruntime/RefPtr.h>
+#include <libruntime/Macros.h>
 
 using namespace libruntime;
 
@@ -13,6 +14,7 @@ private:
     int _x;
 
 public:
+    int x() { return _x; }
     Object(int x) : _x(x) { object_instance_count++; }
     ~Object() { object_instance_count--; }
 };
@@ -60,6 +62,9 @@ void test_ref_from_function()
 
 int main(int argc, char const *argv[])
 {
+    __unused(argc);
+    __unused(argv);
+
     test_coping_ref();
     assert(object_instance_count == 0);
 

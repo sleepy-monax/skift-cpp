@@ -5,6 +5,11 @@
 
 typedef unsigned char byte;
 
+typedef unsigned char uchar;
+typedef unsigned short ushort;
+typedef unsigned int uint;
+typedef unsigned long ulong;
+
 typedef int8_t s8;
 typedef int16_t s16;
 typedef int32_t s32;
