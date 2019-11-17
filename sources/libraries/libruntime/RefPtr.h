@@ -1,5 +1,6 @@
 #pragma once
 
+#include <printf.h>
 #include <libruntime/Macros.h>
 
 namespace libruntime
@@ -24,8 +25,38 @@ public:
     RefPtr(RefPtr &other) : _ptr(other.necked()) { _ptr->ref(); }
     RefPtr(AdoptTag, RefPtr &other) : _ptr(other.give_ref()) {}
 
-    RefPtr(RefPtr &&other) : _ptr(other.necked()) { _ptr->ref(); }
-    RefPtr(AdoptTag, RefPtr &&other) : _ptr(other.give_ref()) {}
+    RefPtr(RefPtr &&other) : _ptr(other.give_ref()) {}
+
+    RefPtr &operator=(RefPtr &other)
+    {
+        if (necked() != other.necked())
+        {
+            if (_ptr)
+            {
+                necked()->deref();
+            }
+
+            _ptr = other.necked();
+            _ptr->ref();
+        }
+
+        return *this;
+    }
+
+    RefPtr &operator=(RefPtr &&other)
+    {
+        if (this != &other)
+        {
+            if (_ptr)
+            {
+                _ptr->deref();
+            }
+
+            _ptr = other.give_ref();
+        }
+
+        return *this;
+    }
 
     ~RefPtr()
     {
@@ -36,26 +67,6 @@ public:
     T *operator->()
     {
         return _ptr;
-    }
-
-    RefPtr &operator=(RefPtr &&other)
-    {
-        if (necked() != other.necked())
-        {
-            if (_ptr)
-            {
-                necked()->deref();
-            }
-
-            if (other.necked() != nullptr)
-            {
-                other.necked()->ref();
-            }
-
-            _ptr = other.necked();
-        }
-
-        return *this;
     }
 
     int refcount()
@@ -70,11 +81,11 @@ public:
         }
     }
 
-    T &give_ref()
+    T *give_ref()
     {
         T *ptr = _ptr;
         _ptr = nullptr;
-        return *ptr;
+        return ptr;
     }
 
     T *necked()

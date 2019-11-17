@@ -1,5 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
+
+#include <libruntime/Move.h>
 #include <libruntime/RefCounted.h>
 #include <libruntime/RefPtr.h>
 #include <libruntime/Macros.h>
@@ -21,42 +23,29 @@ public:
 
 void test_coping_ref()
 {
-    assert(object_instance_count == 0);
-
+    // Regular constructor
     RefPtr<Object> a = make<Object>(10);
-
     assert(a.refcount() == 1);
     assert(object_instance_count == 1);
 
+    // Copy constructor
     RefPtr<Object> b = a;
-
     assert(b.refcount() == 2);
-    assert(b.refcount() == a.refcount());
     assert(object_instance_count == 1);
 
-    RefPtr<Object> c = b;
-    assert(c.refcount() == 3);
-    assert(c.refcount() == a.refcount());
-    assert(c.refcount() == b.refcount());
+    // Move constructor
+    RefPtr<Object> c = libruntime::move(b);
+    assert(c.refcount() == 2);
     assert(object_instance_count == 1);
 
-    assert(a.refcount() == 3);
+    // Copy assignment
+    b = a;
+    assert(b.refcount() == 3);
+    assert(object_instance_count == 1);
 
-    a = make<Object>(1234);
-    assert(a.refcount() == 1);
+    // Move assignment
+    b = libruntime::move(a);
     assert(b.refcount() == 2);
-}
-
-RefPtr<Object> gimme_that_ref()
-{
-    return make<Object>(42);
-}
-
-void test_ref_from_function()
-{
-    auto a = gimme_that_ref();
-
-    assert(a.refcount() == 1);
     assert(object_instance_count == 1);
 }
 
@@ -65,10 +54,8 @@ int main(int argc, char const *argv[])
     __unused(argc);
     __unused(argv);
 
-    test_coping_ref();
     assert(object_instance_count == 0);
-
-    test_ref_from_function();
+    test_coping_ref();
     assert(object_instance_count == 0);
 
     return 0;
