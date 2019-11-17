@@ -1,6 +1,5 @@
 #pragma once
 
-#include <printf.h>
 #include <libruntime/Macros.h>
 
 namespace libruntime
