@@ -8,7 +8,8 @@ A simple, handmade, operating system for the intel x86 cpu.
 <br>
 <br>
 <a href="https://discord.gg/gamGsfg">Discord</a> -
-<a href="https://skiftOS.github.io/">Website</a>
+<a href="https://skiftOS.github.io/">Website</a> - 
+<a href="manual/README.md">Manual</a>
 <br>
 <br>
 </p>
