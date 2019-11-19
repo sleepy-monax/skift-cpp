@@ -2,6 +2,8 @@
 #include <libsystem/__plugs__.h>
 #include <libsystem/FileStream.h>
 
+using namespace libruntime;
+
 namespace libsystem
 {
 

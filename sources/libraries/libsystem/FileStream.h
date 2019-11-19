@@ -20,7 +20,7 @@ private:
     FileStreamFlags flags;
 
 public:
-    static ErrorOr<RefPtr<FileStream>>
+    static libruntime::ErrorOr<libruntime::RefPtr<FileStream>>
     open(const char *path, FileStreamFlags flags);
 
     FileStream(int fd);
@@ -33,17 +33,17 @@ public:
 
     bool seekable();
 
-    ErrorOr<size_t> read(void *buffer, size_t size);
+    libruntime::ErrorOr<size_t> read(void *buffer, size_t size);
 
-    ErrorOr<size_t> write(const void *buffer, size_t size);
+    libruntime::ErrorOr<size_t> write(const void *buffer, size_t size);
 
-    ErrorOr<byte> read_byte();
+    libruntime::ErrorOr<byte> read_byte();
 
-    Error write_byte(byte byte);
+    libruntime::Error write_byte(byte byte);
 
-    ErrorOr<size_t> seek(Stream::Offset offset, SeekOrigine origine);
+    libruntime::ErrorOr<size_t> seek(Stream::Offset offset, SeekOrigine origine);
 
-    ErrorOr<size_t> tell();
+    libruntime::ErrorOr<size_t> tell();
 
     void flush();
 };
