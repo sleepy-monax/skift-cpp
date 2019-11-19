@@ -1,26 +1,17 @@
 #pragma once
 
 #include <libc/string.h>
-
 #include <libsystem/Stream.h>
-#include <libsystem/Convert.h>
 
 namespace libsystem
 {
 
-libruntime::ErrorOr<size_t> format(Stream &stream, const char *string)
+struct FormatInfo
 {
-    return stream.write(static_cast<const void *>(string), libc::strlen(string));
-}
+    int base = 10;
+};
 
-libruntime::ErrorOr<size_t> format(Stream &stream, uint value)
-{
-    char buffer[32];
-
-    convert_uint_to_string(value, buffer, 10);
-
-    return stream.write(static_cast<const void *>(buffer), libc::strlen(buffer));
-}
+libruntime::ErrorOr<size_t> format(Stream &stream, const char *fmt);
 
 template <typename First, typename... Args>
 libruntime::ErrorOr<size_t> format(Stream &stream, const char *fmt, First first, Args... args)
@@ -31,12 +22,21 @@ libruntime::ErrorOr<size_t> format(Stream &stream, const char *fmt, First first,
     {
         if (fmt[i] == '{')
         {
+            FormatInfo info;
+
             for (; fmt[i] != '}'; i++)
             {
-                // TODO: format specifier
+                if (fmt[i] == 'x')
+                    info.base = 16;
+                else if (fmt[i] == 'd')
+                    info.base = 10;
+                else if (fmt[i] == 'o')
+                    info.base = 8;
+                else if (fmt[i] == 'b')
+                    info.base = 2;
             }
 
-            auto res_format = format(stream, first);
+            auto res_format = format(stream, first, info);
 
             written += res_format.value();
 
@@ -74,15 +74,8 @@ libruntime::ErrorOr<size_t> format(Stream &stream, const char *fmt, First first,
     return libruntime::ErrorOr<size_t>(written);
 }
 
-template <typename... Args>
-libruntime::ErrorOr<size_t> format(Stream *stream, const char *fmt, Args... args)
-{
-    return format(*stream, fmt, args...);
-}
+libruntime::ErrorOr<size_t> format(Stream &stream, const char *string, FormatInfo &info);
 
-libruntime::ErrorOr<size_t> format(Stream *stream, const char *fmt)
-{
-    return format(*stream, fmt);
-}
+libruntime::ErrorOr<size_t> format(Stream &stream, uint value, FormatInfo &info);
 
 } // namespace libsystem

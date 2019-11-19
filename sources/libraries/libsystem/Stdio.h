@@ -14,7 +14,7 @@ extern Stream *stdlog;
 template <typename... Args>
 libruntime::ErrorOr<size_t> print(Args... args)
 {
-    return format(stdout, args...);
+    return format(*stdout, args...);
 }
 
 } // namespace libsystem

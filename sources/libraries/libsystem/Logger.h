@@ -34,10 +34,10 @@ void log(LogLevel level, const char *file, int line, Args... args)
     const char *level_names[] = {"TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
     const char *level_colors[] = {"\e[34m", "\e[36m", "\e[32m", "\e[22m", "\e[31m", "\e[35m"};
 
-    format(stdlog, "{}{}\e[0m ", level_colors[static_cast<int>(level)], level_names[static_cast<int>(level)]);
-    format(stdlog, "{}:{}: \e[37;1m", file, line);
-    format(stdlog, args...);
-    format(stdlog, "\e[0m\n");
+    format(*stdlog, "{}{}\e[0m ", level_colors[static_cast<int>(level)], level_names[static_cast<int>(level)]);
+    format(*stdlog, "{}:{}: \e[37;1m", file, line);
+    format(*stdlog, args...);
+    format(*stdlog, "\e[0m\n");
 }
 
 } // namespace libsystem
