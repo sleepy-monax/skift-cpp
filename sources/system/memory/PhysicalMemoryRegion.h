@@ -1,7 +1,7 @@
 #pragma once
 
 #include <libmath/MinMax.h>
-#include <libruntime/Assert.h>
+#include <libsystem/Assert.h>
 #include <libruntime/Types.h>
 #include <libruntime/RefCounted.h>
 
@@ -33,11 +33,6 @@ public:
         _addr = libmath::min(_addr, other._addr);
         _size = _size + other._size;
     }
-};
-
-class MemoryManager
-{
-    void allocphys();
 };
 
 } // namespace system
