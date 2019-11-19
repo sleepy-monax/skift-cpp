@@ -1,6 +1,6 @@
 #include <libruntime/Types.h>
 #include <libruntime/Macros.h>
-#include <libruntime/Assert.h>
+#include <libsystem/Assert.h>
 
 void *operator new(size_t size)
 {
