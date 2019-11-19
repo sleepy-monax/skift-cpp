@@ -8,17 +8,23 @@
 namespace __plugs__
 {
 
+//FIXME: convert errno to Error
+
 libruntime::ErrorOr<int> file_open(const char *path, size_t len, libsystem::FileStreamFlags flags)
 {
+    __unused(flags);
+
     char *buffer = reinterpret_cast<char *>(malloc(len + 1));
 
     strncpy(buffer, path, len);
 
     buffer[len] = '\0';
 
-    int fd = open(buffer, O_CREAT);
+    int handle = open(buffer, O_CREAT);
 
     free(buffer);
+
+    return handle;
 }
 
 void file_close(int handle)
@@ -28,12 +34,12 @@ void file_close(int handle)
 
 libruntime::ErrorOr<size_t> file_read(int handle, void *buffer, size_t size)
 {
-    read(handle, buffer, size);
+    return read(handle, buffer, size);
 }
 
 libruntime::ErrorOr<size_t> file_write(int handle, const void *buffer, size_t size)
 {
-    write(handle, buffer, size);
+    return write(handle, buffer, size);
 }
 
 int SeekOrigine_to_whence(libsystem::SeekOrigine origine)
@@ -53,7 +59,7 @@ int SeekOrigine_to_whence(libsystem::SeekOrigine origine)
 
 libruntime::ErrorOr<size_t> file_seek(int handle, libsystem::Stream::Offset offset, libsystem::SeekOrigine origine)
 {
-    lseek(handle, offset, SeekOrigine_to_whence(origine));
+    return lseek(handle, offset, SeekOrigine_to_whence(origine));
 }
 
 libruntime::ErrorOr<size_t> file_tell(int handle)

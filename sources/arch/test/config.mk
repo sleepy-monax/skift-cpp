@@ -1,0 +1,5 @@
+CXX=gcc
+KCXXFLAGS=
+
+LD=g++
+KLDFLAGS=
