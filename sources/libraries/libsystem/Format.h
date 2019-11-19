@@ -1,81 +1,88 @@
 #pragma once
 
 #include <libc/string.h>
+
 #include <libsystem/Stream.h>
+#include <libsystem/Convert.h>
 
 namespace libsystem
 {
 
-ErrorOr<size_t> format(Stream &stream, const char *string)
+libruntime::ErrorOr<size_t> format(Stream &stream, const char *string)
 {
     return stream.write(static_cast<const void *>(string), libc::strlen(string));
 }
 
-ErrorOr<size_t> format(Stream &stream, int value)
+libruntime::ErrorOr<size_t> format(Stream &stream, uint value)
 {
     char buffer[32];
 
-    __unused(value);
+    convert_uint_to_string(value, buffer, 10);
 
     return stream.write(static_cast<const void *>(buffer), libc::strlen(buffer));
 }
 
 template <typename First, typename... Args>
-ErrorOr<size_t> format(Stream &stream, const char *fmt, First first, Args... args)
+libruntime::ErrorOr<size_t> format(Stream &stream, const char *fmt, First first, Args... args)
 {
     size_t written = 0;
 
     for (size_t i = 0; fmt[i]; i++)
     {
-        if (fmt[i] == '%')
+        if (fmt[i] == '{')
         {
+            for (; fmt[i] != '}'; i++)
+            {
+                // TODO: format specifier
+            }
+
             auto res_format = format(stream, first);
 
             written += res_format.value();
 
-            if (res_format != Error::SUCCEED)
+            if (res_format != libruntime::Error::SUCCEED)
             {
-                return ErrorOr<size_t>(res_format.error(), written);
+                return libruntime::ErrorOr<size_t>(res_format.error(), written);
             }
 
             auto res_print = format(stream, &fmt[i + 1], args...);
 
             written += res_print.value();
 
-            if (res_print != Error::SUCCEED)
+            if (res_print != libruntime::Error::SUCCEED)
             {
-                return ErrorOr<size_t>(res_print.error(), written);
+                return libruntime::ErrorOr<size_t>(res_print.error(), written);
             }
             else
             {
-                return ErrorOr<size_t>(written);
+                return libruntime::ErrorOr<size_t>(written);
             }
         }
         else
         {
             auto err = stream.write_byte(fmt[i]);
 
-            if (err != Error::SUCCEED)
+            if (err != libruntime::Error::SUCCEED)
             {
-                return ErrorOr<size_t>(err, written);
+                return libruntime::ErrorOr<size_t>(err, written);
             }
 
             written += 1;
         }
     }
 
-    return ErrorOr<size_t>(written);
+    return libruntime::ErrorOr<size_t>(written);
 }
 
-ErrorOr<size_t> format(Stream *stream, const char *fmt)
+template <typename... Args>
+libruntime::ErrorOr<size_t> format(Stream *stream, const char *fmt, Args... args)
+{
+    return format(*stream, fmt, args...);
+}
+
+libruntime::ErrorOr<size_t> format(Stream *stream, const char *fmt)
 {
     return format(*stream, fmt);
-}
-
-template <typename First, typename... Args>
-ErrorOr<size_t> format(Stream *stream, const char *fmt, First first, Args... args)
-{
-    return format(*stream, fmt, first, args...);
 }
 
 } // namespace libsystem

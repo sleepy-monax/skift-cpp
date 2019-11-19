@@ -1,48 +1,63 @@
-#include <libruntime/Types.h>
-#include <libsystem/Format.h>
+#include <libsystem/Stdio.h>
+#include <libsystem/Logger.h>
 
 #include <arch/x86/CGAScreen.h>
 #include <arch/x86/SerialStream.h>
 #include <arch/x86/TerminalStream.h>
 #include <arch/x86/Multiboot.h>
 
+#include <system/memory/MemoryManager.h>
+
 using namespace libsystem;
 
-extern "C" void arch_main(u32 mboot_magic, multiboot_info_t *mboot_info)
+Stream *libsystem::stdin;
+Stream *libsystem::stderr;
+Stream *libsystem::stdout;
+Stream *libsystem::stdlog;
+
+extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 {
     auto serial = SerialStream(SerialPort::COM1);
     auto terminal = TerminalStream(CGAScreen((void *)0xB8000));
 
-    if (mboot_magic != MULTIBOOT_BOOTLOADER_MAGIC)
+    libsystem::stdin = nullptr;
+    libsystem::stderr = &serial;
+    libsystem::stdout = &terminal;
+    libsystem::stdlog = &serial;
+
+    logger_info("Booting...");
+    logger_info("hjert kernel ({})", __BUILD_TARGET__);
+    logger_info("Kernel build on \"{}\"", __BUILD_UNAME__);
+
+    x86::Multiboot multiboot = x86::Multiboot(multiboot_magic, multiboot_info);
+
+    if (!multiboot.is_valid())
     {
-        format(serial, "Does't look good :/");
+        logger_info("Invalid bootload, how did you do that !?");
+    }
+    else
+    {
+        logger_info("Bootloader is {}", multiboot.bootloader());
     }
 
-    format(terminal, "Bootloader is: %\n", reinterpret_cast<const char *>(mboot_info->boot_loader_name));
+    const char *multiboot_memory_type_name[] = {
+        "AVAILABLE",
+        "RESERVED",
+        "ACPI_RECLAIMABLE",
+        "NVS",
+        "BADRAM",
+    };
 
-    switch (mboot_info->framebuffer_type)
-    {
-    case MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT:
-        format(terminal, "Framebuffer is: MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT\n");
-        break;
+    multiboot.with_memory_map([&](auto addr, auto size, auto type) {
+        if (type == MULTIBOOT_MEMORY_AVAILABLE)
+        {
+            system::MemoryManager::free_region(addr, size);
+        }
 
-    case MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED:
-        format(terminal, "Framebuffer is: MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED\n");
-        break;
+        logger_info("Memory map entry: 0x{x}({}) {}", addr, size, multiboot_memory_type_name[type - 1]);
+    });
 
-    case MULTIBOOT_FRAMEBUFFER_TYPE_RGB:
-        format(terminal, "Framebuffer is: MULTIBOOT_FRAMEBUFFER_TYPE_RGB\n");
-        break;
-
-    default:
-        break;
-    }
-
-    format(terminal, "hjert kernel\n");
-    format(terminal, "--------------------------------------------------------------------------------\n");
-    format(terminal, "\n");
-    format(terminal, "Hi! I'm the new skiftOS kernel :) \n");
-
-    format(serial, "Hello world!\n");
-    format(serial, "Hello % world!\n", "other");
+    print("hjert kernel v0.0.1\n");
+    print("--------------------------------------------------------------------------------\n");
+    print("\nSystem halted!\n");
 }

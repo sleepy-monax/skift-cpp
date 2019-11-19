@@ -14,6 +14,24 @@ extern "C"
         return len;
     }
 
+    void strapd(char *str, char c)
+    {
+        unsigned int len = strlen(str);
+        str[len] = c;
+        str[len + 1] = '\0';
+    }
+
+    void strrvs(char *str)
+    {
+        int c, i, j;
+        for (i = 0, j = strlen(str) - 1; i < j; i++, j--)
+        {
+            c = str[i];
+            str[i] = str[j];
+            str[j] = c;
+        }
+    }
+
     void *memset(char *dest, int ch, size_t size)
     {
         for (size_t i = 0; i < size; i++)
@@ -57,4 +75,5 @@ extern "C"
 
         return n == 0 ? 0 : (*iter1 - *iter2);
     }
+
 }

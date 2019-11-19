@@ -19,8 +19,7 @@
  *  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef MULTIBOOT_HEADER
-#define MULTIBOOT_HEADER 1
+#pragma once
 
 /* How many bytes from the start of the file we search for the header. */
 #define MULTIBOOT_SEARCH 8192
@@ -88,8 +87,6 @@
 /* Is there video information? */
 #define MULTIBOOT_INFO_VBE_INFO 0x00000800
 #define MULTIBOOT_INFO_FRAMEBUFFER_INFO 0x00001000
-
-#ifndef ASM_FILE
 
 typedef unsigned char multiboot_uint8_t;
 typedef unsigned short multiboot_uint16_t;
@@ -267,6 +264,40 @@ struct multiboot_apm_info
     multiboot_uint16_t dseg_len;
 };
 
-#endif /* ! ASM_FILE */
+namespace x86
+{
 
-#endif /* ! MULTIBOOT_HEADER */
+class Multiboot
+{
+private:
+    multiboot_info_t *_info;
+    u32 _magic;
+
+public:
+    Multiboot(u32 magic, multiboot_info_t *info) : _info(info), _magic(magic) {}
+
+    ~Multiboot() {}
+
+    bool is_valid()
+    {
+        return _magic == MULTIBOOT_BOOTLOADER_MAGIC;
+    }
+
+    const char *bootloader()
+    {
+        return (const char *)_info->boot_loader_name;
+    }
+
+    template <typename Callback>
+    void with_memory_map(Callback callback)
+    {
+        for (multiboot_memory_map_t *mmap = (multiboot_memory_map_t *)_info->mmap_addr;
+             (u32)mmap < _info->mmap_addr + _info->mmap_length;
+             mmap = (multiboot_memory_map_t *)((u32)mmap + mmap->size + sizeof(mmap->size)))
+        {
+            callback(mmap->addr, mmap->len, mmap->type);
+        }
+    }
+};
+
+}; // namespace x86
