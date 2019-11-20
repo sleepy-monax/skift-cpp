@@ -22,4 +22,10 @@ libruntime::ErrorOr<size_t> file_seek(int handle, libsystem::Stream::Offset offs
 
 libruntime::ErrorOr<size_t> file_tell(int handle);
 
+/* --- Assert --------------------------------------------------------------- */
+
+void assert_failled() __noreturn;
+
+void assert_not_reached_reached() __noreturn;
+
 } // namespace __plugs__

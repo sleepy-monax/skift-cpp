@@ -51,4 +51,20 @@ libruntime::ErrorOr<size_t> file_tell(int handle)
     return libruntime::Error::NOT_IMPLEMENTED;
 }
 
+/* --- Assert --------------------------------------------------------------- */
+
+void assert_failled()
+{
+    do
+    {
+    } while (true);
+}
+
+void assert_not_reached_reached()
+{
+    do
+    {
+    } while (true);
+}
+
 } // namespace __plugs__
