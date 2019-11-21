@@ -57,6 +57,39 @@ public:
         return *this;
     }
 
+    template <typename U>
+    RefPtr &operator=(RefPtr<U> &other)
+    {
+        if (necked() != other.necked())
+        {
+            if (necked())
+            {
+                necked()->deref();
+            }
+
+            _ptr = other.necked();
+            necked()->ref();
+        }
+
+        return *this;
+    }
+
+    template <typename U>
+    RefPtr &operator=(RefPtr<U> &&other)
+    {
+        if (this != static_cast<void *>(&other))
+        {
+            if (necked())
+            {
+                necked()->deref();
+            }
+
+            _ptr = other.give_ref();
+        }
+
+        return *this;
+    }
+
     ~RefPtr()
     {
         if (_ptr)
@@ -67,6 +100,10 @@ public:
     {
         return _ptr;
     }
+
+    T &operator*() { return *_ptr; }
+
+    const T &operator*() const { return *_ptr; }
 
     int refcount()
     {
