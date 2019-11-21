@@ -8,7 +8,7 @@
 namespace system::MemoryManager
 {
 
-libruntime::RefPtr<SharedMemoryObject> alloc_region(size_t count);
+uintptr_t alloc_region(size_t count);
 
 void free_region(uintptr_t page, size_t count);
 

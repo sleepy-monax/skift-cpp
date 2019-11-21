@@ -49,15 +49,17 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     };
 
     multiboot.with_memory_map([&](auto addr, auto size, auto type) {
+        logger_info("Memory map entry: {#x}({}) {}", addr, size, multiboot_memory_type_name[type - 1]);
+
         if (type == MULTIBOOT_MEMORY_AVAILABLE)
         {
             system::MemoryManager::free_region(addr, size);
         }
-
-        logger_info("Memory map entry: 0x{x}({}) {}", addr, size, multiboot_memory_type_name[type - 1]);
     });
 
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");
     print("\nSystem halted!\n");
+
+    assert_not_reached();
 }

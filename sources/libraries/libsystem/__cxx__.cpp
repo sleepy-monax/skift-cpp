@@ -1,6 +1,8 @@
 #include <libruntime/Types.h>
 #include <libruntime/Macros.h>
 #include <libsystem/Assert.h>
+#include <libsystem/__alloc__.h>
+#include <libsystem/Logger.h>
 
 #define MAX_AT_EXIT_FUNCTION 128
 
@@ -30,28 +32,22 @@ extern "C" int __cxa_atexit(void (*f)(void *), void *objptr, void *dso)
 
 void *operator new(size_t size)
 {
-    __unused(size);
-    assert_not_reached();
+    return __alloc__::malloc(size);
 }
 
 void *operator new[](size_t size)
 {
-    __unused(size);
-    assert_not_reached();
+    return __alloc__::malloc(size);
 }
 
 void operator delete(void *ptr)
 {
-    __unused(ptr);
-
-    assert_not_reached();
+    __alloc__::free(ptr);
 }
 
 void operator delete[](void *ptr)
 {
-    __unused(ptr);
-
-    assert_not_reached();
+    __alloc__::free(ptr);
 }
 
 void operator delete(void *ptr, size_t size)
@@ -70,5 +66,6 @@ void operator delete[](void *ptr, size_t size)
 
 extern "C" void __cxa_pure_virtual()
 {
+    logger_fatal("Attempt at calling a pure virtual function!");
     assert_not_reached();
 }

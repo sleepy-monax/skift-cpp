@@ -1,4 +1,8 @@
 #include <libsystem/__plugs__.h>
+#include <libsystem/Logger.h>
+
+#include "system/memory/MemoryManager.h"
+#include "system/System.h"
 
 namespace __plugs__
 {
@@ -49,6 +53,24 @@ libruntime::ErrorOr<size_t> file_tell(int handle)
     __unused(handle);
 
     return libruntime::Error::NOT_IMPLEMENTED;
+}
+
+/* --- Memory --------------------------------------------------------------- */
+
+void memory_lock() {}
+
+void memory_unlock() {}
+
+libruntime::ErrorOr<uintptr_t> memory_alloc(size_t how_many_pages)
+{
+    logger_debug("Allocating {} pages.", how_many_pages);
+    return libruntime::ErrorOr<uintptr_t>(system::MemoryManager::alloc_region(how_many_pages));
+}
+
+void memory_free(uintptr_t addr, size_t how_many_pages)
+{
+    logger_debug("Freeing {} pages at {x}.", how_many_pages, addr);
+    system::MemoryManager::free_region(addr, how_many_pages);
 }
 
 /* --- Assert --------------------------------------------------------------- */
