@@ -9,7 +9,7 @@ PREFIX="$DIR/local"
 SYSROOT="$DIR/../build/sysroot"
 
 if [ -e "$PREFIX/build-ok" ]; then
-    echo "The toolchain is build and ready :)"
+    echo "The toolchain is build and should ready :)"
     exit 0
 fi
 
