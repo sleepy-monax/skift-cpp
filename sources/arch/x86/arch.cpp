@@ -13,15 +13,15 @@ size_t arch::get_page_size()
     return 4096;
 }
 
+using namespace system::memory;
+
 extern int __kernel_start;
 extern int __kernel_end;
 
-uintptr_t arch::get_kernel_base_address()
+system::memory::Region arch::get_kernel_region()
 {
-    return (uintptr_t)&__kernel_start;
-}
+    uintptr_t addr = (uintptr_t)&__kernel_start;
+    size_t size = &__kernel_end - &__kernel_start;
 
-size_t arch::get_kernel_size()
-{
-    return &__kernel_end - &__kernel_start;
+    return Region::create_around_non_aligned_address(addr, size);
 }

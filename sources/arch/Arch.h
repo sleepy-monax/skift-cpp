@@ -3,6 +3,8 @@
 #include <libruntime/Types.h>
 #include <libruntime/Macros.h>
 
+#include "system/memory/Region.h"
+
 namespace arch
 {
 
@@ -10,8 +12,6 @@ void stop() __noreturn;
 
 size_t get_page_size();
 
-uintptr_t get_kernel_base_address();
-
-size_t get_kernel_size();
+system::memory::Region get_kernel_region();
 
 } // namespace arch

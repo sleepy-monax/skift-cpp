@@ -1,7 +1,8 @@
 #include <libsystem/__plugs__.h>
 #include <libsystem/Logger.h>
 
-#include "system/memory/MemoryManager.h"
+#include "arch/Arch.h"
+#include "system/memory/Memory.h"
 #include "system/System.h"
 
 namespace __plugs__
@@ -57,20 +58,27 @@ libruntime::ErrorOr<size_t> file_tell(int handle)
 
 /* --- Memory --------------------------------------------------------------- */
 
+size_t get_page_size()
+{
+    return arch::get_page_size();
+}
+
 void memory_lock() {}
 
 void memory_unlock() {}
 
 libruntime::ErrorOr<uintptr_t> memory_alloc(size_t how_many_pages)
 {
-    logger_debug("Allocating {} pages.", how_many_pages);
-    return libruntime::ErrorOr<uintptr_t>(system::MemoryManager::alloc_region(how_many_pages));
+    logger_trace("Allocating {} pages.", how_many_pages);
+
+    return libruntime::ErrorOr<uintptr_t>(system::memory::alloc_region(how_many_pages).base_address());
 }
 
 void memory_free(uintptr_t addr, size_t how_many_pages)
 {
-    logger_debug("Freeing {} pages at {x}.", how_many_pages, addr);
-    system::MemoryManager::free_region(addr, how_many_pages);
+    logger_trace("Freeing {} pages at {x}.", how_many_pages, addr);
+
+    system::memory::free_region(system::memory::Region::from_aligned_address(addr, how_many_pages));
 }
 
 /* --- Assert --------------------------------------------------------------- */

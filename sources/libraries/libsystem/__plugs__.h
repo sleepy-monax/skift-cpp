@@ -30,6 +30,8 @@ void memory_lock();
 
 void memory_unlock();
 
+size_t get_page_size();
+
 libruntime::ErrorOr<uintptr_t> memory_alloc(size_t how_many_pages);
 
 void memory_free(uintptr_t addr, size_t how_many_pages);

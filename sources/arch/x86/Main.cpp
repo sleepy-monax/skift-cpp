@@ -45,21 +45,22 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
         logger_info("Bootloader is {}", multiboot.bootloader());
     }
 
-    const char *multiboot_memory_type_name[] = {
-        "AVAILABLE",
-        "RESERVED",
-        "ACPI_RECLAIMABLE",
-        "NVS",
-        "BADRAM",
-    };
-
-    multiboot.with_memory_map([&](auto addr, auto size, auto type) {
-        logger_info("Memory map entry: {#x}({}) {}", addr, size, multiboot_memory_type_name[type - 1]);
-
-        if (type == MULTIBOOT_MEMORY_AVAILABLE)
+    multiboot.with_memory_map([&](auto entry) {
+        if (entry.is_available())
         {
-            system::MemoryManager::free_region(addr, size);
+            logger_info("Marking {} as free usable memory by the kernel...", entry);
+            system::memory::free_region(entry.region());
         }
+        else if (entry.is_bad())
+        {
+            logger_warn("Badram at {#x}({})", entry.region());
+        }
+        else
+        {
+            logger_info("Skipping {}...", entry);
+        }
+
+        return Iteration::CONTINUE;
     });
 
     print("hjert kernel v0.0.1\n");

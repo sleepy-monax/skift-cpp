@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include <libruntime/Iteration.h>
+
 /* How many bytes from the start of the file we search for the header. */
 #define MULTIBOOT_SEARCH 8192
 #define MULTIBOOT_HEADER_ALIGN 4
@@ -264,8 +266,63 @@ struct multiboot_apm_info
     multiboot_uint16_t dseg_len;
 };
 
+#include <libsystem/Formattable.h>
+#include "system/memory/Region.h"
+
 namespace x86
 {
+
+class MemoryMapEntry : public libsystem::Formattable
+{
+private:
+    uintptr_t _addr;
+    size_t _size;
+    int _type;
+
+public:
+    MemoryMapEntry(uintptr_t addr, size_t size, int type)
+        : _addr(addr), _size(size), _type(type) {}
+
+    bool is_available()
+    {
+        return _type == MULTIBOOT_MEMORY_AVAILABLE;
+    }
+
+    bool is_reserved()
+    {
+        return _type == MULTIBOOT_MEMORY_RESERVED;
+    }
+
+    bool is_bad()
+    {
+        return _type == MULTIBOOT_MEMORY_BADRAM;
+    }
+
+    system::memory::Region region()
+    {
+        return system::memory::Region::from_non_aligned_address(_addr, _size);
+    }
+
+    libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info)
+    {
+        __unused(info);
+
+        const char *multiboot_memory_type_name[] = {
+            "INVALID",
+            "AVAILABLE",
+            "RESERVED",
+            "ACPI_RECLAIMABLE",
+            "NVS",
+            "BADRAM",
+        };
+
+        return libsystem::format(
+            stream,
+            "MemoryMapEntry({}, {})",
+            region(),
+            multiboot_memory_type_name[_type]);
+    }
+};
 
 class Multiboot
 {
@@ -295,7 +352,11 @@ public:
              (u32)mmap < _info->mmap_addr + _info->mmap_length;
              mmap = (multiboot_memory_map_t *)((u32)mmap + mmap->size + sizeof(mmap->size)))
         {
-            callback(mmap->addr, mmap->len, mmap->type);
+
+            if (callback(MemoryMapEntry((uintptr_t)mmap->addr, (size_t)mmap->len, mmap->type)) == libruntime::Iteration::STOP)
+            {
+                return;
+            }
         }
     }
 };

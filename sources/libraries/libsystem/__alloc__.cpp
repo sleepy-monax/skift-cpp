@@ -69,7 +69,6 @@ struct AllocMinor
 static AllocMajor *l_memRoot = nullptr; ///< The root memory block acquired from the system.
 static AllocMajor *l_bestBet = nullptr; ///< The major with the most free memory.
 
-static unsigned int l_pageSize = 4096;     ///< The size of an individual page. Set up in liballoc_init.
 static unsigned int l_pageCount = 16;      ///< The number of pages to request per chunk. Set up in liballoc_init.
 static unsigned long long l_allocated = 0; ///< Running total of allocated memory.
 static unsigned long long l_inuse = 0;     ///< Running total of used memory.
@@ -128,10 +127,10 @@ static AllocMajor *allocate_new_page(unsigned int size)
     st += sizeof(AllocMinor);
 
     // Perfect amount of space?
-    if ((st % l_pageSize) == 0)
-        st = st / (l_pageSize);
+    if ((st % __plugs__::get_page_size()) == 0)
+        st = st / (__plugs__::get_page_size());
     else
-        st = st / (l_pageSize) + 1;
+        st = st / (__plugs__::get_page_size()) + 1;
     // No, add the buffer.
 
     // Make sure it's >= the minimum size.
@@ -154,7 +153,7 @@ static AllocMajor *allocate_new_page(unsigned int size)
     maj->prev = nullptr;
     maj->next = nullptr;
     maj->pages = st;
-    maj->size = st * l_pageSize;
+    maj->size = st * __plugs__::get_page_size();
     maj->usage = sizeof(AllocMajor);
     maj->first = nullptr;
 
