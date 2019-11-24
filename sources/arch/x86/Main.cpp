@@ -1,35 +1,40 @@
-#include <libsystem/Stdio.h>
 #include <libsystem/Logger.h>
+#include <libsystem/Stdio.h>
 
-#include <arch/x86/CGAScreen.h>
-#include <arch/x86/SerialStream.h>
-#include <arch/x86/TerminalStream.h>
-#include <arch/x86/Multiboot.h>
+#include "arch/x86/CGAScreen.h"
+#include "arch/x86/Multiboot.h"
+#include "arch/x86/SerialStream.h"
+#include "arch/x86/TerminalStream.h"
+#include "arch/Arch.h"
 
-#include <system/memory/MemoryManager.h>
+#include "system/memory/Memory.h"
 
+using namespace x86;
+using namespace system;
+using namespace libruntime;
 using namespace libsystem;
 
-Stream *libsystem::stdin;
-Stream *libsystem::stderr;
-Stream *libsystem::stdout;
-Stream *libsystem::stdlog;
+RefPtr<Stream> libsystem::stdin;
+RefPtr<Stream> libsystem::stdout;
+RefPtr<Stream> libsystem::stderr;
+RefPtr<Stream> libsystem::stdlog;
 
 extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 {
+    // These two should never go out of scope beause there are refcounted but not own by a refptr :/
     auto serial = SerialStream(SerialPort::COM1);
     auto terminal = TerminalStream(CGAScreen((void *)0xB8000));
 
-    libsystem::stdin = nullptr;
-    libsystem::stderr = &serial;
-    libsystem::stdout = &terminal;
-    libsystem::stdlog = &serial;
+    //libsystem::stdin = nullptr;
+    libsystem::stderr = adopt(serial);
+    libsystem::stdout = adopt(terminal);
+    libsystem::stdlog = adopt(serial);
 
     logger_info("Booting...");
     logger_info("hjert kernel ({})", __BUILD_TARGET__);
     logger_info("Kernel build on \"{}\"", __BUILD_UNAME__);
 
-    x86::Multiboot multiboot = x86::Multiboot(multiboot_magic, multiboot_info);
+    auto multiboot = Multiboot(multiboot_magic, multiboot_info);
 
     if (!multiboot.is_valid())
     {
