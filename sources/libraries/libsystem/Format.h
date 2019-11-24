@@ -6,8 +6,11 @@
 namespace libsystem
 {
 
+class Formattable;
+
 struct FormatInfo
 {
+    bool prefix;
     int base = 10;
 };
 
@@ -26,6 +29,9 @@ libruntime::ErrorOr<size_t> format(Stream &stream, const char *fmt, First first,
 
             for (; fmt[i] != '}'; i++)
             {
+                if (fmt[i] == '#')
+                    info.prefix = true;
+
                 if (fmt[i] == 'x')
                     info.base = 16;
                 else if (fmt[i] == 'd')
@@ -76,6 +82,10 @@ libruntime::ErrorOr<size_t> format(Stream &stream, const char *fmt, First first,
 
 libruntime::ErrorOr<size_t> format(Stream &stream, const char *string, FormatInfo &info);
 
+libruntime::ErrorOr<size_t> format(Stream &stream, void *value, FormatInfo &info);
+
 libruntime::ErrorOr<size_t> format(Stream &stream, uint value, FormatInfo &info);
+
+libruntime::ErrorOr<size_t> format(Stream &stream, Formattable &value, FormatInfo &info);
 
 } // namespace libsystem
