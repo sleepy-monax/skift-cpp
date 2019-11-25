@@ -26,7 +26,7 @@ align 4
 
 
 section .bss
-align 16
+align 4096
 stack_bottom:
 resb 16384 ; 16 KiB
 stack_top:

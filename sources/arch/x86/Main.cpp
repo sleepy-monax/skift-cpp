@@ -22,8 +22,12 @@ RefPtr<Stream> libsystem::stdlog;
 extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 {
     // These two should never go out of scope beause there are refcounted but not own by a refptr :/
+    // These are own by a refptr but allocated on the stack so
     auto serial = SerialStream(SerialPort::COM1);
+    serial.make_orphan();
+
     auto terminal = TerminalStream(CGAScreen((void *)0xB8000));
+    terminal.make_orphan();
 
     //libsystem::stdin = nullptr;
     libsystem::stderr = adopt(serial);
@@ -38,7 +42,7 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 
     if (!multiboot.is_valid())
     {
-        logger_info("Invalid bootload, how did you do that !?");
+        logger_info("Invalid bootloader, how did you do that !?");
     }
     else
     {
@@ -49,7 +53,7 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
         if (entry.is_available())
         {
             logger_info("Marking {} as free usable memory by the kernel...", entry);
-            system::memory::free_region(entry.region());
+            memory::free_region(entry.region());
         }
         else if (entry.is_bad())
         {
@@ -67,5 +71,5 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     print("--------------------------------------------------------------------------------\n");
     print("\nSystem halted!\n");
 
-    assert_not_reached();
+    //assert_not_reached(); // FIXME: We get a cpu panic when this is not there
 }

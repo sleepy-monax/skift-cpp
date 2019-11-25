@@ -1,6 +1,6 @@
 #pragma once
 
-#include <arch/x86/PortIO.h>
+#include <arch/x86/x86.h>
 #include <libsystem/Stream.h>
 #include <libruntime/Types.h>
 
@@ -19,7 +19,7 @@ private:
 
     void wait_read()
     {
-        while ((in8(static_cast<u16>(_port) + 5) & 1) == 0)
+        while ((x86::in8(static_cast<u16>(_port) + 5) & 1) == 0)
         {
             /* do nothing */
         }
@@ -27,7 +27,7 @@ private:
 
     void wait_write()
     {
-        while ((in8(static_cast<u16>(_port) + 5) & 0x20) == 0)
+        while ((x86::in8(static_cast<u16>(_port) + 5) & 0x20) == 0)
         {
             /* do nothing */
         }
@@ -36,13 +36,13 @@ private:
 public:
     SerialStream(SerialPort port) : _port(port)
     {
-        out8(static_cast<u16>(_port) + 1, 0x00);
-        out8(static_cast<u16>(_port) + 3, 0x80);
-        out8(static_cast<u16>(_port) + 0, 0x03);
-        out8(static_cast<u16>(_port) + 1, 0x00);
-        out8(static_cast<u16>(_port) + 3, 0x03);
-        out8(static_cast<u16>(_port) + 2, 0xC7);
-        out8(static_cast<u16>(_port) + 4, 0x0B);
+        x86::out8(static_cast<u16>(_port) + 1, 0x00);
+        x86::out8(static_cast<u16>(_port) + 3, 0x80);
+        x86::out8(static_cast<u16>(_port) + 0, 0x03);
+        x86::out8(static_cast<u16>(_port) + 1, 0x00);
+        x86::out8(static_cast<u16>(_port) + 3, 0x03);
+        x86::out8(static_cast<u16>(_port) + 2, 0xC7);
+        x86::out8(static_cast<u16>(_port) + 4, 0x0B);
     }
 
     ~SerialStream() {}
@@ -56,7 +56,7 @@ public:
     {
         wait_write();
 
-        out8(static_cast<u16>(_port), byte);
+        x86::out8(static_cast<u16>(_port), byte);
 
         return libruntime::Error::SUCCEED;
     }
