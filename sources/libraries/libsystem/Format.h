@@ -10,7 +10,7 @@ class Formattable;
 
 struct FormatInfo
 {
-    bool prefix;
+    bool prefix = false;
     int base = 10;
 };
 

@@ -60,6 +60,7 @@ LD=i686-elf-ld
 
 KCXX=$(CXX)
 KCXXFLAGS=-ffreestanding \
+		  -fsanitize=undefined \
 		  -fno-stack-protector \
 		  -nostdlib \
 		  -nostdinc++ \

@@ -298,6 +298,16 @@ public:
         return _type == MULTIBOOT_MEMORY_BADRAM;
     }
 
+    uintptr_t address()
+    {
+        return _addr;
+    }
+
+    size_t size()
+    {
+        return _size;
+    }
+
     system::memory::Region region()
     {
         return system::memory::Region::from_non_aligned_address(_addr, _size);

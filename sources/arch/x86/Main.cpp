@@ -21,12 +21,11 @@ RefPtr<Stream> libsystem::stdlog;
 
 extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 {
-    // These two should never go out of scope beause there are refcounted but not own by a refptr :/
-    // These are own by a refptr but allocated on the stack so
     auto serial = SerialStream(SerialPort::COM1);
-    serial.make_orphan();
-
     auto terminal = TerminalStream(CGAScreen((void *)0xB8000));
+
+    // We don't went the ref count to try to free these.
+    serial.make_orphan();
     terminal.make_orphan();
 
     //libsystem::stdin = nullptr;
@@ -50,6 +49,8 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     }
 
     multiboot.with_memory_map([&](auto entry) {
+        logger_trace("Memory map entry: {#x} {}kib", entry.address(), entry.size() / 1024);
+
         if (entry.is_available())
         {
             logger_info("Marking {} as free usable memory by the kernel...", entry);
@@ -57,7 +58,7 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
         }
         else if (entry.is_bad())
         {
-            logger_warn("Badram at {#x}({})", entry.region());
+            logger_warn("Badram at {}, skipping...", entry.region());
         }
         else
         {
@@ -69,7 +70,5 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");
-    print("\nSystem halted!\n");
-
-    //assert_not_reached(); // FIXME: We get a cpu panic when this is not there
+    print("System halted!\n");
 }
