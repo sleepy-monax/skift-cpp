@@ -92,6 +92,14 @@ extern "C" void __ubsan_handle_sub_overflow(UbsanOverflowData *data, unsigned lo
     libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Sub overflow");
 }
 
+extern "C" void __ubsan_handle_mul_overflow(UbsanOverflowData *data, unsigned long ulLHS, unsigned long ulRHS)
+{
+    (void)ulLHS;
+    (void)ulRHS;
+
+    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Mul overflow");
+}
+
 extern "C" void __ubsan_handle_divrem_overflow(UbsanOverflowData *data, unsigned long ulLHS, unsigned long ulRHS)
 {
     (void)ulLHS;
