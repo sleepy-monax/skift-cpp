@@ -2,6 +2,7 @@
 #include <libsystem/Stdio.h>
 
 #include "arch/x86/CGAScreen.h"
+#include "arch/x86/Interupts.h"
 #include "arch/x86/Multiboot.h"
 #include "arch/x86/SerialStream.h"
 #include "arch/x86/TerminalStream.h"
@@ -48,7 +49,7 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
         logger_info("Bootloader is {}", multiboot.bootloader());
     }
 
-    multiboot.with_memory_map([&](auto entry) {
+    multiboot.with_memory_map([](auto entry) {
         logger_trace("Memory map entry: {#x} {}kib", entry.address(), entry.size() / 1024);
 
         if (entry.is_available())
@@ -67,6 +68,8 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 
         return Iteration::CONTINUE;
     });
+
+    x86::interupts_initialise();
 
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");
