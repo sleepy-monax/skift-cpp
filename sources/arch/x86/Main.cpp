@@ -1,12 +1,13 @@
 #include <libsystem/Logger.h>
 #include <libsystem/Stdio.h>
 
+#include "arch/Arch.h"
 #include "arch/x86/CGAScreen.h"
 #include "arch/x86/Interupts.h"
 #include "arch/x86/Multiboot.h"
+#include "arch/x86/Segmentation.h"
 #include "arch/x86/SerialStream.h"
 #include "arch/x86/TerminalStream.h"
-#include "arch/Arch.h"
 
 #include "system/memory/Memory.h"
 
@@ -69,9 +70,12 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
         return Iteration::CONTINUE;
     });
 
+    x86::segmentation_initialize();
     x86::interupts_initialise();
 
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");
     print("System halted!\n");
+
+    asm volatile("int $80");
 }

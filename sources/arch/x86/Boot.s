@@ -34,6 +34,9 @@ stack_top:
 section .text
 global _start:function (_start.end - _start)
 _start:
+    cli
+    cld
+
     mov esp, stack_top
     extern arch_main
 

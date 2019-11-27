@@ -9,16 +9,12 @@ dd __interrupt%1
 
 %macro INTERRUPT_ERR 1
 __interrupt%1:
-    cli
-
     push %1
     jmp __interrupt_common
 %endmacro
 
 %macro INTERRUPT_NOERR 1
 __interrupt%1:
-    cli
-
     push 0
     push %1
     jmp __interrupt_common
@@ -30,6 +26,8 @@ __interrupt%1:
     push %1
     jmp __interrupt_common
 %endmacro
+
+extern interupts_handle
 
 __interrupt_common:
     cld
@@ -48,8 +46,11 @@ __interrupt_common:
     mov fs, ax
     mov gs, ax
 
-    extern interupts_handle
+    push esp
+
     call interupts_handle
+
+    mov esp, eax
 
     pop gs
     pop fs

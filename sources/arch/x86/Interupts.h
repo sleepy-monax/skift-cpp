@@ -21,27 +21,26 @@ struct __packed IdtDescriptor
 
 struct __packed IdtEntry
 {
-    u16 _offset0_15; // offset bits 0..15
-    u16 _selector;   // a code segment selector in GDT or LDT
-    u8 _zero;
-    u8 _type_attr;    // type and attributes
-    u16 _offset16_31; // offset bits 16..31
+    u16 offset0_15; // offset bits 0..15
+    u16 selector;   // a code segment selector in GDT or LDT
+    u8 zero;
+    u8 type_attr;    // type and attributes
+    u16 offset16_31; // offset bits 16..31
 
-    IdtEntry() {}
-
-    IdtEntry(uintptr_t offset, u32 selector, u8 type)
+    static IdtEntry create(uintptr_t offset, u32 selector, u8 type)
     {
-        _offset0_15 = (offset)&0xffff;
-        _selector = (selector);
-        _type_attr = (type);
-        _offset16_31 = ((offset) >> 16) & 0xffff;
+        IdtEntry entry;
 
-        _zero = 0;
+        entry.offset0_15 = offset & 0xffff;
+        entry.selector = selector;
+        entry.type_attr = type;
+        entry.offset16_31 = (offset >> 16) & 0xffff;
+        entry.zero = 0;
+
+        return entry;
     }
 };
 
 void interupts_initialise();
-
-extern "C" void interupts_handle();
 
 } // namespace x86

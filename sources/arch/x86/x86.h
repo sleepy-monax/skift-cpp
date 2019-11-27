@@ -56,4 +56,8 @@ static inline void sti(void) { asm volatile("sti"); }
 
 static inline void hlt(void) { asm volatile("hlt"); }
 
+extern "C" void load_gdt(u32 gdt);
+
+extern "C" void load_idt(u32 idt);
+
 } // namespace x86

@@ -12,7 +12,7 @@ public:
     {
         __unused(info);
 
-        return libsystem::format(stream, "{#x}", reinterpret_cast<void *>(this));
+        return libsystem::format(stream, "Object({#x})", reinterpret_cast<void *>(this));
     }
 };
 
