@@ -1,11 +1,11 @@
 #include <libsystem/Logger.h>
 
 #include "arch/x86/Interupts.h"
-#include "arch/x86/pic.h"
+#include "arch/x86/Pic.h"
 #include "arch/x86/x86.h"
 #include "arch/x86/x86InteruptStackFrame.h"
 
-x86::IdtEntry idt_entries[IDT_ENTRY_COUNT];
+x86::IdtEntry idt_entries[IDT_ENTRY_COUNT] = {0};
 
 x86::IdtDescriptor idt_descriptor = {
     .size = sizeof(x86::IdtEntry) * IDT_ENTRY_COUNT,
@@ -46,7 +46,11 @@ void x86::interupts_initialise()
 
 extern "C" u32 interupts_handle(u32 esp, x86::x86InteruptStackFrame stackframe)
 {
-    logger_info("Interupt {}: {#x} {} {#b}", stackframe.intno >= 32 ? "IRQ" : "ISR", esp, stackframe.intno, stackframe.err);
+    logger_info("Interupt {}: {#x} {} {#b}",
+                stackframe.intno >= 32 ? "IRQ" : "ISR",
+                esp,
+                stackframe.intno,
+                stackframe.err);
 
     x86::pic_ack(stackframe.intno);
 

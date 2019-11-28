@@ -77,5 +77,5 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     print("--------------------------------------------------------------------------------\n");
     print("System halted!\n");
 
-    asm volatile("int $80");
+    asm volatile("int $0x80");
 }

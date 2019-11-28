@@ -2,7 +2,6 @@
 
 #include <libruntime/Macros.h>
 #include <libruntime/Types.h>
-#include <libsystem/Formattable.h>
 
 namespace x86
 {

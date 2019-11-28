@@ -5,7 +5,8 @@
 
 x86::Tss tss;
 
-x86::GdtEntry gdt_entries[GDT_ENTRY_COUNT];
+x86::GdtEntry gdt_entries[GDT_ENTRY_COUNT] = {0};
+
 x86::GdtDescriptor gdt_descriptor = {
     .size = sizeof(x86::GdtEntry) * GDT_ENTRY_COUNT,
     .offset = (u32)&gdt_entries[0],
