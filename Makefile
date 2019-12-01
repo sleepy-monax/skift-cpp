@@ -18,9 +18,9 @@ DIRECTORY_ARCH=$(DIRECTORY_SOURCES)/arch/$(BUILD_ARCH)
 DIRECTORY_SYSTEM=$(DIRECTORY_SOURCES)/system
 
 SOURCES_KERNEL= $(wildcard $(DIRECTORY_ARCH)/*.s) \
+				$(wildcard $(DIRECTORY_ARCH)/*.cpp) \
 				$(wildcard $(DIRECTORY_SYSTEM)/*.cpp) \
 				$(wildcard $(DIRECTORY_SYSTEM)/**/*.cpp) \
-				$(wildcard $(DIRECTORY_ARCH)/*.cpp) \
 				$(wildcard $(DIRECTORY_LIBRARIES)/libc/*.cpp) \
 				$(wildcard $(DIRECTORY_LIBRARIES)/libruntime/*.cpp) \
 				$(wildcard $(DIRECTORY_LIBRARIES)/libsystem/*.cpp)
@@ -42,6 +42,7 @@ CXX_DEFINES=-D__BUILD_TARGET__=\"$(BUILD_TARGET)\" \
 
 CXX=i686-elf-g++
 CXXFLAGS=-std=c++17 \
+		 -MD \
 		 -O3 \
 		 -Wall \
 		 -Wextra \
@@ -114,8 +115,10 @@ $(BINARY_KERNEL): $(OBJECTS_KERNEL)
 
 $(DIRECTORY_BUILD)/%.cpp.kernel.o: $(DIRECTORY_SOURCES)/%.cpp
 	$(DIRECTORY_GUARD)
-	$(KCXX) $(CXXFLAGS) $(KCXXFLAGS) -c -o $@ $^
+	$(KCXX) $(CXXFLAGS) $(KCXXFLAGS) -c -o $@ $<
 
 $(DIRECTORY_BUILD)/%.s.kernel.o: $(DIRECTORY_SOURCES)/%.s
 	$(DIRECTORY_GUARD)
-	$(AS) $(ASFLAGS) -o $@ $^
+	$(AS) $(ASFLAGS) -o $@ $<
+
+-include $(OBJECTS_KERNEL:.o=.d)
