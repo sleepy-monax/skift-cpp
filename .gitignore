@@ -1,5 +1,6 @@
 build/
 toolchain/local
+toolchain/tarballs/
 
 *.o
 *.elf
