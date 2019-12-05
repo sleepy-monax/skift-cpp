@@ -1,5 +1,8 @@
 #include <arch/Arch.h>
+
 #include "arch/x86/x86.h"
+#include "arch/x86/x86Thread.h"
+#include "arch/x86/InteruptStackFrame.h"
 
 using namespace system::memory;
 
@@ -29,6 +32,11 @@ system::memory::Region get_kernel_region()
     size_t size = &__kernel_end - &__kernel_start;
 
     return Region::create_around_non_aligned_address(addr, size);
+}
+
+libruntime::RefPtr<system::tasking::Thread> create_task(system::tasking::ThreadPromotion promotion, system::tasking::ThreadEntry entry)
+{
+    return libruntime::make<x86::x86Thread>(promotion, entry);
 }
 
 } // namespace arch

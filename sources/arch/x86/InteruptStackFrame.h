@@ -6,7 +6,7 @@
 namespace x86
 {
 
-struct __packed x86InteruptStackFrame
+struct __packed InteruptStackFrame
 {
     u32 gs, fs, es, ds;
     u32 edi, esi, ebp, esp, ebx, edx, ecx, eax;

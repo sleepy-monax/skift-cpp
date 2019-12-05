@@ -38,6 +38,9 @@ _start:
     cld
 
     mov esp, stack_top
+    push 0
+    push 0
+    mov ebp, esp
     extern arch_main
 
     push ebx

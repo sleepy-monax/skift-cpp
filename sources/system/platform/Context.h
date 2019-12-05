@@ -5,13 +5,13 @@
 namespace system::platform
 {
 
-class __packed PlatformContext : public libsystem::Formattable
+class __packed Context : public libsystem::Formattable
 {
 private:
     /* data */
 public:
-    PlatformContext() {}
-    ~PlatformContext() {}
+    Context() {}
+    ~Context() {}
 };
 
 } // namespace system::platform

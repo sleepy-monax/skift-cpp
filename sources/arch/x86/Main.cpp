@@ -10,6 +10,7 @@
 #include "arch/x86/TerminalStream.h"
 
 #include "system/memory/Memory.h"
+#include "system/sheduling/Sheduling.h"
 
 using namespace x86;
 using namespace system;
@@ -73,9 +74,16 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     x86::segmentation_initialize();
     x86::interupts_initialise();
 
+    sheduling::initialize();
+
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");
     print("System halted!\n");
 
     asm volatile("int $0x80");
+
+    while (1)
+    {
+        /* code */
+    }
 }

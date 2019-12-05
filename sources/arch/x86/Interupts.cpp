@@ -3,7 +3,7 @@
 #include "arch/x86/Interupts.h"
 #include "arch/x86/Pic.h"
 #include "arch/x86/x86.h"
-#include "arch/x86/x86InteruptStackFrame.h"
+#include "arch/x86/InteruptStackFrame.h"
 
 x86::IdtEntry idt_entries[IDT_ENTRY_COUNT] = {0};
 
@@ -44,7 +44,7 @@ void x86::interupts_initialise()
     x86::sti();
 }
 
-extern "C" u32 interupts_handle(u32 esp, x86::x86InteruptStackFrame stackframe)
+extern "C" u32 interupts_handle(u32 esp, x86::InteruptStackFrame stackframe)
 {
     logger_info("Interupt {}: {#x} {} {#b}",
                 stackframe.intno >= 32 ? "IRQ" : "ISR",
