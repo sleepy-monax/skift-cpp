@@ -23,8 +23,16 @@ public:
 
     RefPtr(RefPtr &other) : _ptr(other.necked()) { _ptr->ref(); }
     RefPtr(AdoptTag, RefPtr &other) : _ptr(other.give_ref()) {}
-
     RefPtr(RefPtr &&other) : _ptr(other.give_ref()) {}
+
+    template <typename U>
+    RefPtr(RefPtr<U> &other) : _ptr(static_cast<T *>(other.necked())) { _ptr->ref(); }
+
+    template <typename U>
+    RefPtr(AdoptTag, RefPtr<U> &other) : _ptr(static_cast<T *>(other.give_ref())) {}
+
+    template <typename U>
+    RefPtr(RefPtr<U> &&other) : _ptr(static_cast<T *>(other.give_ref())) {}
 
     RefPtr &operator=(RefPtr &other)
     {
