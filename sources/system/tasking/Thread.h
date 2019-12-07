@@ -8,6 +8,8 @@
 namespace system::tasking
 {
 
+class Process;
+
 typedef void (*ThreadEntry)(void);
 
 enum class ThreadPromotion
@@ -16,20 +18,23 @@ enum class ThreadPromotion
     USER,
 };
 
-class Thread : public libruntime::RefCounted<Thread>
+class Thread : public libruntime::RefCounted<Thread>, public libsystem::Formattable
 {
 private:
+    int _id;
+
     ThreadEntry _entry;
+    ThreadPromotion _promotion;
+
+    Process &_process;
 
     Stack _stack;
     Stack _userstack;
 
-    ThreadPromotion _promotion;
-
     bool _started;
 
 public:
-    Thread(ThreadPromotion promotion, ThreadEntry entry);
+    Thread(Process &process, ThreadPromotion promotion, ThreadEntry entry);
 
     virtual ~Thread();
 
@@ -39,13 +44,19 @@ public:
 
     void start();
 
+    int id() { return _id; }
+
+    ThreadEntry entry() { return _entry; }
+
     Stack &stack() { return _stack; }
 
     Stack &userstack() { return _userstack; }
 
-    ThreadEntry entry() { return _entry; }
-
     ThreadPromotion promotion() { return _promotion; }
+
+    bool started() { return _started; }
+
+    libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);
 };
 
 } // namespace system::tasking

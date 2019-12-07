@@ -2,6 +2,7 @@
 
 #include "arch/x86/InteruptStackFrame.h"
 #include "system/tasking/Thread.h"
+#include "system/tasking/Process.h"
 
 namespace x86
 {
@@ -9,7 +10,10 @@ namespace x86
 class x86Thread : public system::tasking::Thread
 {
 public:
-    x86Thread(system::tasking::ThreadPromotion promotion, system::tasking::ThreadEntry entry) : Thread(promotion, entry) {}
+    x86Thread(
+        system::tasking::Process &process,
+        system::tasking::ThreadPromotion promotion,
+        system::tasking::ThreadEntry entry) : Thread(process, promotion, entry) {}
 
     ~x86Thread() {}
 

@@ -21,9 +21,6 @@ void initialize()
 
     logger_trace("Creating the kernel thread");
 
-    auto kernel_thread = arch::create_thread(ThreadPromotion::SUPERVISOR, nullptr);
-    _running_thread = kernel_thread;
-
     logger_info("The kernel thread has been created");
 }
 

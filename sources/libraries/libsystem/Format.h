@@ -88,4 +88,6 @@ libruntime::ErrorOr<size_t> format(Stream &stream, uint value, FormatInfo &info)
 
 libruntime::ErrorOr<size_t> format(Stream &stream, Formattable &value, FormatInfo &info);
 
+libruntime::ErrorOr<size_t> format(Stream &stream, Formattable *value, FormatInfo &info);
+
 } // namespace libsystem

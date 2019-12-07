@@ -113,6 +113,21 @@ public:
 
     const T &operator*() const { return *_ptr; }
 
+    bool operator==(RefPtr<T> other) const
+    {
+        return _ptr == other._ptr;
+    }
+
+    operator bool() const
+    {
+        return _ptr != nullptr;
+    }
+
+    bool operator!() const
+    {
+        return _ptr == nullptr;
+    }
+
     int refcount()
     {
         if (_ptr)

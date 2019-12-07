@@ -21,6 +21,14 @@ void stop()
     } while (1);
 }
 
+void idle()
+{
+    do
+    {
+        x86::hlt();
+    } while (1);
+}
+
 size_t get_page_size()
 {
     return 4096;
@@ -34,9 +42,9 @@ system::memory::Region get_kernel_region()
     return Region::create_around_non_aligned_address(addr, size);
 }
 
-libruntime::RefPtr<system::tasking::Thread> create_task(system::tasking::ThreadPromotion promotion, system::tasking::ThreadEntry entry)
+libruntime::RefPtr<system::tasking::Thread> create_thread(system::tasking::Process &process, system::tasking::ThreadPromotion promotion, system::tasking::ThreadEntry entry)
 {
-    return libruntime::make<x86::x86Thread>(promotion, entry);
+    return libruntime::make<x86::x86Thread>(process, promotion, entry);
 }
 
 } // namespace arch

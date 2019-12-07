@@ -11,6 +11,7 @@
 
 #include "system/memory/Memory.h"
 #include "system/sheduling/Sheduling.h"
+#include "system/tasking/Process.h"
 
 using namespace x86;
 using namespace system;
@@ -22,12 +23,17 @@ RefPtr<Stream> libsystem::stdout;
 RefPtr<Stream> libsystem::stderr;
 RefPtr<Stream> libsystem::stdlog;
 
+void taskA()
+{
+    libsystem::stdout->write("A", 1);
+}
+
 extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 {
     auto serial = SerialStream(SerialPort::COM1);
     auto terminal = TerminalStream(CGAScreen((void *)0xB8000));
 
-    // We don't went the ref count to try to free these.
+    // We don't went the ref count to try to delete these.
     serial.make_orphan();
     terminal.make_orphan();
 
@@ -76,14 +82,15 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 
     sheduling::initialize();
 
+    auto kernel_process = new tasking::Process(nullptr);
+    kernel_process->create_thread(nullptr);
+    kernel_process->create_thread(static_cast<tasking::ThreadEntry>(taskA));
+
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");
     print("System halted!\n");
 
     asm volatile("int $0x80");
 
-    while (1)
-    {
-        /* code */
-    }
+    arch::idle();
 }

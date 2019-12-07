@@ -52,16 +52,14 @@ void operator delete[](void *ptr)
 
 void operator delete(void *ptr, size_t size)
 {
-    __unused(ptr);
     __unused(size);
-    assert_not_reached();
+    __alloc__::free(ptr);
 }
 
 void operator delete[](void *ptr, size_t size)
 {
-    __unused(ptr);
     __unused(size);
-    assert_not_reached();
+    __alloc__::free(ptr);
 }
 
 extern "C" void __cxa_pure_virtual()
