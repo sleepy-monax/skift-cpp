@@ -160,7 +160,7 @@ RefPtr<T> adopt(T &object)
 }
 
 template <typename Type, typename... Args>
-RefPtr<Type> make(Args... args)
+RefPtr<Type> make(Args &&... args)
 {
     return RefPtr<Type>(adopt(*new Type(args...)));
 }
