@@ -8,7 +8,7 @@
 namespace system::tasking
 {
 
-class Process
+class Process : public libsystem::Formattable
 {
 private:
     int _id;
@@ -22,6 +22,8 @@ public:
     ~Process();
 
     libruntime::RefPtr<Thread> create_thread(ThreadEntry entry);
+
+    libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);
 };
 
 } // namespace system::tasking
