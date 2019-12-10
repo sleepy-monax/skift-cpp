@@ -1,8 +1,8 @@
 #pragma once
 
 #include <arch/x86/x86.h>
-#include <libsystem/Stream.h>
 #include <libruntime/Types.h>
+#include <libsystem/Stream.h>
 
 enum class SerialPort : u16
 {

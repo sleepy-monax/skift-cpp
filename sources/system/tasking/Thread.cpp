@@ -3,6 +3,7 @@
 #include <libsystem/Logger.h>
 
 #include "arch/Arch.h"
+#include "system/sheduling/Sheduling.h"
 #include "system/tasking/Thread.h"
 
 namespace system::tasking
@@ -33,6 +34,7 @@ void Thread::start()
     assert(!_started);
 
     finalize_thread();
+    sheduling::register_thread(libruntime::RefPtr(*this));
 
     _started = true; // It's too late to change anything...
 }

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <libsystem/Stream.h>
-#include <arch/x86/CGAScreen.h>
+
+#include "arch/x86/device/CGAScreen.h"
 
 class TerminalStream : public libsystem::Stream
 {

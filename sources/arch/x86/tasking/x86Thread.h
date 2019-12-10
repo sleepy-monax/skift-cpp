@@ -1,8 +1,8 @@
 #pragma once
 
-#include "arch/x86/InteruptStackFrame.h"
-#include "system/tasking/Thread.h"
+#include "arch/x86/interupts/InteruptStackFrame.h"
 #include "system/tasking/Process.h"
+#include "system/tasking/Thread.h"
 
 namespace x86
 {
@@ -51,17 +51,8 @@ public:
             frame.gs = 0x10;
         }
 
-        frame.eax = 0;
-        frame.ebx = 0;
-        frame.ecx = 0;
-        frame.edx = 0;
-
-        frame.edi = 0;
-        frame.esi = 0;
         frame.ebp = stack().get_pointer();
         frame.esp = stack().get_pointer();
-        frame.intno = 0;
-        frame.err = 0;
         frame.eip = (u32)entry();
         frame.eflags = 0x202;
 

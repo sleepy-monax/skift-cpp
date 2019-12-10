@@ -266,8 +266,8 @@ struct multiboot_apm_info
     multiboot_uint16_t dseg_len;
 };
 
-#include <libsystem/Formattable.h>
 #include "system/memory/Region.h"
+#include <libsystem/Formattable.h>
 
 namespace x86
 {

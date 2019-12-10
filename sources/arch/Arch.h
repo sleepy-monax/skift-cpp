@@ -1,8 +1,8 @@
 #pragma once
 
-#include <libruntime/Types.h>
 #include <libruntime/Macros.h>
 #include <libruntime/RefPtr.h>
+#include <libruntime/Types.h>
 
 #include "system/memory/Region.h"
 #include "system/tasking/Thread.h"

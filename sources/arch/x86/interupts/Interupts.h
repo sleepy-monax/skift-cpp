@@ -1,7 +1,7 @@
 #pragma once
 
-#include <libruntime/Types.h>
 #include <libruntime/Macros.h>
+#include <libruntime/Types.h>
 
 namespace x86
 {

@@ -18,7 +18,9 @@ DIRECTORY_ARCH=$(DIRECTORY_SOURCES)/arch/$(BUILD_ARCH)
 DIRECTORY_SYSTEM=$(DIRECTORY_SOURCES)/system
 
 SOURCES_KERNEL= $(wildcard $(DIRECTORY_ARCH)/*.s) \
+				$(wildcard $(DIRECTORY_ARCH)/**/*.s) \
 				$(wildcard $(DIRECTORY_ARCH)/*.cpp) \
+				$(wildcard $(DIRECTORY_ARCH)/**/*.cpp) \
 				$(wildcard $(DIRECTORY_SYSTEM)/*.cpp) \
 				$(wildcard $(DIRECTORY_SYSTEM)/**/*.cpp) \
 				$(wildcard $(DIRECTORY_LIBRARIES)/libc/*.cpp) \

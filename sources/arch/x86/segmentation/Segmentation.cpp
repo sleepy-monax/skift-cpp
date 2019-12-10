@@ -1,6 +1,6 @@
 #include <libsystem/Logger.h>
 
-#include "arch/x86/Segmentation.h"
+#include "arch/x86/segmentation/Segmentation.h"
 #include "arch/x86/x86.h"
 
 x86::Tss tss;

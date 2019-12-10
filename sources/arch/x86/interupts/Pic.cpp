@@ -1,5 +1,5 @@
+#include "arch/x86/interupts/Pic.h"
 #include "arch/x86/x86.h"
-#include "arch/x86/Pic.h"
 
 namespace x86
 {

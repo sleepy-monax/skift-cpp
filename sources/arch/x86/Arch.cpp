@@ -1,8 +1,7 @@
 #include <arch/Arch.h>
 
+#include "arch/x86/tasking/x86Thread.h"
 #include "arch/x86/x86.h"
-#include "arch/x86/x86Thread.h"
-#include "arch/x86/InteruptStackFrame.h"
 
 using namespace system::memory;
 
@@ -36,7 +35,7 @@ size_t get_page_size()
 
 system::memory::Region get_kernel_region()
 {
-    uintptr_t addr = (uintptr_t)&__kernel_start;
+    uintptr_t addr = reinterpret_cast<uintptr_t>(&__kernel_start);
     size_t size = &__kernel_end - &__kernel_start;
 
     return Region::create_around_non_aligned_address(addr, size);

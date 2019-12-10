@@ -2,12 +2,12 @@
 #include <libsystem/Stdio.h>
 
 #include "arch/Arch.h"
-#include "arch/x86/CGAScreen.h"
-#include "arch/x86/Interupts.h"
-#include "arch/x86/Multiboot.h"
-#include "arch/x86/Segmentation.h"
-#include "arch/x86/SerialStream.h"
 #include "arch/x86/TerminalStream.h"
+#include "arch/x86/boot/Multiboot.h"
+#include "arch/x86/device/CGAScreen.h"
+#include "arch/x86/device/SerialStream.h"
+#include "arch/x86/interupts/Interupts.h"
+#include "arch/x86/segmentation/Segmentation.h"
 
 #include "system/memory/Memory.h"
 #include "system/sheduling/Sheduling.h"
@@ -25,7 +25,10 @@ RefPtr<Stream> libsystem::stdlog;
 
 void taskA()
 {
-    libsystem::stdout->write("A", 1);
+    do
+    {
+        libsystem::stderr->write("A", 1);
+    } while (1);
 }
 
 extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
@@ -77,14 +80,28 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
         return Iteration::CONTINUE;
     });
 
+    return;
+
     x86::segmentation_initialize();
     x86::interupts_initialise();
 
     sheduling::initialize();
 
     auto kernel_process = new tasking::Process(nullptr);
-    kernel_process->create_thread(nullptr);
-    kernel_process->create_thread(static_cast<tasking::ThreadEntry>(taskA));
+
+    auto kernel_thread = kernel_process->create_thread(nullptr);
+    auto taskA_thread = kernel_process->create_thread(reinterpret_cast<tasking::ThreadEntry>(taskA));
+
+    kernel_thread->start();
+    taskA_thread->start();
+
+    logger_info("Hi {}!", kernel_thread.necked());
+    logger_info("Hi {}!", taskA_thread.necked());
+
+    do
+    {
+        libsystem::stderr->write("K", 1);
+    } while (true);
 
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");

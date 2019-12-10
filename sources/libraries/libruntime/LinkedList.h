@@ -1,8 +1,9 @@
 #pragma once
 
-#include <libruntime/Types.h>
-#include <libruntime/Move.h>
 #include <libruntime/Iteration.h>
+#include <libruntime/Move.h>
+#include <libruntime/Types.h>
+#include <libsystem/Assert.h>
 
 namespace libruntime
 {
@@ -207,6 +208,32 @@ public:
     {
         assert(_tail);
         return _tail->value;
+    }
+
+    T peek_and_pushback()
+    {
+        if (_count == 1)
+        {
+            return peek();
+        }
+        else
+        {
+            T value = peek();
+
+            auto *item = _head;
+
+            // Make the next item the first one.
+            item->next->prev = NULL;
+            _head = item->next;
+
+            // Make the first item the last one.
+            item->next = NULL;
+            _tail->next = item;
+            item->prev = _tail;
+            _tail = item;
+
+            return value;
+        }
     }
 
     bool containe(T value)

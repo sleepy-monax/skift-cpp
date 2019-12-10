@@ -1,7 +1,7 @@
 #pragma once
 
-#include <libruntime/Types.h>
 #include <libc/string.h>
+#include <libruntime/Types.h>
 
 #include "system/memory/Memory.h"
 
@@ -18,12 +18,12 @@ public:
     Stack(size_t how_many_pages)
     {
         _region = memory::alloc_region(how_many_pages);
+        _ptr = _region.end_address();
     }
 
     ~Stack()
     {
         memory::free_region(_region);
-        _ptr = _region.end_address();
     }
 
     template <typename T>

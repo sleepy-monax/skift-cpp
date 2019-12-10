@@ -12,7 +12,7 @@ class Process : public libsystem::Formattable
 {
 private:
     int _id;
-    ThreadPromotion _promotion;
+    ThreadPromotion _promotion = ThreadPromotion::SUPERVISOR;
     libruntime::LinkedList<libruntime::RefPtr<Thread>> _threads;
     Process *_parent;
 
