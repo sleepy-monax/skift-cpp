@@ -17,32 +17,38 @@ extern "C"
     void strapd(char *str, char c)
     {
         unsigned int len = strlen(str);
+
         str[len] = c;
         str[len + 1] = '\0';
     }
 
     void strrvs(char *str)
     {
-        int c, i, j;
-        for (i = 0, j = strlen(str) - 1; i < j; i++, j--)
+        for (int i = 0, j = strlen(str) - 1; i < j; i++, j--)
         {
-            c = str[i];
+            int tmp = str[i];
             str[i] = str[j];
-            str[j] = c;
+            str[j] = tmp;
         }
     }
 
     void *memset(void *dest, int ch, size_t size)
     {
         for (size_t i = 0; i < size; i++)
+        {
             ((char *)dest)[i] = ch;
+        }
+
         return dest;
     }
 
     void *memcpy(void *dest, const void *src, size_t size)
     {
         for (size_t i = 0; i < size; i++)
+        {
             ((char *)dest)[i] = ((char *)src)[i];
+        }
+
         return dest;
     }
 
@@ -51,13 +57,18 @@ extern "C"
         if (dest <= src)
         {
             for (size_t i = 0; i < size; i++)
+            {
                 ((char *)dest)[i] = ((char *)src)[i];
+            }
         }
         else
         {
             for (int i = size - 1; i >= 0; i--)
+            {
                 ((char *)dest)[i] = ((char *)src)[i];
+            }
         }
+
         return dest;
     }
 
@@ -70,6 +81,7 @@ extern "C"
         {
             iter1++;
             iter2++;
+
             n--;
         }
 
