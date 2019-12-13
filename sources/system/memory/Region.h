@@ -56,7 +56,7 @@ public:
     {
         __unused(info);
 
-        return libsystem::format(stream, "Region({#x}-{#x})", base_address(), end_address());
+        return libsystem::format(stream, "Region[{#x}-{#x}]", base_address(), end_address() - 1);
     }
 };
 

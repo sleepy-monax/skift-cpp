@@ -1,9 +1,9 @@
-#include <libsystem/__plugs__.h>
 #include <libsystem/Logger.h>
+#include <libsystem/__plugs__.h>
 
 #include "arch/Arch.h"
-#include "system/memory/Memory.h"
 #include "system/System.h"
+#include "system/memory/Memory.h"
 
 namespace __plugs__
 {
@@ -69,15 +69,11 @@ void memory_unlock() {}
 
 libruntime::ErrorOr<uintptr_t> memory_alloc(size_t how_many_pages)
 {
-    logger_trace("Allocating {} pages.", how_many_pages);
-
     return libruntime::ErrorOr<uintptr_t>(system::memory::alloc_region(how_many_pages).base_address());
 }
 
 void memory_free(uintptr_t addr, size_t how_many_pages)
 {
-    logger_trace("Freeing {} pages at {x}.", how_many_pages, addr);
-
     system::memory::free_region(system::memory::Region::from_aligned_address(addr, how_many_pages));
 }
 
