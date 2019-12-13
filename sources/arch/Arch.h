@@ -14,6 +14,8 @@ void stop() __noreturn;
 
 void idle() __noreturn;
 
+void halt();
+
 size_t get_page_size();
 
 system::memory::Region get_kernel_region();

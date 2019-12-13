@@ -28,6 +28,11 @@ void idle()
     } while (1);
 }
 
+void halt()
+{
+    x86::hlt();
+}
+
 size_t get_page_size()
 {
     return 4096;
