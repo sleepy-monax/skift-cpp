@@ -28,6 +28,16 @@ void taskA()
     do
     {
         libsystem::stderr->write("A", 1);
+        arch::halt();
+    } while (1);
+}
+
+void taskB()
+{
+    do
+    {
+        libsystem::stderr->write("B", 1);
+        arch::halt();
     } while (1);
 }
 
@@ -61,8 +71,6 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     }
 
     multiboot.with_memory_map([](auto entry) {
-        logger_trace("Memory map entry: {#x} {}kib", entry.address(), entry.size() / 1024);
-
         if (entry.is_available())
         {
             logger_info("Marking {} as free usable memory by the kernel...", entry);
@@ -80,32 +88,34 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
         return Iteration::CONTINUE;
     });
 
-    return;
-
     x86::segmentation_initialize();
-    x86::interupts_initialise();
-
     sheduling::initialize();
+    x86::interupts_initialise();
 
     auto kernel_process = new tasking::Process(nullptr);
 
     auto kernel_thread = kernel_process->create_thread(nullptr);
     auto taskA_thread = kernel_process->create_thread(reinterpret_cast<tasking::ThreadEntry>(taskA));
+    auto taskB_thread = kernel_process->create_thread(reinterpret_cast<tasking::ThreadEntry>(taskB));
 
     kernel_thread->start();
     taskA_thread->start();
+    taskB_thread->start();
 
     logger_info("Hi {}!", kernel_thread.necked());
     logger_info("Hi {}!", taskA_thread.necked());
-
-    do
-    {
-        libsystem::stderr->write("K", 1);
-    } while (true);
+    logger_info("Hi {}!", taskB_thread.necked());
 
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");
     print("System halted!\n");
+
+    do
+    {
+        libsystem::stderr->write("K", 1);
+
+        arch::halt();
+    } while (true);
 
     asm volatile("int $0x80");
 

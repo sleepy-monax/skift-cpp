@@ -18,10 +18,6 @@ void initialize()
     logger_info("Initializing sheduling");
 
     _threads = new LinkedList<RefPtr<Thread>>();
-
-    logger_trace("Creating the kernel thread");
-
-    logger_info("The kernel thread has been created");
 }
 
 void register_thread(RefPtr<Thread> thread)
@@ -33,15 +29,11 @@ void register_thread(RefPtr<Thread> thread)
         logger_info("Using {} has running thread", thread.necked());
         _running_thread = thread;
     }
-
-    logger_trace("Registering {}", thread.necked());
 }
 
 void unregister_thread(RefPtr<Thread> thread)
 {
     _threads->remove_all(thread);
-
-    logger_trace("Unregistering {}", thread.necked());
 }
 
 uintptr_t shedule(uintptr_t stack_pointer)
@@ -54,8 +46,6 @@ uintptr_t shedule(uintptr_t stack_pointer)
     _running_thread->stack().set_pointer(stack_pointer);
 
     _running_thread = _threads->peek_and_pushback();
-
-    logger_info("Running thread is now {}", _running_thread.necked());
 
     return _running_thread->stack().get_pointer();
 }

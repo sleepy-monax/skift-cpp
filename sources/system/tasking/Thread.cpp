@@ -20,20 +20,17 @@ Thread::Thread(Process &process, ThreadPromotion promotion, ThreadEntry entry)
       _userstack(16),
       _started(false)
 {
-    prepare_thread();
-    logger_info("Construction {}", this);
 }
 
 Thread::~Thread()
 {
-    logger_info("Destructing {}", this);
 }
 
 void Thread::start()
 {
     assert(!_started);
 
-    finalize_thread();
+    finalize();
     sheduling::register_thread(libruntime::RefPtr(*this));
 
     _started = true; // It's too late to change anything...
@@ -43,7 +40,7 @@ libruntime::ErrorOr<size_t> Thread::format(libsystem::Stream &stream, libsystem:
 {
     __unused(info);
 
-    return libsystem::format(stream, "Thread({}, {})", id(), refcount());
+    return libsystem::format(stream, "Thread({})", id());
 }
 
 } // namespace system::tasking

@@ -38,9 +38,9 @@ public:
 
     virtual ~Thread();
 
-    virtual void prepare_thread(){};
+    virtual void prepare() = 0;
 
-    virtual void finalize_thread(){};
+    virtual void finalize() = 0;
 
     void start();
 

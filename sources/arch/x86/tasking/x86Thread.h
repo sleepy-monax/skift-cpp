@@ -17,7 +17,7 @@ public:
 
     ~x86Thread() {}
 
-    void prepare_task()
+    void prepare()
     {
         stack().push(0);
         stack().push(0);
@@ -26,7 +26,7 @@ public:
         userstack().push(0);
     }
 
-    void finalize_task()
+    void finalize()
     {
         InteruptStackFrame frame;
 
