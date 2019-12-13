@@ -5,6 +5,8 @@
 #include "arch/x86/interupts/Pic.h"
 #include "arch/x86/x86.h"
 
+#include "arch/Arch.h"
+#include "system/System.h"
 #include "system/sheduling/Sheduling.h"
 
 x86::IdtEntry idt_entries[IDT_ENTRY_COUNT] = {0};
@@ -49,21 +51,16 @@ void x86::interupts_initialise()
 extern "C" u32 interupts_handle(u32 esp, x86::InteruptStackFrame stackframe)
 {
 
-    logger_info("Interupt {}: {#x} {#x} {} {#b}",
-                stackframe.intno >= 32 ? "IRQ" : "ISR",
-                esp,
-                stackframe.eip,
-                stackframe.intno,
-                stackframe.err);
-
-    logger_info("Selectors {#x} {#x} {#x} {#x} {#x}", stackframe.cs, stackframe.ds, stackframe.es, stackframe.fs, stackframe.gs);
+    if (stackframe.intno < 32)
+    {
+        logger_fatal("x86 CPU exception: {} error={}", stackframe.intno, stackframe.err);
+        system::PANIC("CPU exception!");
+    }
 
     if (stackframe.intno == 32)
     {
         esp = system::sheduling::shedule(esp);
     }
-
-    logger_info("esp {#x}", esp);
 
     x86::pic_ack(stackframe.intno);
 
