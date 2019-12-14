@@ -6,6 +6,7 @@ BUILD_CONFIG?=debug
 BUILD_TARGET=$(BUILD_CONFIG)-$(BUILD_ARCH)
 
 DIRECTORY_BUILD=build/$(BUILD_TARGET)
+DIRECTORY_ISO=build/isodir
 DIRECTORY_SOURCES=sources
 
 # --- Libraries -------------------------------------------------------------- #
@@ -33,6 +34,8 @@ BINARY_KERNEL=$(DIRECTORY_BUILD)/kernel.elf
 
 LOG=@echo -e
 DIRECTORY_GUARD=@mkdir -p $(@D)
+
+SYSTEM_ISO=build/skiftOS-$(BUILD_TARGET).iso
 
 # --- Common configs --------------------------------------------------------- #
 
@@ -101,13 +104,23 @@ dump:
 	$(LOG) Kernel sources:"\n"$(SOURCES_KERNEL)
 	$(LOG) Kernel objects:"\n"$(OBJECTS_KERNEL)
 
-all: $(BINARY_KERNEL)
+all: $(SYSTEM_ISO)
 
-run: $(BINARY_KERNEL)
-	qemu-system-i386 -serial mon:stdio -kernel $(BINARY_KERNEL)
+run: $(SYSTEM_ISO)
+	qemu-system-i386 -serial mon:stdio -cdrom $(SYSTEM_ISO)
 
 clean:
 	rm -rf $(DIRECTORY_BUILD)
+	rm -rf $(DIRECTORY_ISO)
+	rm -f $(SYSTEM_ISO)
+
+
+$(SYSTEM_ISO): $(BINARY_KERNEL)
+	@mkdir -p $(DIRECTORY_ISO)/boot/grub/
+	@cp grub.cfg $(DIRECTORY_ISO)/boot/grub/
+	@cp $(BINARY_KERNEL) $(DIRECTORY_ISO)/boot/
+	grub-mkrescue -o $(SYSTEM_ISO) $(DIRECTORY_ISO) || \
+	grub2-mkrescue -o $(SYSTEM_ISO) $(DIRECTORY_ISO)
 
 # --- Kernel recipies -------------------------------------------------------- #
 
