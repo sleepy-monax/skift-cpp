@@ -11,9 +11,8 @@ class x86Thread : public system::tasking::Thread
 {
 public:
     x86Thread(
-        system::tasking::Process &process,
-        system::tasking::ThreadPromotion promotion,
-        system::tasking::ThreadEntry entry) : Thread(process, promotion, entry) {}
+        libruntime::RefPtr<system::tasking::Process> process,
+        system::tasking::ThreadEntry entry) : Thread(process, entry) {}
 
     ~x86Thread() {}
 
@@ -30,7 +29,7 @@ public:
     {
         InteruptStackFrame frame;
 
-        if (promotion() == system::tasking::ThreadPromotion::USER)
+        if (promotion() == system::tasking::Promotion::USER)
         {
             stack().push((u32)0x20);
             stack().push(userstack().get_pointer());

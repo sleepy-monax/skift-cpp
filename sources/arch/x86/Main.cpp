@@ -25,20 +25,30 @@ RefPtr<Stream> libsystem::stdlog;
 
 void taskA()
 {
-    do
+    for (int i = 0; i < 16; i++)
     {
         libsystem::stderr->write("A", 1);
         arch::halt();
-    } while (1);
+    }
+
+    logger_info("Good bye cruel world!");
+    system::tasking::Thread::exit();
+
+    assert_not_reached();
 }
 
 void taskB()
 {
-    do
+    for (int i = 0; i < 32; i++)
     {
         libsystem::stderr->write("B", 1);
         arch::halt();
-    } while (1);
+    }
+
+    logger_info("Good bye cruel world!");
+    system::tasking::Thread::exit();
+
+    assert_not_reached();
 }
 
 extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
@@ -92,19 +102,11 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     sheduling::initialize();
     x86::interupts_initialise();
 
-    auto kernel_process = new tasking::Process(nullptr);
+    auto kernel_process = libruntime::make<tasking::Process>(nullptr);
 
-    auto kernel_thread = kernel_process->create_thread(nullptr);
-    auto taskA_thread = kernel_process->create_thread(reinterpret_cast<tasking::ThreadEntry>(taskA));
-    auto taskB_thread = kernel_process->create_thread(reinterpret_cast<tasking::ThreadEntry>(taskB));
-
-    kernel_thread->start();
-    taskA_thread->start();
-    taskB_thread->start();
-
-    logger_info("Hi {}!", kernel_thread.necked());
-    logger_info("Hi {}!", taskA_thread.necked());
-    logger_info("Hi {}!", taskB_thread.necked());
+    tasking::Thread::create(kernel_process, nullptr)->start();
+    tasking::Thread::create(kernel_process, reinterpret_cast<tasking::ThreadEntry>(taskA))->start();
+    tasking::Thread::create(kernel_process, reinterpret_cast<tasking::ThreadEntry>(taskB))->start();
 
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");

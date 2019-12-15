@@ -36,6 +36,20 @@ void unregister_thread(RefPtr<Thread> thread)
     _threads->remove_all(thread);
 }
 
+libruntime::RefPtr<system::tasking::Thread> running_thread()
+{
+    assert(_running_thread.necked() != NULL);
+
+    return _running_thread;
+}
+
+libruntime::RefPtr<system::tasking::Process> running_process()
+{
+    assert(_running_thread.necked() != NULL);
+
+    return _running_thread->process();
+}
+
 uintptr_t shedule(uintptr_t stack_pointer)
 {
     if (_running_thread.necked() == NULL)

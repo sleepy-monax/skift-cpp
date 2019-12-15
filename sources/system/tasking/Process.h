@@ -3,17 +3,16 @@
 #include <libruntime/LinkedList.h>
 #include <libruntime/RefPtr.h>
 
-#include "system/tasking/Thread.h"
+#include "system/tasking/Promotion.h"
 
 namespace system::tasking
 {
 
-class Process : public libsystem::Formattable
+class Process : public libsystem::Formattable, public libruntime::RefCounted<Process>
 {
 private:
     int _id;
-    ThreadPromotion _promotion = ThreadPromotion::SUPERVISOR;
-    libruntime::LinkedList<libruntime::RefPtr<Thread>> _threads;
+    Promotion _promotion = Promotion::SUPERVISOR;
     Process *_parent;
 
 public:
@@ -21,9 +20,9 @@ public:
 
     ~Process();
 
-    libruntime::RefPtr<Thread> create_thread(ThreadEntry entry);
-
     libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);
+
+    Promotion promotion() { return _promotion; }
 };
 
 } // namespace system::tasking

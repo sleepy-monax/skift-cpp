@@ -51,6 +51,11 @@ static inline void out32(u16 port, u32 data)
                  : "a"(data), "d"(port));
 }
 
+static inline void raise_irq1()
+{
+    asm volatile("int $32");
+}
+
 static inline void cli(void) { asm volatile("cli"); }
 
 static inline void sti(void) { asm volatile("sti"); }

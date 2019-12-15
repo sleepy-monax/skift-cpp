@@ -16,13 +16,14 @@ void idle() __noreturn;
 
 void halt();
 
+void yield();
+
 size_t get_page_size();
 
 system::memory::Region get_kernel_region();
 
 libruntime::RefPtr<system::tasking::Thread> create_thread(
-    system::tasking::Process &process,
-    system::tasking::ThreadPromotion promotion,
+    libruntime::RefPtr<system::tasking::Process> process,
     system::tasking::ThreadEntry entry);
 
 } // namespace arch

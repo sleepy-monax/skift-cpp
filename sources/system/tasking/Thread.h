@@ -3,6 +3,7 @@
 #include <libruntime/RefCounted.h>
 
 #include "system/platform/Context.h"
+#include "system/tasking/Process.h"
 #include "system/tasking/Stack.h"
 
 namespace system::tasking
@@ -12,21 +13,14 @@ class Process;
 
 typedef void (*ThreadEntry)(void);
 
-enum class ThreadPromotion
-{
-    SUPERVISOR,
-    USER,
-};
-
 class Thread : public libruntime::RefCounted<Thread>, public libsystem::Formattable
 {
 private:
     int _id;
 
     ThreadEntry _entry;
-    ThreadPromotion _promotion;
 
-    Process &_process;
+    libruntime::RefPtr<Process> _process;
 
     Stack _stack;
     Stack _userstack;
@@ -34,7 +28,7 @@ private:
     bool _started;
 
 public:
-    Thread(Process &process, ThreadPromotion promotion, ThreadEntry entry);
+    Thread(libruntime::RefPtr<Process> process, ThreadEntry entry);
 
     virtual ~Thread();
 
@@ -52,11 +46,17 @@ public:
 
     Stack &userstack() { return _userstack; }
 
-    ThreadPromotion promotion() { return _promotion; }
+    libruntime::RefPtr<Process> process() { return _process; }
+
+    Promotion promotion() { return _process->promotion(); }
 
     bool started() { return _started; }
 
     libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);
+
+    static libruntime::RefPtr<Thread> create(libruntime::RefPtr<Process> process, ThreadEntry entry);
+
+    static void exit() __noreturn;
 };
 
 } // namespace system::tasking
