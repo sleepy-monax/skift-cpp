@@ -9,6 +9,7 @@
 #include "arch/x86/interupts/Interupts.h"
 #include "arch/x86/segmentation/Segmentation.h"
 
+#include "system/System.h"
 #include "system/memory/Memory.h"
 #include "system/sheduling/Sheduling.h"
 #include "system/tasking/Process.h"
@@ -45,7 +46,7 @@ void taskB()
         arch::halt();
     }
 
-    logger_info("Good bye cruel world!");
+    logger_info("Bye bye!");
     system::tasking::Thread::exit();
 
     assert_not_reached();
@@ -73,7 +74,8 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 
     if (!multiboot.is_valid())
     {
-        logger_info("Invalid bootloader, how did you do that !?");
+        logger_fatal("Invalid bootloader, how did you do that !?");
+        system::PANIC("Invalid bootloader, how did you do that !?");
     }
     else
     {
@@ -110,7 +112,6 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
 
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");
-    print("System halted!\n");
 
     do
     {
