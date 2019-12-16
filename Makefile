@@ -6,7 +6,7 @@ BUILD_CONFIG?=debug
 BUILD_TARGET=$(BUILD_CONFIG)-$(BUILD_ARCH)
 
 DIRECTORY_BUILD=build/$(BUILD_TARGET)
-DIRECTORY_ISO=build/isodir
+DIRECTORY_ISO=$(DIRECTORY_BUILD)/isodir
 DIRECTORY_SOURCES=sources
 
 # --- Libraries -------------------------------------------------------------- #
@@ -35,7 +35,7 @@ BINARY_KERNEL=$(DIRECTORY_BUILD)/kernel.elf
 LOG=@echo -e
 DIRECTORY_GUARD=@mkdir -p $(@D)
 
-SYSTEM_ISO=build/skiftOS-$(BUILD_TARGET).iso
+SYSTEM_ISO=$(DIRECTORY_BUILD)/image.iso
 
 # --- Common configs --------------------------------------------------------- #
 
