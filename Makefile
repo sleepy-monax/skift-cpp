@@ -43,6 +43,7 @@ CXX_INCLUDES=-I$(DIRECTORY_SOURCES) \
 			 -I$(DIRECTORY_LIBRARIES)
 
 CXX_DEFINES=-D__BUILD_TARGET__=\"$(BUILD_TARGET)\" \
+			-D__BUILD_GITREF__=\"$(shell git rev-parse --abbrev-ref HEAD || echo unknown)/$(shell git rev-parse --short HEAD || echo unknown)\" \
 			-D__BUILD_UNAME__=\""$(shell uname -s -o -m -r)"\"
 
 CXX=i686-elf-g++

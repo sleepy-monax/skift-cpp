@@ -57,7 +57,7 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     auto serial = SerialStream(SerialPort::COM1);
     auto terminal = TerminalStream(CGAScreen((void *)0xB8000));
 
-    // We don't went the ref count to try to delete these.
+    // We don't went RefPtr to try to delete these.
     serial.make_orphan();
     terminal.make_orphan();
 
@@ -67,7 +67,7 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     libsystem::stdlog = adopt(serial);
 
     logger_info("Booting...");
-    logger_info("hjert kernel ({})", __BUILD_TARGET__);
+    logger_info("hjert kernel ({} {})", __BUILD_TARGET__, __BUILD_GITREF__);
     logger_info("Kernel build on \"{}\"", __BUILD_UNAME__);
 
     auto multiboot = Multiboot(multiboot_magic, multiboot_info);
