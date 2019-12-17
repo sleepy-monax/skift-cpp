@@ -1,5 +1,6 @@
 #include <libsystem/Logger.h>
 #include <libsystem/__plugs__.h>
+#include <libruntime/SpinLock.h>
 
 #include "arch/Arch.h"
 #include "system/System.h"
@@ -63,9 +64,22 @@ size_t get_page_size()
     return arch::get_page_size();
 }
 
-void memory_lock() {}
+libruntime::SpinLock _memory_lock;
 
-void memory_unlock() {}
+bool memory_is_lock()
+{
+    return _memory_lock.is_acquired();
+}
+
+void memory_lock()
+{
+    _memory_lock.acquire();
+}
+
+void memory_unlock()
+{
+    _memory_lock.release();
+}
 
 libruntime::ErrorOr<uintptr_t> memory_alloc(size_t how_many_pages)
 {

@@ -26,6 +26,8 @@ libruntime::ErrorOr<size_t> file_tell(int handle);
 
 /* --- Memory Managment ----------------------------------------------------- */
 
+bool memory_is_lock();
+
 void memory_lock();
 
 void memory_unlock();
