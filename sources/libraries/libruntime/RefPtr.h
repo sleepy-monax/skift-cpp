@@ -154,13 +154,13 @@ public:
 };
 
 template <typename T>
-RefPtr<T> adopt(T &object)
+inline RefPtr<T> adopt(T &object)
 {
     return RefPtr<T>(RefPtr<T>::Adopt, object);
 }
 
 template <typename Type, typename... Args>
-RefPtr<Type> make(Args &&... args)
+inline RefPtr<Type> make(Args &&... args)
 {
     return RefPtr<Type>(adopt(*new Type(args...)));
 }
