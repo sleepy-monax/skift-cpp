@@ -13,7 +13,7 @@ ErrorOr<RefPtr<FileStream>> FileStream::open(const char *path, FileStreamFlags f
 
     if (handle == Error::SUCCEED)
     {
-        return libruntime::make<FileStream>(handle.value());
+        return libruntime::make<FileStream>(handle.value(), flags);
     }
     else
     {
