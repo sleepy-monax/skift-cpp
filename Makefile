@@ -109,6 +109,9 @@ all: $(SYSTEM_ISO)
 run: $(SYSTEM_ISO)
 	qemu-system-i386 -serial mon:stdio -cdrom $(SYSTEM_ISO)
 
+run-headless: $(SYSTEM_ISO)
+	qemu-system-i386 -nographic -serial mon:stdio -cdrom $(SYSTEM_ISO)
+
 clean:
 	rm -rf $(DIRECTORY_BUILD)
 	rm -rf $(DIRECTORY_ISO)
