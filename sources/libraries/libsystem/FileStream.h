@@ -1,8 +1,7 @@
 #pragma once
 
-#include <libsystem/Stream.h>
-#include <libsystem/__plugs__.h>
 #include <libruntime/RefPtr.h>
+#include <libsystem/Stream.h>
 
 namespace libsystem
 {
@@ -16,14 +15,14 @@ enum FileStreamFlags
 class FileStream : public Stream
 {
 private:
-    int _fd;
-    FileStreamFlags flags;
+    int _handle;
+    FileStreamFlags _flags;
 
 public:
     static libruntime::ErrorOr<libruntime::RefPtr<FileStream>>
     open(const char *path, FileStreamFlags flags);
 
-    FileStream(int fd);
+    FileStream(int handle, FileStreamFlags flags);
 
     ~FileStream();
 
