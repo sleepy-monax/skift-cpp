@@ -1,6 +1,10 @@
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
+#include <libruntime/SpinLock.h>
 #include <libsystem/Logger.h>
 #include <libsystem/__plugs__.h>
-#include <libruntime/SpinLock.h>
 
 #include "arch/Arch.h"
 #include "system/System.h"

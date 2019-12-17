@@ -1,9 +1,13 @@
 #pragma once
 
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 #include <libruntime/ErrorOr.h>
 #include <libruntime/Types.h>
-#include <libsystem/Stream.h>
 #include <libsystem/FileStream.h>
+#include <libsystem/Stream.h>
 
 extern "C" void __plug_init_libsystem();
 

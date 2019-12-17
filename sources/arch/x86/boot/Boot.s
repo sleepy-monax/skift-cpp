@@ -1,3 +1,7 @@
+; Copyright © 2019-2020 N. Van Bossuyt.                                        ;
+; This code is licensed under the 3-Clause BSD License.                        ;
+; See: LICENSE.md                                                              ;
+
 MBALIGN  equ  1 << 0
 MEMINFO  equ  1 << 1
 MBVIDEO  equ  0x4

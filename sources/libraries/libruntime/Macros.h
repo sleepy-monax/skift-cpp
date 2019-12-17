@@ -1,5 +1,9 @@
 #pragma once
 
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 #ifndef __BUILD_TARGET__
 #define __BUILD_TARGET__ "unknown"
 #endif

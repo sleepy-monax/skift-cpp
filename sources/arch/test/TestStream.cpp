@@ -1,9 +1,14 @@
-#include <cassert>
-#include "TestFileStream.h"
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
 
+#include <cassert>
+
+#include <libruntime/Macros.h>
 #include <libsystem/Format.h>
 #include <libsystem/Stdio.h>
-#include <libruntime/Macros.h>
+
+#include "TestFileStream.h"
 
 libsystem::Stream *libsystem::stdin;
 libsystem::Stream *libsystem::stdout;

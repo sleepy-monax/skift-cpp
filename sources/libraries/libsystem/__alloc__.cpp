@@ -1,10 +1,14 @@
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 /*               Durand's Amazing Super Duper Memory functions.               */
 
-#include <libsystem/__plugs__.h>
-#include <libsystem/__alloc__.h>
-#include <libsystem/Logger.h>
-#include <libsystem/Assert.h>
 #include <libc/string.h>
+#include <libsystem/Assert.h>
+#include <libsystem/Logger.h>
+#include <libsystem/__alloc__.h>
+#include <libsystem/__plugs__.h>
 
 #define VERSION "1.1"
 #define ALIGNMENT 16ul

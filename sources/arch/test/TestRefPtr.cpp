@@ -1,10 +1,14 @@
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 #include <assert.h>
 #include <stdio.h>
 
+#include <libruntime/Macros.h>
 #include <libruntime/Move.h>
 #include <libruntime/RefCounted.h>
 #include <libruntime/RefPtr.h>
-#include <libruntime/Macros.h>
 
 using namespace libruntime;
 

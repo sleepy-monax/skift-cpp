@@ -1,5 +1,9 @@
-#include <libsystem/Stream.h>
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 #include <libruntime/Macros.h>
+#include <libsystem/Stream.h>
 
 using namespace libruntime;
 

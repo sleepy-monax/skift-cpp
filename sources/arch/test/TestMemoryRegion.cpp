@@ -1,7 +1,12 @@
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 #include <assert.h>
+
 #include "arch/Arch.h"
-#include "system/memory/Region.h"
 #include "system/memory/Region.cpp"
+#include "system/memory/Region.h"
 
 using system::memory::Region;
 

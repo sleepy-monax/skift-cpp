@@ -1,6 +1,6 @@
-;; Copyright © 2018-2019 N. Van Bossuyt.                                      ;;
-;; This code is licensed under the MIT License.                               ;;
-;; See: LICENSE.md                                                            ;;
+; Copyright © 2019-2020 N. Van Bossuyt.                                        ;
+; This code is licensed under the 3-Clause BSD License.                        ;
+; See: LICENSE.md                                                              ;
 
 
 %macro INTERRUPT_NAME 1

@@ -1,3 +1,7 @@
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 #include "arch/x86/interupts/Pic.h"
 #include "arch/x86/x86.h"
 

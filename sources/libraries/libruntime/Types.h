@@ -1,7 +1,11 @@
 #pragma once
 
-#include <stdint.h>
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 #include <stddef.h>
+#include <stdint.h>
 
 typedef unsigned char byte;
 

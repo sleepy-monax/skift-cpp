@@ -1,7 +1,12 @@
-#include <libruntime/Types.h>
-#include <libruntime/Macros.h>
-#include <libsystem/Assert.h>
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 #include <libsystem/__alloc__.h>
+
+#include <libruntime/Macros.h>
+#include <libruntime/Types.h>
+#include <libsystem/Assert.h>
 #include <libsystem/Logger.h>
 
 #define MAX_AT_EXIT_FUNCTION 128

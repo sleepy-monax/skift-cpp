@@ -1,6 +1,10 @@
+/* Copyright © 2019-2020 N. Van Bossuyt.                                      */
+/* This code is licensed under the 3-Clause BSD License.                      */
+/* See: LICENSE.md                                                            */
+
 #include <libruntime/Macros.h>
-#include <libsystem/__plugs__.h>
 #include <libsystem/Logger.h>
+#include <libsystem/__plugs__.h>
 
 void libsystem::__assert_failled(const char *file, int line, const char *expr)
 {
