@@ -1,6 +1,8 @@
 #pragma once
 
 #include <libc/string.h>
+#include <libruntime/OwnPtr.h>
+#include <libruntime/RefPtr.h>
 #include <libsystem/Stream.h>
 
 namespace libsystem
@@ -89,5 +91,17 @@ libruntime::ErrorOr<size_t> format(Stream &stream, uint value, FormatInfo &info)
 libruntime::ErrorOr<size_t> format(Stream &stream, Formattable &value, FormatInfo &info);
 
 libruntime::ErrorOr<size_t> format(Stream &stream, Formattable *value, FormatInfo &info);
+
+template <typename T>
+libruntime::ErrorOr<size_t> format(Stream &stream, libruntime::RefPtr<T> &value, FormatInfo &info)
+{
+    return format(stream, value.necked(), info);
+}
+
+template <typename T>
+libruntime::ErrorOr<size_t> format(Stream &stream, libruntime::OwnPtr<T> &value, FormatInfo &info)
+{
+    return format(stream, value.necked(), info);
+}
 
 } // namespace libsystem
