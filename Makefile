@@ -69,11 +69,7 @@ KCXXFLAGS=-ffreestanding \
 		  -fsanitize=undefined \
 		  -fno-stack-protector \
 		  -nostdlib \
-		  -nostdinc++ \
-		  -mno-80387 \
-		  -mno-mmx \
-		  -mno-sse \
-		  -mno-sse2
+		  -nostdinc++
 
 KLD=$(LD)
 KLDFLAGS=-m elf_i386 -T $(DIRECTORY_ARCH)/system.ld
