@@ -39,7 +39,8 @@ SYSTEM_ISO=$(DIRECTORY_BUILD)/image.iso
 
 # --- Common configs --------------------------------------------------------- #
 
-CXX_INCLUDES=-I$(DIRECTORY_SOURCES) \
+CXX_INCLUDES=-I. \
+			 -I$(DIRECTORY_SOURCES) \
 			 -I$(DIRECTORY_LIBRARIES)
 
 CXX_DEFINES=-D__BUILD_TARGET__=\"$(BUILD_TARGET)\" \
