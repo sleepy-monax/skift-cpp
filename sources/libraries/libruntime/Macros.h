@@ -20,6 +20,18 @@
 
 #define __aligned(__align) __attribute__((aligned(__align)))
 
+// Align the nearest _lower_ aligned address
+// ex: 8 with align = 8 -> 8
+// ex: 9 with align = 8 -> 16
+// ex: 7 with align = 8 -> 0
+#define __align_down(__addr, __align) ((__addr) & ~((__align)-1))
+
+// Align the nearest _upper_ aligned address
+// ex: 8 with align = 8 -> 8
+// ex: 9 with align = 8 -> 16
+// ex: 7 with align = 8 -> 8
+#define __align_up(__addr, __align) (((__addr) + (__align)-1) & ~((__align)-1))
+
 #define __unused(__arg) (void)(__arg)
 
 #define __noreturn __attribute__((noreturn));

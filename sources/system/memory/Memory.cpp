@@ -22,6 +22,11 @@ static Region bootstarp;
 
 static LinkedList<Region> *free_list;
 
+bool is_bootstraped()
+{
+    return bootstraped;
+}
+
 static Region take_from_free_list(size_t how_many_pages)
 {
     Region region = Region::empty();

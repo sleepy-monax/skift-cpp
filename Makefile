@@ -116,7 +116,7 @@ clean:
 	rm -f $(SYSTEM_ISO)
 
 
-$(SYSTEM_ISO): $(BINARY_KERNEL)
+$(SYSTEM_ISO): $(BINARY_KERNEL) grub.cfg
 	@mkdir -p $(DIRECTORY_ISO)/boot/grub/
 	@cp grub.cfg $(DIRECTORY_ISO)/boot/grub/
 	@cp $(BINARY_KERNEL) $(DIRECTORY_ISO)/boot/

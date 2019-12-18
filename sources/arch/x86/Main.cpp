@@ -30,7 +30,7 @@ RefPtr<Stream> libsystem::stdlog;
 
 void taskA()
 {
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 8; i++)
     {
         libsystem::stderr->write("A", 1);
         arch::halt();
@@ -44,7 +44,7 @@ void taskA()
 
 void taskB()
 {
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < 16; i++)
     {
         libsystem::stderr->write("B", 1);
         arch::halt();
@@ -56,7 +56,7 @@ void taskB()
     assert_not_reached();
 }
 
-extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
+extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
 {
     auto serial = SerialStream(SerialPort::COM1);
     auto terminal = TerminalStream(CGAScreen((void *)0xB8000));
@@ -74,7 +74,7 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     logger_info("hjert kernel ({} {})", __BUILD_TARGET__, __BUILD_GITREF__);
     logger_info("Kernel build on \"{}\"", __BUILD_UNAME__);
 
-    auto multiboot = Multiboot(multiboot_magic, multiboot_info);
+    auto multiboot = Multiboot(multiboot_magic, multiboot_addr);
 
     if (!multiboot.is_valid())
     {
@@ -104,9 +104,15 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
         return Iteration::CONTINUE;
     });
 
+    if (!memory::is_bootstraped())
+    {
+        system::PANIC("Failled to bootstrap the memory manager!");
+    }
+
     x86::segmentation_initialize();
-    sheduling::initialize();
     x86::interupts_initialise();
+
+    sheduling::initialize();
 
     auto kernel_process = libruntime::make<tasking::Process>(nullptr, String("Kernel"));
 

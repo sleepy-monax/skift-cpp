@@ -16,4 +16,6 @@ Region alloc_region(size_t how_many_pages);
 
 void free_region(Region region);
 
+bool is_bootstraped();
+
 } // namespace system::memory
