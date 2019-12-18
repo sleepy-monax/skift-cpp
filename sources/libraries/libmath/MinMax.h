@@ -20,6 +20,12 @@ T max(T a, T b)
 }
 
 template <typename T>
+T clamp(T a)
+{
+    return max(0, min(1, a));
+}
+
+template <typename T>
 T clamp(T a, T min_value, T max_value)
 {
     return max(min_value, min(max_value, a));
