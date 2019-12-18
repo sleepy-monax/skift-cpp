@@ -36,7 +36,7 @@ extern "C" void __ubsan_handle_type_mismatch_v1(UbsanTypeMismatchData_v1 *data, 
 
     if (ptr == 0)
     {
-        UBSAN_LOG("Null pointer of type {} at {#x}", data->type->type_name, ptr);
+        UBSAN_LOG("Null pointer of type {} at {#x}", ptr, reinterpret_cast<char *>(&data->type->type_name[0]));
     }
     else if ((data->log_alignment - 1) & ptr)
     {
