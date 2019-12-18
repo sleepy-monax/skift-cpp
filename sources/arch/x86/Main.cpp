@@ -108,7 +108,7 @@ extern "C" void arch_main(u32 multiboot_magic, multiboot_info_t *multiboot_info)
     sheduling::initialize();
     x86::interupts_initialise();
 
-    auto kernel_process = libruntime::make<tasking::Process>(nullptr);
+    auto kernel_process = libruntime::make<tasking::Process>(nullptr, String("Kernel"));
 
     tasking::Thread::create(kernel_process, nullptr)->start();
     tasking::Thread::create(kernel_process, reinterpret_cast<tasking::ThreadEntry>(taskA))->start();

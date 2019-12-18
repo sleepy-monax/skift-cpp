@@ -16,7 +16,7 @@ namespace system
 
 void PANIC(const char *message)
 {
-    logger_fatal("KERNE PANIC: {}", message);
+    logger_fatal("KERNEL PANIC: {}", message);
     print("\nKERNEL PANIC: {}\n", message);
 
     arch::stop();

@@ -6,6 +6,7 @@
 
 #include <libruntime/LinkedList.h>
 #include <libruntime/RefPtr.h>
+#include <libruntime/String.h>
 
 #include "system/tasking/Promotion.h"
 
@@ -18,9 +19,10 @@ private:
     int _id;
     Promotion _promotion = Promotion::SUPERVISOR;
     Process *_parent;
+    libruntime::String _name;
 
 public:
-    Process(Process *parent);
+    Process(Process *parent, libruntime::String name);
 
     ~Process();
 

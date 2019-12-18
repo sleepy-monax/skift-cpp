@@ -12,9 +12,10 @@ namespace system::tasking
 
 static volatile int _process_id_counter = -1;
 
-Process::Process(Process *parent)
+Process::Process(Process *parent, libruntime::String name)
     : _id(__sync_add_and_fetch(&_process_id_counter, 1)),
-      _parent(parent)
+      _parent(parent),
+      _name(name)
 {
 }
 
@@ -26,7 +27,7 @@ libruntime::ErrorOr<size_t> Process::format(libsystem::Stream &stream, libsystem
 {
     __unused(info);
 
-    return libsystem::format(stream, "Process({})", _id);
+    return libsystem::format(stream, "Process(id={}, name={#})", _id, _name);
 }
 
 } // namespace system::tasking
