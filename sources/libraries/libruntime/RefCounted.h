@@ -33,7 +33,7 @@ public:
         }
     }
 
-    // Find a better name for this...
+    // FIXME: Find a better name for this...
     void make_orphan()
     {
         _orphan = true;

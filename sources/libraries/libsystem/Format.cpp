@@ -70,4 +70,18 @@ libruntime::ErrorOr<size_t> format(Stream &stream, Formattable *value, FormatInf
     return value->format(stream, info);
 }
 
+libruntime::ErrorOr<size_t> format(Stream &stream, libruntime::String value, FormatInfo &info)
+{
+    (void)info;
+
+    if (info.prefix)
+    {
+        return format(stream, "\"{}\"", value.cstring());
+    }
+    else
+    {
+        return stream.write(value.cstring(), value.lenght());
+    }
+}
+
 }; // namespace libsystem
