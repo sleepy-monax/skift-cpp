@@ -37,12 +37,16 @@ extern "C" int __cxa_atexit(void (*f)(void *), void *objptr, void *dso)
 
 void *operator new(size_t size)
 {
-    return __alloc__::malloc(size);
+    //FIXME HACK: round size to 2 to fix ubsan checks.
+
+    return __alloc__::malloc(size + size % 2);
 }
 
 void *operator new[](size_t size)
 {
-    return __alloc__::malloc(size);
+    //FIXME HACK: round size to 2 to fix ubsan checks.
+
+    return __alloc__::malloc(size + size % 2);
 }
 
 void operator delete(void *ptr)
