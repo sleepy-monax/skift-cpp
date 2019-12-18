@@ -27,7 +27,7 @@ libruntime::ErrorOr<size_t> Process::format(libsystem::Stream &stream, libsystem
 {
     __unused(info);
 
-    return libsystem::format(stream, "Process(id={}, name={#})", _id, _name);
+    return libsystem::format(stream, "{}({})", _name, _id);
 }
 
 } // namespace system::tasking
