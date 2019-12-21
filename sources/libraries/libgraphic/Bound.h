@@ -1,6 +1,9 @@
 #pragma once
 
+#include <libmath/MinMax.h>
+
 #include <libgraphic/Point.h>
+#include <libgraphic/Size.h>
 
 namespace libgraphic
 {
@@ -8,19 +11,24 @@ namespace libgraphic
 class Bound
 {
 private:
-    double _x;
-    double _y;
-    double _width;
-    double _height;
+    int _x;
+    int _y;
+    int _width;
+    int _height;
 
 public:
-    double X() { return _x; }
-    double Y() { return _y; }
-    double width() { return _width; }
-    double height() { return _height; }
+    int X() { return _x; }
+    int Y() { return _y; }
+    int width() { return _width; }
+    int height() { return _height; }
 
-    Point position() { return Point(_x, _y); }
-    Point size() { return Point(_width, _height); }
+    Point location() { return Point(_x, _y); }
+    Size size() { return Size(_width, _height); }
+
+    int left() { return _x; }
+    int right() { return _x + _width; }
+    int top() { return _y; }
+    int bottom() { return _y + _height; }
 
     Point topleft() { return Point(_x, _y); }
     Point topright() { return Point(_x + _width, _y); }
@@ -34,21 +42,55 @@ public:
     {
     }
 
-    Bound(double x, double y, double width, double height) : _x(x),
-                                                             _y(y),
-                                                             _width(width),
-                                                             _height(height)
+    Bound(int width, int height) : _x(0),
+                                   _y(0),
+                                   _width(width),
+                                   _height(height)
     {
     }
 
-    Bound(Point position, Point size) : _x(position.X()),
-                                        _y(position.Y()),
-                                        _width(size.X()),
-                                        _height(size.Y)
+    Bound(int x, int y, int width, int height) : _x(x),
+                                                 _y(y),
+                                                 _width(width),
+                                                 _height(height)
+    {
+    }
+
+    Bound(Point position, Size size) : _x(position.X()),
+                                       _y(position.Y()),
+                                       _width(size.width()),
+                                       _height(size.height())
     {
     }
 
     ~Bound() {}
+
+    bool containe(Point point)
+    {
+        return point.X() >= left() &&
+               point.X() < right() &&
+               point.Y() >= top() &&
+               point.Y() < bottom();
+    }
+
+    bool containe(Bound bound)
+    {
+        return left() < bound.right() &&
+               right() > bound.left() &&
+               top() < bound.bottom() &&
+               bottom() > bound.top();
+    }
+
+    Bound clipped_in(Bound other)
+    {
+        auto x = libmath::max(other.X() + X(), other.X());
+        auto y = libmath::max(other.Y() + Y(), other.Y());
+
+        auto w = libmath::min(other.X() + X() + width(), other.X() + other.width()) - x;
+        auto h = libmath::min(other.Y() + Y() + height(), other.Y() + other.height()) - y;
+
+        return Bound(x, y, w, h);
+    }
 };
 
 } // namespace libgraphic
