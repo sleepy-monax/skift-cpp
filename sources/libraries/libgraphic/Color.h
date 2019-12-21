@@ -1,6 +1,7 @@
 #pragma once
 
 #include <libmath/Math.h>
+#include <libruntime/Macros.h>
 #include <libruntime/Move.h>
 #include <libruntime/Types.h>
 

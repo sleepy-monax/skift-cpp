@@ -119,9 +119,9 @@ void Painter::draw_triangle(Point p0, Point p1, Point p2, Color color)
 //
 void Painter::fill_rectangle(Bound bound, Color color)
 {
-    for (int x = 0; x < bound.width; x++)
+    for (int x = 0; x < bound.width(); x++)
     {
-        for (int y = 0; y < bound.height; y++)
+        for (int y = 0; y < bound.height(); y++)
         {
             plot(bound.location() + Point(x, y), color);
         }
