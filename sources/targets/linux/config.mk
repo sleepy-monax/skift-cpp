@@ -1,0 +1,5 @@
+COMMON_CXX=gcc
+COMMON_CC=gcc
+COMMON_LD=ld
+COMMON_AS=gas
+COMMON_AR=ar

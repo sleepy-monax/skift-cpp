@@ -81,7 +81,7 @@ Error Stream::write_byte(byte byte)
     return Error::NOT_IMPLEMENTED;
 }
 
-ErrorOr<size_t> Stream::seek(size_t offset, SeekOrigine origine)
+ErrorOr<size_t> Stream::seek(Stream::Offset offset, SeekOrigine origine)
 {
     __unused(offset);
     __unused(origine);

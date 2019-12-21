@@ -20,51 +20,42 @@ SYSTEM_IMAGE=$(BUILD_DIRECTORY)/image.iso
 
 # --- Common configs --------------------------------------------------------- #
 
-CXX_INCLUDES=-I. \
-			 -I$(SOURCES_DIRECTORY) \
-			 -I$(LIBRARIES_DIRECTORY)
+CINCLUDES=-I. \
+		  -I$(SOURCES_DIRECTORY) \
+		  -I$(LIBRARIES_DIRECTORY)
 
-CXX_DEFINES=-D__BUILD_TARGET__=\""$(BUILD_TARGET)"\" \
-			-D__BUILD_GITREF__=\""$(BUILD_GITREF)"\" \
-			-D__BUILD_UNAME__=\""$(BUILD_UNAME)"\"
+CDEFINES=-D__BUILD_TARGET__=\""$(BUILD_TARGET)"\" \
+		 -D__BUILD_GITREF__=\""$(BUILD_GITREF)"\" \
+		 -D__BUILD_UNAME__=\""$(BUILD_UNAME)"\"
 
-CXX=i686-elf-g++
-CXXFLAGS=-std=c++17 \
-		 -MD \
-		 -O3 \
-		 -Wall \
-		 -Wextra \
-		 -Werror \
-		 -fno-rtti \
-		 -fno-exceptions \
-		 $(CXX_INCLUDES) \
-		 $(CXX_DEFINES)
-
-AS=nasm
-ASFLAGS=-f elf32
-
-LD=i686-elf-ld
 
 # --- Common configs --------------------------------------------------------- #
 
-COMMON_CXXFLAGS=-std=c++17 -O3 -Wall -Wextra -Werror -fsanitize=undefined -fno-rtti -fno-exceptions
-COMMON_CFLAGS  =-std=c11   -O3 -Wall -Wextra -Werror -fsanitize=undefined
+COMMON_CXX=i686-elf-g++
+COMMON_CXXFLAGS=-std=c++17 -MD -O3 -Wall -Wextra -Werror -fsanitize=undefined $(CINCLUDES) $(CDEFINES) -fno-rtti -fno-exceptions
+
+COMMON_CC=i686-elf-gcc
+COMMON_CFLAGS  =-std=c11   -MD -O3 -Wall -Wextra -Werror -fsanitize=undefined $(CINCLUDES) $(CDEFINES)
+
+COMMON_LD=i686-elf-ld
+
+COMMON_AS=nasm
+COMMON_ASFLAGS=-f elf32
+
+COMMON_AR=i686-elf-ar
+
 
 # --- User space configs ----------------------------------------------------- #
 
-USERSPACE_CXX=$(CXX)
 USERSPACE_CXXFLAGS=-ffreestanding \
-				-fno-stack-protector \
-				-nostdlib \
-				-nostdinc++
+				   -fno-stack-protector \
+				   -nostdlib \
+				   -nostdinc++
 
-USERSPACE_LD=$(LD)
 USERSPACE_LDFLAGS=
 
-USERSPACE_AS=$(AS)
 USERSPACE_ASFLAGS=
 
-USERSPACE_AR=$(AR)
 USERSPACE_ARFLAGS=rcs
 
 # --- Libraries -------------------------------------------------------------- #
@@ -75,19 +66,23 @@ LIBRARIES=libc \
 		  libruntime \
 		  libsystem \
 		  libtest \
-		  libwidget 
+		  libwidget
 
 LIBRARIES_DIRECTORY=$(SOURCES_DIRECTORY)/libraries
 
-LIBRARIES_SOURCES=$(shell find $(LIBRARIES_DIRECTORY) -name "*.cpp")
+LIBRARIES_SOURCES=$(shell find $(LIBRARIES_DIRECTORY) -name "*.cpp") \
+				  $(wildcard $(SOURCES_DIRECTORY)/target/$(BUILD_SYSTEM)/*.cpp) \
+				  $(wildcard $(SOURCES_DIRECTORY)/target/$(BUILD_SYSTEM)/$(BUILD_ARCH)/*.cpp) \
+				  $(wildcard $(SOURCES_DIRECTORY)/target/$(BUILD_SYSTEM)/$(BUILD_ARCH)/*.s)
+
 LIBRARIES_OBJECTS=$(patsubst $(SOURCES_DIRECTORY)/%, $(BUILD_DIRECTORY)/%.o, $(LIBRARIES_SOURCES))
 LIBRARIES_ARCHIVES=$(patsubst %, $(BUILD_DIRECTORY)/libraries/%.a, $(LIBRARIES))
 
 # --- Kernel ----------------------------------------------------------------- #
 
 ARCH_DIRECTORY=$(SOURCES_DIRECTORY)/arch/$(BUILD_ARCH)
-
 SYSTEM_DIRECTORY=$(SOURCES_DIRECTORY)/system
+TARGET_DIRECTORY=$(SOURCES_DIRECTORY)/targets
 
 KERNEL_SOURCES=$(wildcard $(ARCH_DIRECTORY)/*.s) \
 			   $(wildcard $(ARCH_DIRECTORY)/**/*.s) \
@@ -99,20 +94,23 @@ KERNEL_SOURCES=$(wildcard $(ARCH_DIRECTORY)/*.s) \
 			   $(wildcard $(LIBRARIES_DIRECTORY)/libruntime/*.cpp) \
 			   $(wildcard $(LIBRARIES_DIRECTORY)/libsystem/*.cpp)
 
-KERNEL_OBJECTS=$(patsubst $(SOURCES_DIRECTORY)/%, $(BUILD_DIRECTORY)/%.kernel.o, $(KERNEL_SOURCES))
+KERNEL_OBJECTS=$(patsubst $(SOURCES_DIRECTORY)/%, $(BUILD_DIRECTORY)/%.k.o, $(KERNEL_SOURCES))
 
 KERNEL_BINARY=$(BUILD_DIRECTORY)/kernel.elf
 
-KERNEL_CXX=$(CXX)
 KERNEL_CXXFLAGS=-ffreestanding \
 				-fno-stack-protector \
 				-nostdlib \
 				-nostdinc++
 
-KERNEL_LD=$(LD)
 KERNEL_LDFLAGS=-m elf_i386 -T $(ARCH_DIRECTORY)/system.ld
 
--include $(ARCH_DIRECTORY)/config.mk
+KERNEL_ASFLAGS=-f elf32
+
+
+-include $(ARCH_DIRECTORY)/config.mk \
+		 $(TARGET_DIRECTORY)/$(BUILD_SYSTEM)/config.mk \
+		 $(TARGET_DIRECTORY)/$(BUILD_SYSTEM)/$(BUILD_ARCH)/config.mk
 
 # --- Phony rules ------------------------------------------------------------ #
 
@@ -141,6 +139,8 @@ dump:
 
 all: $(SYSTEM_IMAGE)
 
+userspace: $(LIBRARIES_ARCHIVES)
+
 run: $(SYSTEM_IMAGE)
 	qemu-system-i386 -serial mon:stdio -cdrom $(SYSTEM_IMAGE)
 
@@ -162,7 +162,9 @@ $(SYSTEM_IMAGE): $(KERNEL_BINARY) $(LIBRARIES_ARCHIVES) grub.cfg
 
 # --- Libraries recipies ----------------------------------------------------- #
 
-$(BUILD_DIRECTORY)/libraries/libc.a: $(filter $(BUILD_DIRECTORY)/libraries/libc/%.o, $(LIBRARIES_OBJECTS))
+$(BUILD_DIRECTORY)/libraries/libc.a: $(filter $(BUILD_DIRECTORY)/libraries/libc/%.o, $(LIBRARIES_OBJECTS)) \
+								     $(filter $(BUILD_DIRECTORY)/libraries/targets/%.o, $(LIBRARIES_OBJECTS))
+
 $(BUILD_DIRECTORY)/libraries/libgraphic.a: $(filter $(BUILD_DIRECTORY)/libraries/libgraphic/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libmath.a: $(filter $(BUILD_DIRECTORY)/libraries/libmath/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libruntime.a: $(filter $(BUILD_DIRECTORY)/libraries/libruntime/%.o, $(LIBRARIES_OBJECTS))
@@ -170,31 +172,32 @@ $(BUILD_DIRECTORY)/libraries/libsystem.a: $(filter $(BUILD_DIRECTORY)/libraries/
 $(BUILD_DIRECTORY)/libraries/libtest.a: $(filter $(BUILD_DIRECTORY)/libraries/libtest/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libwidget.a: $(filter $(BUILD_DIRECTORY)/libraries/libwidget/%.o, $(LIBRARIES_OBJECTS))
 
-$(LIBRARIES_ARCHIVES): 
-	$(LOG) [USER] [AR] $@ 
+$(LIBRARIES_ARCHIVES):
+	$(LOG) [$(BUILD_SYSTEM)] [USER] [AR] $@
 	$(DIRECTORY_GUARD)
-	@$(USERSPACE_AR) $(USERSPACE_ARFLAGS) $@ $^
+	@$(COMMON_AR) $(USERSPACE_ARFLAGS) $@ $^
 
 $(BUILD_DIRECTORY)/%.cpp.o: $(SOURCES_DIRECTORY)/%.cpp
-	$(LOG) [USER] [CXX] $<
+	$(LOG) [$(BUILD_SYSTEM)] [USER] [CXX] $<
 	$(DIRECTORY_GUARD)
-	@$(USERSPACE_CXX) $(CXXFLAGS) $(USERSPACE_CXXFLAGS) -c -o $@ $<
+	@$(COMMON_CXX) $(COMMON_CXXFLAGS) $(USERSPACE_CXXFLAGS) -c -o $@ $<
 
 # --- Kernel recipies -------------------------------------------------------- #
 
 $(KERNEL_BINARY): $(KERNEL_OBJECTS)
-	$(LOG) [KERNEL] [LD] $@ 
+	$(LOG) [KERNEL] [LD] $@
 	$(DIRECTORY_GUARD)
-	@$(KERNEL_LD) $(KERNEL_LDFLAGS) -o $@ $^
+	@$(COMMON_LD) $(KERNEL_LDFLAGS) -o $@ $^
 
-$(BUILD_DIRECTORY)/%.cpp.kernel.o: $(SOURCES_DIRECTORY)/%.cpp
+$(BUILD_DIRECTORY)/%.cpp.k.o: $(SOURCES_DIRECTORY)/%.cpp
 	$(LOG) [KERNEL] [CXX] $<
 	$(DIRECTORY_GUARD)
-	@$(KERNEL_CXX) $(CXXFLAGS) $(KERNEL_CXXFLAGS) -c -o $@ $<
+	@$(COMMON_CXX) $(COMMON_CXXFLAGS) $(KERNEL_CXXFLAGS) -c -o $@ $<
 
-$(BUILD_DIRECTORY)/%.s.kernel.o: $(SOURCES_DIRECTORY)/%.s
+$(BUILD_DIRECTORY)/%.s.k.o: $(SOURCES_DIRECTORY)/%.s
 	$(LOG) [KERNEL] [AS] $<
 	$(DIRECTORY_GUARD)
-	@$(AS) $(ASFLAGS) -o $@ $<
+	@$(COMMON_AS) $(KERNEL_ASFLAGS) -o $@ $<
 
 -include $(KERNEL_OBJECTS:.o=.d)
+-include $(LIBRARIES_OBJECTS:.o=.d)

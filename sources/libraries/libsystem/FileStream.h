@@ -23,6 +23,8 @@ private:
     FileStreamFlags _flags;
 
 public:
+    FileStreamFlags flags() { return _flags; }
+
     static libruntime::ErrorOr<libruntime::RefPtr<FileStream>>
     open(const char *path, FileStreamFlags flags);
 

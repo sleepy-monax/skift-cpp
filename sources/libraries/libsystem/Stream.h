@@ -41,7 +41,7 @@ public:
 
     virtual libruntime::Error write_byte(byte byte);
 
-    virtual libruntime::ErrorOr<size_t> seek(size_t offset, SeekOrigine origine);
+    virtual libruntime::ErrorOr<size_t> seek(Stream::Offset offset, SeekOrigine origine);
 
     virtual libruntime::ErrorOr<size_t> tell();
 

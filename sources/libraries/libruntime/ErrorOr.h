@@ -17,7 +17,7 @@ private:
     T _value;
 
 public:
-    ErrorOr(Error error) : _error(error) {}
+    ErrorOr(Error error) : _error(error), _value() {}
 
     ErrorOr(T value) : _error(Error::SUCCEED), _value(value) {}
 
