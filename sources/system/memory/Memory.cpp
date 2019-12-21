@@ -31,7 +31,7 @@ static Region take_from_free_list(size_t how_many_pages)
 {
     Region region = Region::empty();
 
-    free_list->iterate([&](auto &free_region) {
+    free_list->foreach ([&](auto &free_region) {
         if (free_region.page_count() >= how_many_pages)
         {
             region = free_region.take(how_many_pages);
@@ -126,7 +126,7 @@ void free_region(Region region)
         // FIXME: we should also merge if we are filling an hole.
         bool has_been_merge_with_other_region = false;
 
-        free_list->iterate([&](auto &other) {
+        free_list->foreach ([&](auto &other) {
             if (other.is_contiguous_with(region))
             {
                 other.merge(region);
