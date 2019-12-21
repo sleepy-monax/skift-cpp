@@ -27,7 +27,7 @@ template <typename T>
 class LinkedList
 {
 private:
-    int _count;
+    size_t _count;
     LinkedListItem<T> *_head;
     LinkedListItem<T> *_tail;
 
@@ -61,7 +61,7 @@ public:
     }
 
     template <typename Callback>
-    void iterate(Callback callback)
+    void foreach (Callback callback)
     {
         LinkedListItem<T> *current = _head;
 
@@ -97,7 +97,7 @@ public:
         }
     }
 
-    int count()
+    size_t count()
     {
         return _count;
     }
@@ -173,7 +173,7 @@ public:
 
         _count--;
 
-        T value = item->value;
+        T value = move(item->value);
         delete item;
         return value;
     }
@@ -197,7 +197,7 @@ public:
 
         _count--;
 
-        T value = item->value;
+        T value = move(item->value);
         delete item;
         return value;
     }
