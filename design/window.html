@@ -24,6 +24,7 @@
         height: 90vh;
         width: 90vw;
         margin: 5vh 5vw;
+        position: relative;
     }
 
 
@@ -110,6 +111,19 @@
         box-shadow: 0px 1px #0002;
     }
 
+    .window-statusbar {
+        color: white;
+        padding: 0px 4px;
+        position: absolute;
+        bottom: 0px;
+        height: 24px;
+        border-top: 1px solid #0002;
+        box-shadow: 0px -1px #fff2;
+        width: 100%;
+        line-height: 16px;
+        vertical-align: middle;
+    }
+
     .button {
         outline: 0;
 
@@ -119,7 +133,7 @@
 
         height: 32px;
 
-        margin: 4px;
+        margin: 8px 4px;
         padding: 0 16px;
 
         color: white;
@@ -153,7 +167,7 @@
 
         height: 32px;
 
-        margin: 4px;
+        margin: 8px 4px;
         padding: 0 16px;
 
         color: white;
@@ -224,22 +238,27 @@
                 <div class="menu-button">
                     -
                 </div>
+                <div class="ghost-button">
+                    Button
+                </div>
+                <div class="ghost-button">
+                    Button
+                </div>
+
+                <button class="button">
+                    Button
+                </button>
+
+                <button class="button">
+                    Button
+                </button>
             </div>
 
-            <div class="ghost-button">
-                Button
-            </div>
-            <div class="ghost-button">
-                Button
-            </div>
 
-            <button class="button">
-                Button
-            </button>
 
-            <button class="button">
-                Button
-            </button>
+            <div class="window-statusbar">
+                Loading stuff...
+            </div>
         </div>
 
     </div>
