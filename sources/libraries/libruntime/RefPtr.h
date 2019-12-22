@@ -22,6 +22,7 @@ public:
     };
 
     RefPtr() : _ptr(nullptr) {}
+
     RefPtr(T &object) : _ptr(const_cast<T *>(&object)) { _ptr->ref(); }
     RefPtr(AdoptTag, T &object) : _ptr(const_cast<T *>(&object)) {}
 
@@ -154,6 +155,16 @@ public:
     T *necked()
     {
         return _ptr;
+    }
+
+    void clear()
+    {
+        if (_ptr)
+        {
+            _ptr->deref();
+        }
+
+        _ptr = nullptr;
     }
 };
 
