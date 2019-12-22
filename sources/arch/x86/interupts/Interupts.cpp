@@ -63,6 +63,8 @@ extern "C" u32 interupts_handle(u32 esp, x86::InteruptStackFrame stackframe)
 
     if (stackframe.intno == 32)
     {
+        system::tick();
+
         esp = system::sheduling::shedule(esp);
     }
 
