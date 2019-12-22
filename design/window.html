@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<style>
+    body {
+        background-color: #444;
+        font-family: sans-serif;
+        font-size: 9pt;
+        padding: 0;
+        margin: 0;
+
+        overflow: hidden;
+    }
+
+    .window {
+        overflow: hidden;
+        background-color: #333;
+        border: 1px solid #06f;
+        border-radius: 4px;
+        height: 90vh;
+        width: 90vw;
+        margin: 5vh 5vw;
+    }
+
+
+    .window-headerbar {
+        height: 32px;
+        line-height: 32px;
+        padding: 0px 4px;
+        background-color: #444;
+        border-bottom: 1px solid #fff2;
+        box-shadow: 0px 1px #0002;
+    }
+
+    .window-headerbar-icon {
+        color: white;
+        float: left;
+        text-align: center;
+        font-size: 18px;
+        vertical-align: middle;
+        line-height: 32px;
+        width: 18px;
+        padding: 0px 6px;
+        user-select: none;
+    }
+
+    .window-headerbar-button {
+        margin: 4px 0px;
+        border-radius: 4px;
+        line-height: 24px;
+
+        float: left;
+        color: #fff;
+        padding: 0px 8px;
+        user-select: none;
+    }
+
+    .window-headerbar-button:hover {
+        background-color: #fff1;
+    }
+
+    .window-headerbar-min {
+        float: right;
+        color: white;
+        line-height: 32px;
+        width: 26px;
+        height: 32px;
+        user-select: none;
+
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url("../assets/widget/win-min.svg");
+    }
+
+    .window-headerbar-max {
+        float: right;
+        color: white;
+        line-height: 32px;
+        width: 26px;
+        height: 32px;
+        user-select: none;
+
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url("../assets/widget/win-max.svg");
+    }
+
+    .window-headerbar-close {
+        float: right;
+        color: white;
+        line-height: 32px;
+        width: 26px;
+        height: 32px;
+        user-select: none;
+
+        background-position: center;
+        background-repeat: no-repeat;
+        background-image: url("../assets/widget/win-close.svg");
+    }
+
+    .window-menubar {
+        height: 48px;
+        margin: none;
+        padding: 0px 4px;
+        border-bottom: 1px solid #fff2;
+        box-shadow: 0px 1px #0002;
+    }
+
+    .button {
+        outline: 0;
+
+        display: inline-block;
+        text-align: center;
+        line-height: 32px;
+
+        height: 32px;
+
+        margin: 4px;
+        padding: 0 16px;
+
+        color: white;
+        border-radius: 4px;
+        height: 32px;
+        font-family: sans-serif;
+        user-select: none;
+
+        border: 1px solid #fff1;
+
+        background-color: #333;
+    }
+
+    .button:hover {
+        background-color: #444444;
+    }
+
+    .button:active {
+        background-color: #404040;
+    }
+
+    .button:focus {
+        border: 1px solid #06f;
+
+    }
+
+    .ghost-button {
+        display: inline-block;
+        text-align: center;
+        line-height: 32px;
+
+        height: 32px;
+
+        margin: 4px;
+        padding: 0 16px;
+
+        color: white;
+        border-radius: 4px;
+        height: 32px;
+        font-family: sans-serif;
+        user-select: none;
+
+        background-color: transparent;
+    }
+
+    .ghost-button:hover {
+        background-color: #444444;
+    }
+
+    .ghost-button:active {
+        background-color: #404040;
+    }
+
+    .menu-button {
+        float: left;
+        display: block;
+        text-align: center;
+        line-height: 32px;
+
+        width: 32px;
+        height: 32px;
+
+        margin: 8px 4px;
+
+        color: white;
+        border-radius: 4px;
+        user-select: none;
+
+        background-color: transparent;
+    }
+
+    .menu-button:hover {
+        background-color: #fff1;
+    }
+
+    .menu-button:active {
+        background-color: #fff2;
+    }
+</style>
+
+<body>
+    <div class="dark-mode">
+        <div class="window">
+            <div class="window-headerbar">
+                <div class="window-headerbar-icon material-icons">
+                    folder_open
+                </div>
+                <div class="window-headerbar-button">Explorer</div>
+                <div class="window-headerbar-button">Edit</div>
+                <div class="window-headerbar-button">View</div>
+                <div class="window-headerbar-button">Help</div>
+
+                <div class="window-headerbar-close"> </div>
+                <div class="window-headerbar-max"></div>
+                <div class="window-headerbar-min"></div>
+            </div>
+
+            <div class="window-menubar">
+                <div class="menu-button">
+                    +
+                </div>
+                <div class="menu-button">
+                    -
+                </div>
+            </div>
+
+            <div class="ghost-button">
+                Button
+            </div>
+            <div class="ghost-button">
+                Button
+            </div>
+
+            <button class="button">
+                Button
+            </button>
+
+            <button class="button">
+                Button
+            </button>
+        </div>
+
+    </div>
+</body>
+
+</html>
