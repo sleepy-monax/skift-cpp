@@ -58,9 +58,8 @@ struct UbsanInvalidValueData
 
 extern "C" void __ubsan_handle_load_invalid_value(UbsanInvalidValueData *data, unsigned long value)
 {
-    (void)value;
-
-    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Invalid value");
+    UBSAN_LOG("Load of value {#x} is not a valid value for type {}", value, reinterpret_cast<char *>(&data->type->type_name[0]));
+    assert_not_reached();
 }
 
 struct UbsanOutOfBoundsData
