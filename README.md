@@ -1,7 +1,7 @@
 <p align="center">
 <br>
 <br>
-<img src="https://github.com/skiftOS/skift/blob/master/LOGO.svg" height=64 />
+<img src="https://github.com/skiftOS/skift/blob/master/assets/skift.svg" height=64 />
 <br>
 <br>
 A simple, handmade, operating system for the intel x86 cpu.
