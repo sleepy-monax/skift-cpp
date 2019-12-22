@@ -9,6 +9,7 @@
 #include "arch/Arch.h"
 #include "system/sheduling/Sheduling.h"
 #include "system/tasking/Thread.h"
+#include "system/sheduling/BlockerSleep.h"
 
 namespace system::tasking
 {
@@ -29,6 +30,7 @@ Thread::Thread(libruntime::RefPtr<Process> process, ThreadEntry entry)
 
 Thread::~Thread()
 {
+    logger_info("Destructing {}...", this);
 }
 
 #define THREAD_STATE_STRING_ENTRY(__x) #__x,
@@ -46,9 +48,38 @@ void Thread::start()
 
     finalize();
 
-    sheduling::register_thread(libruntime::RefPtr(*this));
+    switch_state(ThreadState::READY);
+}
 
-    _state = ThreadState::READY;
+// void Thread::set_policy(libruntime::OwnPtr<system::sheduling::Policy> policy)
+// {
+// }
+
+void Thread::block(libruntime::OwnPtr<system::sheduling::Blocker> blocker)
+{
+    _blocker = blocker;
+    switch_state(ThreadState::BLOCKED);
+    arch::yield();
+}
+
+void Thread::switch_state(ThreadState new_state)
+{
+    sheduling::update_thread_state(*this, new_state);
+}
+
+bool Thread::should_unblock()
+{
+    assert(_blocker);
+
+    return _blocker->should_unblock();
+}
+
+void Thread::unblock()
+{
+    assert(_blocker);
+    assert(_blocker->should_unblock());
+
+    _blocker->unblock();
 }
 
 libruntime::ErrorOr<size_t> Thread::format(libsystem::Stream &stream, libsystem::FormatInfo &info)
@@ -70,9 +101,15 @@ libruntime::RefPtr<Thread> Thread::create(libruntime::RefPtr<Process> process, T
 void Thread::exit()
 {
     logger_info("{} kill himself.", sheduling::running_thread());
-    sheduling::unregister_thread(sheduling::running_thread());
+    sheduling::update_thread_state(sheduling::running_thread(), ThreadState::STOPPED);
     arch::yield();
     assert_not_reached();
+}
+
+void Thread::sleep(libsystem::Millisecond time)
+{
+    logger_info("{} is going to sleep for {}ms", sheduling::running_thread(), time);
+    sheduling::running_thread()->block(new system::sheduling::BlockerSleep(time));
 }
 
 } // namespace system::tasking

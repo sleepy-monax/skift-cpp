@@ -4,6 +4,11 @@
 /* This code is licensed under the 3-Clause BSD License.                      */
 /* See: LICENSE.md                                                            */
 
+namespace system::tasking
+{
+class Thread;
+} // namespace system::tasking
+
 namespace system::sheduling
 {
 
@@ -15,7 +20,7 @@ public:
 
     virtual ~Blocker() {}
 
-    virtual bool is_block() = 0;
+    virtual bool should_unblock() = 0;
 
     virtual void unblock() = 0;
 };

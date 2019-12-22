@@ -133,7 +133,7 @@ public:
         auto ref = _ptr;
         _ptr = nullptr;
 
-        return _ptr;
+        return ref;
     }
 
     T *necked()

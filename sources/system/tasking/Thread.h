@@ -6,6 +6,7 @@
 
 #include <libruntime/OwnPtr.h>
 #include <libruntime/RefCounted.h>
+#include <libsystem/Time.h>
 
 #include "system/platform/Context.h"
 #include "system/sheduling/Blocker.h"
@@ -52,6 +53,8 @@ public:
     ThreadEntry entry() { return _entry; }
     ThreadState state() { return _state; }
     const char *state_string();
+    void set_state(ThreadState state) { _state = state; }
+
     Stack &stack() { return _stack; }
     Stack &userstack() { return _userstack; }
     libruntime::RefPtr<Process> process() { return _process; }
@@ -65,10 +68,15 @@ public:
 
     void start();
     void set_policy(libruntime::OwnPtr<system::sheduling::Policy> policy);
-    void set_block(libruntime::OwnPtr<system::sheduling::Blocker> blocker);
+    void block(libruntime::OwnPtr<system::sheduling::Blocker> blocker);
+    void switch_state(ThreadState new_state);
+
+    bool should_unblock();
+    void unblock();
 
     static libruntime::RefPtr<Thread> create(libruntime::RefPtr<Process> process, ThreadEntry entry);
     static void exit() __noreturn;
+    static void sleep(libsystem::Millisecond time);
 
     libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);
 };

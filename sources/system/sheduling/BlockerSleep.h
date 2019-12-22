@@ -4,7 +4,34 @@
 /* This code is licensed under the 3-Clause BSD License.                      */
 /* See: LICENSE.md                                                            */
 
+#include "system/System.h"
+#include "system/sheduling/Blocker.h"
+
 namespace system::sheduling
 {
+
+class BlockerSleep : public Blocker
+{
+private:
+    uint32_t _wakeup_tick;
+
+public:
+    BlockerSleep(uint32_t how_long)
+    {
+        _wakeup_tick = system::get_tick() + how_long;
+    }
+
+    ~BlockerSleep() {}
+
+    bool should_unblock()
+    {
+        return _wakeup_tick <= system::get_tick();
+    }
+
+    void unblock()
+    {
+        // do nothing...
+    }
+};
 
 } // namespace system::sheduling

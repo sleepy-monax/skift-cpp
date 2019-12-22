@@ -12,9 +12,7 @@ namespace system::sheduling
 
 void initialize();
 
-void register_thread(libruntime::RefPtr<system::tasking::Thread> thread);
-
-void unregister_thread(libruntime::RefPtr<system::tasking::Thread> thread);
+void update_thread_state(libruntime::RefPtr<system::tasking::Thread> thread, system::tasking::ThreadState new_state);
 
 uintptr_t shedule(uintptr_t stack_pointer);
 

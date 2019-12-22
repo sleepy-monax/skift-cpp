@@ -18,50 +18,67 @@ namespace system::sheduling
 {
 
 static RefPtr<Thread> _running_thread;
-static LinkedList<RefPtr<Thread>> *_threads;
+static LinkedList<RefPtr<Thread>> *_ready_threads;
+static LinkedList<RefPtr<Thread>> *_blocked_threads;
+
 libruntime::SpinLock _threads_lock;
 
 void initialize()
 {
     logger_info("Initializing sheduling");
 
-    _threads = new LinkedList<RefPtr<Thread>>();
+    _ready_threads = new LinkedList<RefPtr<Thread>>();
+    _blocked_threads = new LinkedList<RefPtr<Thread>>();
 }
 
-void register_thread(RefPtr<Thread> thread)
+void update_thread_state(RefPtr<Thread> thread, ThreadState new_state)
 {
     _threads_lock.acquire();
 
-    _threads->push_back(thread);
-
-    if (_running_thread.necked() == NULL)
+    if (thread->state() == ThreadState::EMBRYO)
     {
-        logger_info("Using {} has running thread", thread);
-        _running_thread = thread;
+        if (_running_thread.necked() == nullptr)
+        {
+            logger_info("Using {} has running thread", thread);
+            _running_thread = thread;
+        }
+    }
+    else if (thread->state() == ThreadState::BLOCKED)
+    {
+        _blocked_threads->remove_first(thread);
+    }
+    else if (thread->state() == ThreadState::READY)
+    {
+        _ready_threads->remove_first(thread);
     }
 
-    _threads_lock.release();
-}
+    thread->set_state(new_state);
 
-void unregister_thread(RefPtr<Thread> thread)
-{
-    _threads_lock.acquire();
-
-    _threads->remove_all(thread);
+    if (thread->state() == ThreadState::BLOCKED)
+    {
+        _blocked_threads->push_back(thread);
+    }
+    else if (thread->state() == ThreadState::READY)
+    {
+        _ready_threads->push_back(thread);
+    }
+    else if (thread->state() == ThreadState::STOPPED)
+    {
+    }
 
     _threads_lock.release();
 }
 
 libruntime::RefPtr<system::tasking::Thread> running_thread()
 {
-    assert(_running_thread.necked() != NULL);
+    assert(_running_thread.necked() != nullptr);
 
     return _running_thread;
 }
 
 libruntime::RefPtr<system::tasking::Process> running_process()
 {
-    assert(_running_thread.necked() != NULL);
+    assert(_running_thread.necked() != nullptr);
 
     return _running_thread->process();
 }
@@ -74,16 +91,40 @@ bool can_shedule()
 
 uintptr_t shedule(uintptr_t stack_pointer)
 {
-    if (_running_thread.necked() == NULL)
+    if (_running_thread.necked() == nullptr)
     {
         return stack_pointer;
     }
 
     if (can_shedule())
     {
+        _threads_lock.acquire();
+
         _running_thread->stack().set_pointer(stack_pointer);
 
-        _running_thread = _threads->peek_and_pushback();
+        _blocked_threads->foreach ([](auto thread) {
+            if (thread->should_unblock())
+            {
+                logger_info("Unblocking {}", thread);
+                thread->unblock();
+                thread->set_state(ThreadState::READY);
+                _blocked_threads->remove_first(thread);
+                _ready_threads->push_back(thread);
+            }
+
+            return Iteration::CONTINUE;
+        });
+
+        if (_running_thread->state() == ThreadState::RUNNING)
+        {
+            _ready_threads->push_back(_running_thread);
+            _running_thread->set_state(ThreadState::READY);
+        }
+
+        _running_thread = RefPtr(*_ready_threads->pop());
+        _running_thread->set_state(ThreadState::RUNNING);
+
+        _threads_lock.release();
 
         return _running_thread->stack().get_pointer();
     }

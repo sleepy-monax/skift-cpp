@@ -32,14 +32,12 @@ void taskA()
 {
     for (int i = 0; i < 8; i++)
     {
-        libsystem::stderr->write("A", 1);
-        arch::halt();
+        logger_info("Hello {} / 8 :)", i + 1);
+        system::tasking::Thread::sleep(10);
     }
 
     logger_info("Good bye cruel world!");
     system::tasking::Thread::exit();
-
-    assert_not_reached();
 }
 
 void taskB()
@@ -52,8 +50,6 @@ void taskB()
 
     logger_info("Bye bye!");
     system::tasking::Thread::exit();
-
-    assert_not_reached();
 }
 
 extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
