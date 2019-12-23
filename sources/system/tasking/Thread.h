@@ -77,6 +77,7 @@ public:
     static libruntime::RefPtr<Thread> create(libruntime::RefPtr<Process> process, ThreadEntry entry);
     static void exit() __noreturn;
     static void sleep(libsystem::Millisecond time);
+    static void join(libruntime::RefPtr<Thread> thread);
 
     libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);
 };

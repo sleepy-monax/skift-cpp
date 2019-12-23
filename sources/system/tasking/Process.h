@@ -7,6 +7,7 @@
 #include <libruntime/LinkedList.h>
 #include <libruntime/RefPtr.h>
 #include <libruntime/String.h>
+#include <libsystem/Formattable.h>
 
 #include "system/tasking/Promotion.h"
 

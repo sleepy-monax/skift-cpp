@@ -17,6 +17,7 @@
 #include "system/memory/Memory.h"
 #include "system/sheduling/Sheduling.h"
 #include "system/tasking/Process.h"
+#include "system/tasking/Tasking.h"
 
 using namespace x86;
 using namespace system;
@@ -109,12 +110,13 @@ extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
     x86::interupts_initialise();
 
     sheduling::initialize();
+    tasking::initialize();
 
-    auto kernel_process = libruntime::make<tasking::Process>(nullptr, String("Kernel"));
+    auto task_a = tasking::Thread::create(tasking::kernel_process(), reinterpret_cast<tasking::ThreadEntry>(taskA));
+    task_a->start();
+    tasking::Thread::create(tasking::kernel_process(), reinterpret_cast<tasking::ThreadEntry>(taskB))->start();
 
-    tasking::Thread::create(kernel_process, nullptr)->start();
-    tasking::Thread::create(kernel_process, reinterpret_cast<tasking::ThreadEntry>(taskA))->start();
-    tasking::Thread::create(kernel_process, reinterpret_cast<tasking::ThreadEntry>(taskB))->start();
+    tasking::Thread::join(task_a);
 
     print("hjert kernel v0.0.1\n");
     print("--------------------------------------------------------------------------------\n");

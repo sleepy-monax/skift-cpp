@@ -7,9 +7,10 @@
 #include <libsystem/Logger.h>
 
 #include "arch/Arch.h"
+#include "system/sheduling/BlockerJoin.h"
+#include "system/sheduling/BlockerSleep.h"
 #include "system/sheduling/Sheduling.h"
 #include "system/tasking/Thread.h"
-#include "system/sheduling/BlockerSleep.h"
 
 namespace system::tasking
 {
@@ -110,6 +111,12 @@ void Thread::sleep(libsystem::Millisecond time)
 {
     logger_info("{} is going to sleep for {}ms", sheduling::running_thread(), time);
     sheduling::running_thread()->block(new system::sheduling::BlockerSleep(time));
+}
+
+void Thread::join(libruntime::RefPtr<Thread> thread_to_join)
+{
+    logger_info("{} is joining {}", sheduling::running_thread(), thread_to_join);
+    sheduling::running_thread()->block(new system::sheduling::BlockerJoin(thread_to_join));
 }
 
 } // namespace system::tasking
