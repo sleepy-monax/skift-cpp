@@ -78,6 +78,10 @@ public:
     static void exit() __noreturn;
     static void sleep(libsystem::Millisecond time);
     static void join(libruntime::RefPtr<Thread> thread);
+    static libruntime::RefPtr<Thread> by_id(int id);
+
+    // Release all the ressources hold by this thread
+    static void cleanup(libruntime::RefPtr<Thread> thread);
 
     libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);
 };

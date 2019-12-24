@@ -29,6 +29,7 @@ public:
 
     void unblock()
     {
+        system::tasking::Thread::cleanup(_joined_thread);
         _joined_thread.clear();
     }
 };

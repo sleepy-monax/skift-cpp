@@ -2,6 +2,7 @@
 /* This code is licensed under the 3-Clause BSD License.                      */
 /* See: LICENSE.md                                                            */
 
+#include <libruntime/SpinLock.h>
 #include <libsystem/Assert.h>
 #include <libsystem/Formattable.h>
 #include <libsystem/Logger.h>
@@ -15,9 +16,9 @@
 namespace system::tasking
 {
 
+static libruntime::SpinLock _threads_lock;
+static libruntime::LinkedList<libruntime::RefPtr<Thread>> _threads;
 static volatile int _thread_id_counter;
-
-const char *state_string();
 
 Thread::Thread(libruntime::RefPtr<Process> process, ThreadEntry entry)
     : _id(__sync_add_and_fetch(&_thread_id_counter, 1)),
@@ -96,6 +97,10 @@ libruntime::RefPtr<Thread> Thread::create(libruntime::RefPtr<Process> process, T
 
     new_thread->prepare();
 
+    _threads_lock.acquire();
+    _threads.push_back(new_thread);
+    _threads_lock.release();
+
     return new_thread;
 }
 
@@ -117,6 +122,35 @@ void Thread::join(libruntime::RefPtr<Thread> thread_to_join)
 {
     logger_info("{} is joining {}", sheduling::running_thread(), thread_to_join);
     sheduling::running_thread()->block(new system::sheduling::BlockerJoin(thread_to_join));
+}
+
+void Thread::cleanup(libruntime::RefPtr<Thread> thread)
+{
+    _threads_lock.acquire();
+    _threads.remove_all(thread);
+    _threads_lock.release();
+}
+
+libruntime::RefPtr<Thread> Thread::by_id(int id)
+{
+    libruntime::RefPtr<Thread> result;
+
+    _threads_lock.acquire();
+
+    _threads.foreach ([&](auto thread) {
+        if (thread->id() == id)
+        {
+            result = thread;
+
+            return libruntime::Iteration::STOP;
+        }
+
+        return libruntime::Iteration::CONTINUE;
+    });
+
+    _threads_lock.release();
+
+    return result;
 }
 
 } // namespace system::tasking
