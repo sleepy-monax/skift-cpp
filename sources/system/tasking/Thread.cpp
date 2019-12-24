@@ -114,18 +114,28 @@ void Thread::exit()
 
 void Thread::sleep(libsystem::Millisecond time)
 {
-    logger_info("{} is going to sleep for {}ms", sheduling::running_thread(), time);
-    sheduling::running_thread()->block(new system::sheduling::BlockerSleep(time));
+    if (time > 0)
+    {
+        logger_info("{} is going to sleep for {}ms", sheduling::running_thread(), time);
+        sheduling::running_thread()->block(new system::sheduling::BlockerSleep(time));
+    }
 }
 
 void Thread::join(libruntime::RefPtr<Thread> thread_to_join)
 {
-    logger_info("{} is joining {}", sheduling::running_thread(), thread_to_join);
-    sheduling::running_thread()->block(new system::sheduling::BlockerJoin(thread_to_join));
+    assert(thread_to_join != nullptr);
+
+    if (thread_to_join->state() != ThreadState::STOPPED)
+    {
+        logger_info("{} is joining {}", sheduling::running_thread(), thread_to_join);
+        sheduling::running_thread()->block(new system::sheduling::BlockerJoin(thread_to_join));
+    }
 }
 
 void Thread::cleanup(libruntime::RefPtr<Thread> thread)
 {
+    assert(thread != nullptr);
+
     _threads_lock.acquire();
     _threads.remove_all(thread);
     _threads_lock.release();
