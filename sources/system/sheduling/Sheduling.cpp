@@ -89,6 +89,22 @@ bool can_shedule()
            !_threads_lock.is_acquired();
 }
 
+static void unblock_blocked_thread()
+{
+    _blocked_threads->foreach ([](auto thread) {
+        if (thread->should_unblock())
+        {
+            logger_info("Unblocking {}", thread);
+            thread->unblock();
+            thread->set_state(ThreadState::READY);
+            _blocked_threads->remove_first(thread);
+            _ready_threads->push_back(thread);
+        }
+
+        return Iteration::CONTINUE;
+    });
+}
+
 uintptr_t shedule(uintptr_t stack_pointer)
 {
     if (_running_thread.necked() == nullptr)
@@ -102,18 +118,7 @@ uintptr_t shedule(uintptr_t stack_pointer)
 
         _running_thread->stack().set_pointer(stack_pointer);
 
-        _blocked_threads->foreach ([](auto thread) {
-            if (thread->should_unblock())
-            {
-                logger_info("Unblocking {}", thread);
-                thread->unblock();
-                thread->set_state(ThreadState::READY);
-                _blocked_threads->remove_first(thread);
-                _ready_threads->push_back(thread);
-            }
-
-            return Iteration::CONTINUE;
-        });
+        unblock_blocked_thread();
 
         if (_running_thread->state() == ThreadState::RUNNING)
         {
