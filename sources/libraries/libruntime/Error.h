@@ -12,7 +12,11 @@ namespace libruntime
     __ITEM(NOT_IMPLEMENTED) \
     __ITEM(READ_ONLY)       \
     __ITEM(WRITE_ONLY)      \
-    __ITEM(END_OF_STREAM)
+    __ITEM(END_OF_STREAM)   \
+    __ITEM(NO_SUCH_THREAD)  \
+    __ITEM(NO_CHILD_THREAD) \
+    __ITEM(NO_SUCH_PROCESS) \
+    __ITEM(NO_CHILD_PROCESS)
 
 enum class Error
 {
