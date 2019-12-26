@@ -56,7 +56,8 @@ public:
     void fill_circle_sector(Point center, double radius, CircleSector sector, Color color);
     void fill_rectangle_with_radius(Bound bound, double radius, Color color);
 
-    void blit(Surface &source, Bound source_bound, Bound destination_bound, Color color);
+    void blit(Surface &source, Bound destination_bound, Color color, SurfaceFiltering filtering = SurfaceFiltering::NEAREST);
+    void blit(Surface &source, Bound source_bound, Bound destination_bound, Color color, SurfaceFiltering filtering = SurfaceFiltering::NEAREST);
 };
 
 } // namespace libgraphic

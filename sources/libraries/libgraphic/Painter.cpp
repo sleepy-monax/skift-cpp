@@ -152,8 +152,25 @@ void Painter::fill_rectangle(Bound bound, Color color)
 // {
 // }
 //
-// void blit(Surface &source, Bound source_bound, Bound destination_bound, Color color)
-// {
-// }
-//
+
+void Painter::blit(Surface &source, Bound destination_bound, Color color, SurfaceFiltering filtering = SurfaceFiltering::NEAREST)
+{
+    blit(source, source.bound(), destination_bound, color, filtering);
+}
+
+void Painter::blit(Surface &source, Bound source_bound, Bound destination_bound, Color color, SurfaceFiltering filtering = SurfaceFiltering::NEAREST)
+{
+    for (int x = 0; x < destination_bound.width(); x++)
+    {
+        for (int y = 0; y < destination_bound.height(); y++)
+        {
+            float xx = x / (float)destination_bound.width;
+            float yy = y / (float)destination_bound.height;
+
+            Color pix = source.sample(xx, yy, source_bound, filtering);
+            plot(Point(x, y), pix);
+        }
+    }
+}
+
 } // namespace libgraphic
