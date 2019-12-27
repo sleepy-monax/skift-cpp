@@ -103,10 +103,13 @@ void Painter::draw_triangle(Point p0, Point p1, Point p2, Color color)
 //
 // void Painter::draw_circle(Point center, double radius, Color color)
 // {
+//TODO: http://rosettacode.org/wiki/Bitmap/Midpoint_circle_algorithm#C
+//      https://stackoverflow.com/questions/37589165/drawing-an-antialiased-circle-as-described-by-xaolin-wu
 // }
 //
 // void Painter::draw_ellipse(Bound bound, Color color)
 // {
+//
 // }
 //
 // void Painter::draw_circle_sector(Point center, double radius, CircleSector sector, Color color)
@@ -153,22 +156,22 @@ void Painter::fill_rectangle(Bound bound, Color color)
 // }
 //
 
-void Painter::blit(Surface &source, Bound destination_bound, Color color, SurfaceFiltering filtering = SurfaceFiltering::NEAREST)
+void Painter::blit(Surface &source, Bound destination_bound, Color color, SurfaceFiltering filtering)
 {
     blit(source, source.bound(), destination_bound, color, filtering);
 }
 
-void Painter::blit(Surface &source, Bound source_bound, Bound destination_bound, Color color, SurfaceFiltering filtering = SurfaceFiltering::NEAREST)
+void Painter::blit(Surface &source, Bound source_bound, Bound destination_bound, Color color, SurfaceFiltering filtering)
 {
     for (int x = 0; x < destination_bound.width(); x++)
     {
         for (int y = 0; y < destination_bound.height(); y++)
         {
-            float xx = x / (float)destination_bound.width;
-            float yy = y / (float)destination_bound.height;
+            float xx = x / (float)destination_bound.width();
+            float yy = y / (float)destination_bound.height();
 
             Color pix = source.sample(xx, yy, source_bound, filtering);
-            plot(Point(x, y), pix);
+            plot(Point(x, y), Color::multiply(pix, color));
         }
     }
 }

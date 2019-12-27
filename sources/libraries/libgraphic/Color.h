@@ -64,6 +64,8 @@ public:
 
     static Color lerp(Color from, Color to, double transition);
 
+    static Color multiply(Color a, Color b);
+
     ~Color() {}
 };
 

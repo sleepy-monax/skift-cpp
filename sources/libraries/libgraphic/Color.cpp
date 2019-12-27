@@ -79,4 +79,12 @@ Color Color::lerp(Color from, Color to, double transition)
                  libmath::lerp(from.alpha(), to.alpha(), transition));
 }
 
+Color Color::multiply(Color a, Color b)
+{
+    return Color(static_cast<uint8_t>(a.red() * b.red() / 255.0),
+                 static_cast<uint8_t>(a.green() * b.green() / 255.0),
+                 static_cast<uint8_t>(a.blue() * b.blue() / 255.0),
+                 static_cast<uint8_t>(a.alpha() * b.alpha() / 255.0));
+}
+
 } // namespace libgraphic
