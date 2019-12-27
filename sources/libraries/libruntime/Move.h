@@ -13,4 +13,16 @@ T &&move(T &arg)
     return static_cast<T &&>(arg);
 }
 
+template <typename T>
+struct Identity
+{
+    typedef T Type;
+};
+
+template <class T>
+constexpr T &&forward(typename Identity<T>::Type &param)
+{
+    return static_cast<T &&>(param);
+}
+
 } // namespace libruntime

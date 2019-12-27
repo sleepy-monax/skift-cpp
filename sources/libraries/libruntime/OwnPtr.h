@@ -142,4 +142,10 @@ public:
     }
 };
 
+template <typename Type, typename... Args>
+inline OwnPtr<Type> own(Args &&... args)
+{
+    return OwnPtr<Type>(new Type(args...));
+}
+
 } // namespace libruntime
