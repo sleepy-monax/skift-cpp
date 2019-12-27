@@ -31,6 +31,8 @@ public:
     }
 
     inline ~Point() {}
+
+    double Distance(Point from, Point to);
 };
 
 } // namespace libgraphic
