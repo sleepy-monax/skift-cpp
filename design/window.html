@@ -16,6 +16,17 @@
         overflow: hidden;
     }
 
+    .clickable {}
+
+
+    .clickable:hover {
+        background-color: #ffffff15;
+    }
+
+    .clickable:active {
+        background-color: #ffffff10;
+    }
+
     .window {
         overflow: hidden;
         background-color: #333;
@@ -24,6 +35,7 @@
         height: 90vh;
         width: 90vw;
         margin: 5vh 5vw;
+
         position: relative;
     }
 
@@ -58,19 +70,47 @@
         color: #fff;
         padding: 0px 8px;
         user-select: none;
+
+        position: relative;
     }
 
-    .window-headerbar-button:hover {
-        background-color: #fff1;
+    .window-headerbar-menu {
+        left: -8px;
+
+        position: absolute;
+        overflow: hidden;
+        border: 1px solid #fff2;
+        background-color: #333;
+        box-shadow: 0px 0px 0px 1px #0002;
+        border-radius: 4px;
+        min-width: 128px;
+    }
+
+    .window-headerbar-menu-item {
+        padding: 0px 16px;
+        height: 32px;
+        line-height: 32px;
+        vertical-align: middle;
+    }
+
+    .window-headerbar-menu-item:hover {
+        background-color: #ffffff15;
+    }
+
+    .window-headerbar-menu-item:active {
+        background-color: #ffffff10;
     }
 
     .window-headerbar-min {
         float: right;
         color: white;
         line-height: 32px;
-        width: 26px;
-        height: 32px;
+        margin: 4px 4px;
+        width: 24px;
+        height: 24px;
         user-select: none;
+
+        border-radius: 4px;
 
         background-position: center;
         background-repeat: no-repeat;
@@ -81,9 +121,12 @@
         float: right;
         color: white;
         line-height: 32px;
-        width: 26px;
-        height: 32px;
+        margin: 4px 4px;
+        width: 24px;
+        height: 24px;
         user-select: none;
+
+        border-radius: 4px;
 
         background-position: center;
         background-repeat: no-repeat;
@@ -94,9 +137,12 @@
         float: right;
         color: white;
         line-height: 32px;
-        width: 26px;
-        height: 32px;
+        margin: 4px 4px;
+        width: 24px;
+        height: 24px;
         user-select: none;
+
+        border-radius: 4px;
 
         background-position: center;
         background-repeat: no-repeat;
@@ -112,15 +158,15 @@
     }
 
     .window-statusbar {
-        color: white;
-        padding: 0px 4px;
+        color: #fff;
+        padding: 0px 8px;
         position: absolute;
         bottom: 0px;
         height: 24px;
         border-top: 1px solid #0002;
         box-shadow: 0px -1px #fff2;
         width: 100%;
-        line-height: 16px;
+        line-height: 24px;
         vertical-align: middle;
     }
 
@@ -147,17 +193,8 @@
         background-color: #333;
     }
 
-    .button:hover {
-        background-color: #444444;
-    }
-
-    .button:active {
-        background-color: #404040;
-    }
-
     .button:focus {
         border: 1px solid #06f;
-
     }
 
     .ghost-button {
@@ -179,14 +216,6 @@
         background-color: transparent;
     }
 
-    .ghost-button:hover {
-        background-color: #444444;
-    }
-
-    .ghost-button:active {
-        background-color: #404040;
-    }
-
     .menu-button {
         float: left;
         display: block;
@@ -204,14 +233,6 @@
 
         background-color: transparent;
     }
-
-    .menu-button:hover {
-        background-color: #fff1;
-    }
-
-    .menu-button:active {
-        background-color: #fff2;
-    }
 </style>
 
 <body>
@@ -221,35 +242,54 @@
                 <div class="window-headerbar-icon material-icons">
                     folder_open
                 </div>
-                <div class="window-headerbar-button">Explorer</div>
-                <div class="window-headerbar-button">Edit</div>
-                <div class="window-headerbar-button">View</div>
-                <div class="window-headerbar-button">Help</div>
+                <div class="window-headerbar-button clickable">Explorer
+                </div>
+                <div class="window-headerbar-button clickable">Edit</div>
+                <div class="window-headerbar-button clickable">View</div>
+                <div class="window-headerbar-button clickable">Help
+                    <div class="window-headerbar-menu">
+                        <div class="window-headerbar-menu-item">
+                            Manual
+                        </div>
+                        <div class="window-headerbar-menu-item">
+                            License
+                        </div>
+                        <div class="window-headerbar-menu-item">
+                            About
+                        </div>
+                    </div>
+                </div>
 
-                <div class="window-headerbar-close"> </div>
-                <div class="window-headerbar-max"></div>
-                <div class="window-headerbar-min"></div>
+                <div class="window-headerbar-close clickable"> </div>
+                <div class="window-headerbar-max clickable"></div>
+                <div class="window-headerbar-min clickable"></div>
             </div>
 
             <div class="window-menubar">
-                <div class="menu-button">
-                    +
+                <div class="menu-button clickable material-icons">
+                    add
                 </div>
-                <div class="menu-button">
-                    -
+                <div class="menu-button clickable material-icons">
+                    clear
                 </div>
-                <div class="ghost-button">
+                <div class="menu-button clickable material-icons">
+                    help
+                </div>
+                <div class="menu-button clickable material-icons">
+                    home
+                </div>
+                <div class="ghost-button clickable">
                     Button
                 </div>
-                <div class="ghost-button">
+                <div class="ghost-button clickable">
                     Button
                 </div>
 
-                <button class="button">
+                <button class="button clickable">
                     Button
                 </button>
 
-                <button class="button">
+                <button class="button clickable">
                     Button
                 </button>
             </div>
