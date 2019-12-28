@@ -9,46 +9,46 @@
 namespace x86
 {
 
-static inline u8 in8(u16 port)
+static inline uint8_t in8(uint16_t port)
 {
-    u8 data;
+    uint8_t data;
     asm volatile("inb %1, %0"
                  : "=a"(data)
                  : "d"(port));
     return data;
 }
 
-static inline u16 in16(u16 port)
+static inline uint16_t in16(uint16_t port)
 {
-    u16 data;
+    uint16_t data;
     asm volatile("inw %1, %0"
                  : "=a"(data)
                  : "d"(port));
     return data;
 }
 
-static inline u32 in32(u16 port)
+static inline uint32_t in32(uint16_t port)
 {
-    u32 data;
+    uint32_t data;
     asm volatile("inl %1, %0"
                  : "=a"(data)
                  : "d"(port));
     return data;
 }
 
-static inline void out8(u16 port, u8 data)
+static inline void out8(uint16_t port, uint8_t data)
 {
     asm volatile("outb %0, %1"
                  :
                  : "a"(data), "d"(port));
 }
 
-static inline void out16(u16 port, u16 data)
+static inline void out16(uint16_t port, uint16_t data)
 {
     asm volatile("outw %0, %1" ::"a"(data), "d"(port));
 }
 
-static inline void out32(u16 port, u32 data)
+static inline void out32(uint16_t port, uint32_t data)
 {
     asm volatile("outl %0, %1"
                  :
@@ -66,8 +66,8 @@ static inline void sti(void) { asm volatile("sti"); }
 
 static inline void hlt(void) { asm volatile("hlt"); }
 
-extern "C" void load_gdt(u32 gdt);
+extern "C" void load_gdt(uint32_t gdt);
 
-extern "C" void load_idt(u32 idt);
+extern "C" void load_idt(uint32_t idt);
 
 } // namespace x86

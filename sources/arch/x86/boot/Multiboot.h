@@ -74,12 +74,12 @@ public:
 class Multiboot
 {
 private:
-    u32 _magic;
+    uint32_t _magic;
     uintptr_t _address;
     size_t _size;
 
 public:
-    Multiboot(u32 magic, uintptr_t address)
+    Multiboot(uint32_t magic, uintptr_t address)
     {
         _magic = magic;
 
@@ -156,7 +156,7 @@ public:
         if (tag)
         {
             for (multiboot2_memory_map_t *mmap = tag->entries;
-                 (u8 *)mmap < (u8 *)tag + tag->size;
+                 (uint8_t *)mmap < (uint8_t *)tag + tag->size;
                  mmap = (multiboot2_memory_map_t *)((uintptr_t)mmap + tag->entry_size))
             {
                 if (callback(MemoryMapEntry((uintptr_t)mmap->addr, (size_t)mmap->len, mmap->type)) == libruntime::Iteration::STOP)

@@ -13,7 +13,7 @@ x86::GdtEntry gdt_entries[GDT_ENTRY_COUNT] = {0};
 
 x86::GdtDescriptor gdt_descriptor = {
     .size = sizeof(x86::GdtEntry) * GDT_ENTRY_COUNT,
-    .offset = (u32)&gdt_entries[0],
+    .offset = (uint32_t)&gdt_entries[0],
 };
 
 void x86::segmentation_initialize()
@@ -30,7 +30,7 @@ void x86::segmentation_initialize()
     gdt_entries[5] = x86::GdtEntry::create(((uintptr_t)&tss), sizeof(x86::Tss), GDT_PRESENT | GDT_EXECUTABLE | GDT_ACCESSED, TSS_FLAGS);
 
     logger_info("Loading the GDT...");
-    x86::load_gdt((u32)&gdt_descriptor);
+    x86::load_gdt((uint32_t)&gdt_descriptor);
 
     logger_info("Memory segmentation loaded.");
 }

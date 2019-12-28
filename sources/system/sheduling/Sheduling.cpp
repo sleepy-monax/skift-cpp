@@ -37,7 +37,7 @@ void update_thread_state(RefPtr<Thread> thread, ThreadState new_state)
 
     if (thread->state() == ThreadState::EMBRYO)
     {
-        if (_running_thread.necked() == nullptr)
+        if (_running_thread == nullptr)
         {
             logger_info("Using {} has running thread", thread);
             _running_thread = thread;
@@ -71,14 +71,14 @@ void update_thread_state(RefPtr<Thread> thread, ThreadState new_state)
 
 libruntime::RefPtr<system::tasking::Thread> running_thread()
 {
-    assert(_running_thread.necked() != nullptr);
+    assert(_running_thread != nullptr);
 
     return _running_thread;
 }
 
 libruntime::RefPtr<system::tasking::Process> running_process()
 {
-    assert(_running_thread.necked() != nullptr);
+    assert(_running_thread != nullptr);
 
     return _running_thread->process();
 }
@@ -107,7 +107,7 @@ static void unblock_blocked_thread()
 
 uintptr_t shedule(uintptr_t stack_pointer)
 {
-    if (_running_thread.necked() == nullptr)
+    if (_running_thread == nullptr)
     {
         return stack_pointer;
     }

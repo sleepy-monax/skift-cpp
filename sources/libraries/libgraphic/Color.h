@@ -50,7 +50,7 @@ public:
     uint8_t blue() { return _blue; }
     uint8_t alpha() { return _alpha; }
 
-    u32 packed() { return _packed; }
+    uint32_t packed() { return _packed; }
 
     static Color RGB(uint8_t red, uint8_t green, uint8_t blue);
 

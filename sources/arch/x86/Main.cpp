@@ -49,7 +49,7 @@ void taskB()
     tasking::Thread::exit();
 }
 
-extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
+extern "C" void arch_main(uint32_t multiboot_magic, uintptr_t multiboot_addr)
 {
     auto serial = SerialStream(SerialPort::COM1);
     auto terminal = Stream(); // Create a dummy stream for the terminal
@@ -114,8 +114,8 @@ extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
     task_a->start();
     tasking::Thread::create(tasking::kernel_process(), reinterpret_cast<tasking::ThreadEntry>(taskB))->start();
 
-    print("hjert kernel ({} {})\n", __BUILD_TARGET__, __BUILD_GITREF__);
-    print("--------------------------------------------------------------------------------\n");
+    print(" ☺ hjert kernel ({} {})\n", __BUILD_TARGET__, __BUILD_GITREF__);
+    print("════════════════════════════════════════════════════════════════════════════════\n");
 
     print(u8"~ \e[94mµ\e[m ");
 

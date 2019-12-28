@@ -35,9 +35,9 @@ public:
 
         if (promotion() == system::tasking::Promotion::USER)
         {
-            stack().push((u32)0x20);
+            stack().push((uint32_t)0x20);
             stack().push(userstack().get_pointer());
-            stack().push((u32)0x202);
+            stack().push((uint32_t)0x202);
 
             frame.cs = 0x18;
             frame.ds = 0x20;
@@ -56,7 +56,7 @@ public:
 
         frame.ebp = stack().get_pointer();
         frame.esp = stack().get_pointer();
-        frame.eip = (u32)entry();
+        frame.eip = (uint32_t)entry();
         frame.eflags = 0x202;
 
         stack().push(&frame);

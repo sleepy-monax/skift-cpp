@@ -5,6 +5,7 @@
 /* See: LICENSE.md                                                            */
 
 #include <libruntime/Macros.h>
+#include <libruntime/Types.h>
 
 namespace libruntime
 {

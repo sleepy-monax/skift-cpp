@@ -17,7 +17,7 @@ x86::IdtEntry idt_entries[IDT_ENTRY_COUNT] = {0};
 
 x86::IdtDescriptor idt_descriptor = {
     .size = sizeof(x86::IdtEntry) * IDT_ENTRY_COUNT,
-    .offset = (u32)&idt_entries[0],
+    .offset = (uint32_t)&idt_entries[0],
 };
 
 extern "C" uintptr_t __interrupt_vector[];
@@ -46,13 +46,13 @@ void x86::interupts_initialise()
     idt_entries[128] = x86::IdtEntry::create(__interrupt_vector[48], 0x08, IDT_TRAPGATE);
 
     logger_info("Loading the IDT...");
-    x86::load_idt((u32)&idt_descriptor);
+    x86::load_idt((uint32_t)&idt_descriptor);
 
     logger_info("We should get interupts now...");
     x86::sti();
 }
 
-extern "C" u32 interupts_handle(u32 esp, x86::InteruptStackFrame stackframe)
+extern "C" uint32_t interupts_handle(uint32_t esp, x86::InteruptStackFrame stackframe)
 {
 
     if (stackframe.intno < 32)

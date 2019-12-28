@@ -19,19 +19,19 @@ namespace x86
 
 struct __packed IdtDescriptor
 {
-    u16 size;
-    u32 offset;
+    uint16_t size;
+    uint32_t offset;
 };
 
 struct __packed IdtEntry
 {
-    u16 offset0_15; // offset bits 0..15
-    u16 selector;   // a code segment selector in GDT or LDT
-    u8 zero;
-    u8 type_attr;    // type and attributes
-    u16 offset16_31; // offset bits 16..31
+    uint16_t offset0_15; // offset bits 0..15
+    uint16_t selector;   // a code segment selector in GDT or LDT
+    uint8_t zero;
+    uint8_t type_attr;    // type and attributes
+    uint16_t offset16_31; // offset bits 16..31
 
-    static IdtEntry create(uintptr_t offset, u32 selector, u8 type)
+    static IdtEntry create(uintptr_t offset, uint32_t selector, uint8_t type)
     {
         IdtEntry entry;
 
