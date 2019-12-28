@@ -6,9 +6,8 @@
 #include <libsystem/Stdio.h>
 
 #include "arch/Arch.h"
-#include "arch/x86/TerminalStream.h"
 #include "arch/x86/boot/Multiboot.h"
-#include "arch/x86/device/CGAScreen.h"
+#include "arch/x86/device/CGATerminal.h"
 #include "arch/x86/device/SerialStream.h"
 #include "arch/x86/interupts/Interupts.h"
 #include "arch/x86/segmentation/Segmentation.h"
@@ -19,7 +18,6 @@
 #include "system/tasking/Process.h"
 #include "system/tasking/Tasking.h"
 
-using namespace x86;
 using namespace system;
 using namespace libruntime;
 using namespace libsystem;
@@ -31,13 +29,12 @@ RefPtr<Stream> libsystem::stdlog;
 
 void taskA()
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 32; i++)
     {
-        logger_info("Hello {} / 8 :)", i + 1);
-        system::tasking::Thread::sleep(10);
+        stderr->write("A", 1);
+        arch::halt();
     }
 
-    logger_info("Good bye cruel world!");
     system::tasking::Thread::exit();
 }
 
@@ -45,20 +42,19 @@ void taskB()
 {
     for (int i = 0; i < 16; i++)
     {
-        libsystem::stderr->write("B", 1);
+        stderr->write("B", 1);
         arch::halt();
     }
 
-    logger_info("Bye bye!");
-    system::tasking::Thread::exit();
+    tasking::Thread::exit();
 }
 
 extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
 {
     auto serial = SerialStream(SerialPort::COM1);
-    auto terminal = TerminalStream(CGAScreen((void *)0xB8000));
+    auto terminal = Stream(); // Create a dummy stream for the terminal
 
-    // We don't went RefPtr to try to delete these.
+    // We don't want RefPtr to try to delete these.
     serial.make_orphan();
     terminal.make_orphan();
 
@@ -71,12 +67,12 @@ extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
     logger_info("hjert kernel ({} {})", __BUILD_TARGET__, __BUILD_GITREF__);
     logger_info("Kernel build on \"{}\"", __BUILD_UNAME__);
 
-    auto multiboot = Multiboot(multiboot_magic, multiboot_addr);
+    auto multiboot = x86::Multiboot(multiboot_magic, multiboot_addr);
 
     if (!multiboot.is_valid())
     {
         logger_fatal("Invalid bootloader, how did you do that !?");
-        system::PANIC("Invalid bootloader, how did you do that !?");
+        PANIC("Invalid bootloader, how did you do that !?");
     }
     else
     {
@@ -103,11 +99,13 @@ extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
 
     if (!memory::is_bootstraped())
     {
-        system::PANIC("Failled to bootstrap the memory manager!");
+        PANIC("Failled to bootstrap the memory manager!");
     }
 
     x86::segmentation_initialize();
     x86::interupts_initialise();
+
+    libsystem::stdout = make<x86::CGATerminal>(reinterpret_cast<void *>(0xB8000));
 
     sheduling::initialize();
     tasking::initialize();
@@ -123,7 +121,7 @@ extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
 
     do
     {
-        libsystem::stderr->write("K", 1);
+        stderr->write("K", 1);
 
         arch::halt();
     } while (true);
