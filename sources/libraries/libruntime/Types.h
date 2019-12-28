@@ -7,6 +7,12 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __cplusplus
+
+typedef decltype(nullptr) nullptr_t;
+
+#endif
+
 typedef unsigned char byte;
 
 typedef unsigned char uchar;

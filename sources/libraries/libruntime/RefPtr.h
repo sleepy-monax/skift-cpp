@@ -22,6 +22,7 @@ public:
     };
 
     RefPtr() : _ptr(nullptr) {}
+    RefPtr(nullptr_t) : _ptr(nullptr) {}
 
     RefPtr(T &object) : _ptr(const_cast<T *>(&object)) { _ptr->ref(); }
     RefPtr(AdoptTag, T &object) : _ptr(const_cast<T *>(&object)) {}
@@ -38,6 +39,16 @@ public:
 
     template <typename U>
     RefPtr(RefPtr<U> &&other) : _ptr(static_cast<T *>(other.give_ref())) {}
+
+    RefPtr &operator=(nullptr_t)
+    {
+        if (_ptr)
+        {
+            necked()->deref();
+        }
+
+        return *this;
+    }
 
     RefPtr &operator=(RefPtr &other)
     {
@@ -154,16 +165,6 @@ public:
     T *necked()
     {
         return _ptr;
-    }
-
-    void clear()
-    {
-        if (_ptr)
-        {
-            _ptr->deref();
-        }
-
-        _ptr = nullptr;
     }
 };
 
