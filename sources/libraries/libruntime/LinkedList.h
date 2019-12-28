@@ -32,6 +32,10 @@ private:
     LinkedListItem<T> *_tail;
 
 public:
+    size_t count() { return _count; }
+    bool empty() { return _count == 0; }
+    bool any() { return _count > 0; }
+
     LinkedList()
     {
         _count = 0;
@@ -96,15 +100,6 @@ public:
             }
         }
     }
-
-    size_t count()
-    {
-        return _count;
-    }
-
-    bool empty() { return _count == 0; }
-
-    bool any() { return _count > 0; }
 
     T push(T value)
     {

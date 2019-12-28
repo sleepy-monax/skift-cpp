@@ -13,6 +13,9 @@ private:
     RefPtr<StringBuffer> _buffer;
 
 public:
+    const char *cstring() { return _buffer->cstring(); }
+    size_t lenght() { return _buffer->lenght(); }
+
     String(const char *cstring = "")
     {
         _buffer = make<StringBuffer>(cstring);
@@ -23,15 +26,11 @@ public:
         _buffer = make<StringBuffer>(cstring, lenght);
     }
 
+    String(const String &other) : _buffer(const_cast<String &>(other)._buffer) {}
+
+    String(String &&other) : _buffer(libruntime::move(other._buffer)) {}
+
     ~String() {}
-
-    String(const String &other) : _buffer(const_cast<String &>(other)._buffer)
-    {
-    }
-
-    String(String &&other) : _buffer(libruntime::move(other._buffer))
-    {
-    }
 
     String &operator=(const String &other)
     {
@@ -52,9 +51,6 @@ public:
 
         return *this;
     }
-
-    const char *cstring() { return _buffer->cstring(); }
-    size_t lenght() { return _buffer->lenght(); }
 };
 
 } // namespace libruntime

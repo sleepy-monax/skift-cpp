@@ -1,6 +1,8 @@
 
-#include "system/tasking/Tasking.h"
+#include <libsystem/Logger.h>
+
 #include "arch/Arch.h"
+#include "system/tasking/Tasking.h"
 #include "system/tasking/Process.h"
 
 namespace system::tasking
@@ -18,6 +20,8 @@ static libruntime::RefPtr<Process> _kernel_process;
 
 void initialize()
 {
+    logger_info("Initializing tasking");
+
     _kernel_process = libruntime::make<Process>(nullptr, "Kernel");
 
     // Create the main kernel thread...

@@ -14,6 +14,9 @@ private:
     char *_buffer;
 
 public:
+    const char *cstring() { return _buffer; }
+    size_t lenght() { return _lenght; }
+
     StringBuffer(const char *cstring) : StringBuffer(cstring, libc::strlen(cstring)){};
 
     StringBuffer(const char *cstring, size_t lenght)
@@ -28,13 +31,6 @@ public:
     {
         delete _buffer;
     }
-
-    size_t lenght()
-    {
-        return _lenght;
-    }
-
-    const char *cstring() { return _buffer; }
 };
 
 } // namespace libruntime

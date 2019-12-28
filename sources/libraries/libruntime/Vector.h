@@ -21,6 +21,10 @@ private:
     size_t _capacity;
 
 public:
+    size_t count() { return _count; }
+    bool empty() { return _count == 0; }
+    bool any() { return !empty(); }
+
     Vector() : Vector(16) {}
 
     Vector(size_t capacity)
@@ -81,21 +85,6 @@ public:
                 }
             }
         }
-    }
-
-    size_t count()
-    {
-        return _count;
-    }
-
-    bool empty()
-    {
-        return _count == 0;
-    }
-
-    bool any()
-    {
-        return !empty();
     }
 
     void grow()
