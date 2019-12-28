@@ -18,7 +18,9 @@ private:
 
 public:
     Codepoint() : _value(0) {}
+
     Codepoint(char32_t value) : _value(value) {}
+
     ~Codepoint() {}
 
     bool is_digit()
@@ -46,6 +48,8 @@ public:
 
     operator char32_t() { return _value; }
     bool operator==(char32_t other) { return _value == other; }
+
+    char to_cp437();
 };
 
 class UTF8Stream : public Stream

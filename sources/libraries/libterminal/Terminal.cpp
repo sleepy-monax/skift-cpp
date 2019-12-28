@@ -35,9 +35,11 @@ void Terminal::set_cursor(int x, int y)
 
 void Terminal::move_cursor(int vx, int vy)
 {
+    // FIXME: this code look silly...
+    
     if (_cursor.X() + vx < 0 || _cursor.X() + vx >= _width)
     {
-        _cursor = Cursor(_width + (_cursor.X() + vx) % _width, 0);
+        _cursor = Cursor((_cursor.X() + vx) % _width, _cursor.Y());
         move_cursor(0, vy + (_cursor.X() + vx) / _width);
     }
     else if (_cursor.Y() + vy < 0)
@@ -48,8 +50,8 @@ void Terminal::move_cursor(int vx, int vy)
     }
     else if (_cursor.Y() + vy >= _height)
     {
-        scroll(_cursor.Y() + _height);
-        _cursor = Cursor(_cursor.X(), 0);
+        scroll((_cursor.Y() + vy) - (_height - 1));
+        _cursor = Cursor(_cursor.X(), _height - 1);
         move_cursor(vx, 0);
     }
     else
@@ -70,7 +72,7 @@ void Terminal::scroll(int how_many_line)
             for (int i = (_width * _height) - 1; i >= _height; i++)
             {
                 int x = i % _width;
-                int y = i % _width;
+                int y = i / _width;
 
                 set_cell(x, y, cell_at(x, y - 1));
             }
@@ -85,7 +87,7 @@ void Terminal::scroll(int how_many_line)
             for (int i = 0; i < ((_width * _height) - _width); i++)
             {
                 int x = i % _width;
-                int y = i % _width;
+                int y = i / _width;
 
                 set_cell(x, y, cell_at(x, y + 1));
             }
@@ -130,7 +132,7 @@ void Terminal::append(libsystem::Codepoint codepoint)
     }
 }
 
-void Terminal::do_ansi(libsystem::Codepoint op, const Parameter *parameters)
+void Terminal::do_ansi(libsystem::Codepoint op, const Parameter *parameters, int parameter_count)
 {
     switch (op)
     {
@@ -292,7 +294,7 @@ void Terminal::do_ansi(libsystem::Codepoint op, const Parameter *parameters)
         break;
 
     case U'm':
-        for (int i = 0; i < TERMINAL_PARAMETERS_COUNT; i++)
+        for (int i = 0; i < parameter_count; i++)
         {
             if (parameters[i].empty || parameters[i].value == 0)
             {
@@ -395,7 +397,9 @@ libruntime::Error Terminal::write_codepoint(libsystem::Codepoint codepoint)
             }
             else
             {
-                do_ansi(codepoint, _parameters);
+                do_ansi(codepoint, _parameters, _parameters_top + 1);
+
+                _state = ParserState::WAIT_FOR_ESC;
             }
         }
         break;

@@ -36,10 +36,15 @@ private:
 public:
     CGACell() {}
 
-    CGACell(int codepoint, CGAColor foreground, CGAColor background)
+    CGACell(char codepoint, CGAColor foreground, CGAColor background)
         : _codepoint(static_cast<char>(codepoint)),
           _foreground(foreground),
           _background(background) {}
+
+    void clear()
+    {
+        _codepoint = ' ';
+    }
 };
 
 class CGATerminal : public libterminal::Terminal
@@ -48,9 +53,19 @@ private:
     CGACell *_cells;
 
 public:
-    CGATerminal(void *addr) : libterminal::Terminal(80, 25), _cells(reinterpret_cast<CGACell *>(addr)) {}
+    CGATerminal(void *addr) : libterminal::Terminal(80, 25), _cells(reinterpret_cast<CGACell *>(addr))
+    {
+        clear_memory();
+        enable_cursor();
+    }
 
     ~CGATerminal() {}
+
+    void clear_memory();
+
+    void enable_cursor();
+
+    void disable_cursor();
 
     void on_cell_updated(int x, int y, libterminal::Cell cell);
 

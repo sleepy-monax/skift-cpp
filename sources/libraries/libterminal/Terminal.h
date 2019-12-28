@@ -92,6 +92,8 @@ public:
 
     ~Terminal() {}
 
+    void clear() { clear(0, 0, width(), height()); }
+
     void clear(int fromx, int fromy, int tox, int toy);
 
     void clear_line(int line);
@@ -106,7 +108,7 @@ public:
 
     void backspace();
 
-    void do_ansi(libsystem::Codepoint op, const Parameter *parameters);
+    void do_ansi(libsystem::Codepoint op, const Parameter *parameters, int parameter_count);
 
     void append(libsystem::Codepoint codepoint);
 
