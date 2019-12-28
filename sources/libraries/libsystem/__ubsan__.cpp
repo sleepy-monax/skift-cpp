@@ -126,3 +126,10 @@ extern "C" void __ubsan_handle_divrem_overflow(UbsanOverflowData *data, unsigned
 
     libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Divrem overflow");
 }
+
+extern "C" void __ubsan_handle_negate_overflow(UbsanOverflowData *data, unsigned long ulLHS)
+{
+    (void)ulLHS;
+
+    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Negate overflow");
+}

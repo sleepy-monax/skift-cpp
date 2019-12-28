@@ -65,6 +65,7 @@ LIBRARIES=libc \
 		  libmath \
 		  libruntime \
 		  libsystem \
+		  libterminal \
 		  libtest \
 		  libwidget
 
@@ -92,7 +93,8 @@ KERNEL_SOURCES=$(wildcard $(ARCH_DIRECTORY)/*.s) \
 			   $(wildcard $(SYSTEM_DIRECTORY)/**/*.cpp) \
 			   $(wildcard $(LIBRARIES_DIRECTORY)/libc/*.cpp) \
 			   $(wildcard $(LIBRARIES_DIRECTORY)/libruntime/*.cpp) \
-			   $(wildcard $(LIBRARIES_DIRECTORY)/libsystem/*.cpp)
+			   $(wildcard $(LIBRARIES_DIRECTORY)/libsystem/*.cpp) \
+			   $(wildcard $(LIBRARIES_DIRECTORY)/libterminal/*.cpp)
 
 KERNEL_OBJECTS=$(patsubst $(SOURCES_DIRECTORY)/%, $(BUILD_DIRECTORY)/%.k.o, $(KERNEL_SOURCES))
 
@@ -169,6 +171,7 @@ $(BUILD_DIRECTORY)/libraries/libgraphic.a: $(filter $(BUILD_DIRECTORY)/libraries
 $(BUILD_DIRECTORY)/libraries/libmath.a: $(filter $(BUILD_DIRECTORY)/libraries/libmath/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libruntime.a: $(filter $(BUILD_DIRECTORY)/libraries/libruntime/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libsystem.a: $(filter $(BUILD_DIRECTORY)/libraries/libsystem/%.o, $(LIBRARIES_OBJECTS))
+$(BUILD_DIRECTORY)/libraries/libterminal.a: $(filter $(BUILD_DIRECTORY)/libraries/libterminal/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libtest.a: $(filter $(BUILD_DIRECTORY)/libraries/libtest/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libwidget.a: $(filter $(BUILD_DIRECTORY)/libraries/libwidget/%.o, $(LIBRARIES_OBJECTS))
 

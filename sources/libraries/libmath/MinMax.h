@@ -31,4 +31,10 @@ T clamp(T a, T min_value, T max_value)
     return max(min_value, min(max_value, a));
 }
 
+template <typename T>
+T clamp(T a, T max_value)
+{
+    return max(0, min(max_value, a));
+}
+
 } // namespace libmath

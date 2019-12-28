@@ -17,7 +17,7 @@ private:
     class AbstractCallbackWrapper
     {
     public:
-        virtual ~Callback() {}
+        virtual ~AbstractCallbackWrapper() {}
 
         virtual Out call(In...) const = 0;
     };
@@ -29,11 +29,11 @@ private:
         T _callback;
 
     public:
-        CallbackWrapper(T &&callback) : _callback(move(callback)) {}
+        CallbackWrapper(T &&callback) : _callback(callback) {}
         CallbackWrapper(const CallbackWrapper &) = delete;
         CallbackWrapper &operator=(const CallbackWrapper &) = delete;
 
-        Out call(In... in) const final override
+        Out call(In... in) const
         {
             return _callback(forward<In>(in)...);
         }
@@ -43,9 +43,7 @@ private:
 
 public:
     template <typename CallbackType>
-    Callback(CallbackType &&callback) : _wrapper(own<CallbackWrapper<T>>(callback))
-    {
-    }
+    Callback(CallbackType &&callback) : _wrapper(own<CallbackWrapper<CallbackType>>(callback)) {}
 
     ~Callback() {}
 
@@ -58,7 +56,7 @@ public:
     template <typename CallbackType>
     Callback &operator=(CallbackType &&callback)
     {
-        _wrapper = own<CallbackWrapper<T>>(callback);
+        _wrapper = own<CallbackWrapper<CallbackType>>(callback);
         return *this;
     }
 
