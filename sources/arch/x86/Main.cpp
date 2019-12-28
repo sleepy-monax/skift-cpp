@@ -117,19 +117,7 @@ extern "C" void arch_main(u32 multiboot_magic, uintptr_t multiboot_addr)
     print("hjert kernel ({} {})\n", __BUILD_TARGET__, __BUILD_GITREF__);
     print("--------------------------------------------------------------------------------\n");
 
-    print("Hello :)\n");
-    print("Hello :)\n");
-    print("Hello :)\n");
-
-    print(u8"\e[1;94m    _____   \e[1;34muser\e[1;37m@\e[1;34mcore\n");
-    print(u8"\e[1;94m   / ____|  \e[1;37mOS:       \e[0;37mskift\n");
-    print(u8"\e[1;94m  | (___    \e[1;37mKERNEL:   \e[0;37mhjert\n");
-    print(u8"\e[1;94m   \\___ \\   \e[1;37mUPTIME:   \e[0;37m00:00\n");
-    print(u8"\e[1;94m   ____) |  \e[1;37mSHELL:    \e[0;37m/bin/sh\n");
-    print(u8"\e[1;94m  |_____/   \n");
-    print(u8"\e[1;94m            \e[1;30;40m##\e[1;41;31m##\e[1;42;32m##\e[1;43;33m##\e[1;44;34m##\e[1;45;35m##\e[1;46;36m##\e[1;47;37m##\e[0m\n");
-
-    print(u8"UNICODE :) ☺ ☻ ♥ ♪ ↔ é è à ░▒▓█∞⌠√∙· 🤔");
+    print(u8"~ \e[94mµ\e[m ");
 
     tasking::Thread::join(task_a);
 
