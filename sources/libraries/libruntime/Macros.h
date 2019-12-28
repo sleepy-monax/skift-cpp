@@ -37,3 +37,11 @@
 #define __noreturn __attribute__((noreturn));
 
 #define __str(s) #s
+
+#define __noncopyable(__class_name)              \
+    __class_name(const __class_name &) = delete; \
+    __class_name &operator=(const __class_name &) = delete;
+
+#define __nonmovable(__class_name)                \
+    __class_name(const __class_name &&) = delete; \
+    __class_name &operator=(const __class_name &&) = delete;
