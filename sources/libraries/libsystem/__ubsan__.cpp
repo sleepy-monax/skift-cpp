@@ -76,6 +76,19 @@ extern "C" void __ubsan_handle_out_of_bounds(UbsanOutOfBoundsData *data, unsigne
     libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Out of bounds");
 }
 
+struct UbsantShiftOutOfBoundsData
+{
+    UbsanSourceLocation location;
+    UbsanTypeDescriptor *lhs_type;
+    UbsanTypeDescriptor *rhs_type;
+};
+
+extern "C" void __ubsan_handle_shift_out_of_bounds(UbsantShiftOutOfBoundsData *data,
+                                                   unsigned long lhs, unsigned long rhs)
+{
+    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Shift out of bounds");
+}
+
 struct UbsanPointerOverflowData
 {
     UbsanSourceLocation location;
