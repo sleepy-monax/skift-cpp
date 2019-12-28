@@ -9,11 +9,11 @@ BUILD_GITREF=$(shell git rev-parse --abbrev-ref HEAD || echo unknown)/$(shell gi
 BUILD_UNAME=$(shell uname -s -o -m -r)
 BUILD_DIRECTORY=build/$(BUILD_TARGET)
 
-BOOT_DIRECTORY=$(BUILD_DIRECTORY)/isodir
+IMAGE_DIRECTORY=$(BUILD_DIRECTORY)/image
 
 SOURCES_DIRECTORY=sources
 
-LOG=@echo -e
+LOG=@echo
 DIRECTORY_GUARD=@mkdir -p $(@D)
 
 SYSTEM_IMAGE=$(BUILD_DIRECTORY)/image.iso
@@ -151,16 +151,16 @@ run-headless: $(SYSTEM_IMAGE)
 
 clean:
 	rm -rf $(BUILD_DIRECTORY)
-	rm -rf $(BOOT_DIRECTORY)
+	rm -rf $(IMAGE_DIRECTORY)
 	rm -f $(SYSTEM_IMAGE)
 
 
 $(SYSTEM_IMAGE): $(KERNEL_BINARY) $(LIBRARIES_ARCHIVES) grub.cfg
-	@mkdir -p $(BOOT_DIRECTORY)/boot/grub/
-	@cp grub.cfg $(BOOT_DIRECTORY)/boot/grub/
-	@cp $(KERNEL_BINARY) $(BOOT_DIRECTORY)/boot/
-	grub-mkrescue -o $(SYSTEM_IMAGE) $(BOOT_DIRECTORY) || \
-	grub2-mkrescue -o $(SYSTEM_IMAGE) $(BOOT_DIRECTORY)
+	@mkdir -p $(IMAGE_DIRECTORY)/boot/grub/
+	@cp grub.cfg $(IMAGE_DIRECTORY)/boot/grub/
+	@cp $(KERNEL_BINARY) $(IMAGE_DIRECTORY)/boot/
+	grub-mkrescue -o $(SYSTEM_IMAGE) $(IMAGE_DIRECTORY) || \
+	grub2-mkrescue -o $(SYSTEM_IMAGE) $(IMAGE_DIRECTORY)
 
 # --- Libraries recipies ----------------------------------------------------- #
 
