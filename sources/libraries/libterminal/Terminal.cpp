@@ -339,7 +339,7 @@ void Terminal::do_ansi(libsystem::Codepoint op, const Parameter *parameters)
     }
 }
 
-void Terminal::write(libsystem::Codepoint codepoint)
+libruntime::Error Terminal::write_codepoint(libsystem::Codepoint codepoint)
 {
     switch (_state)
     {
@@ -404,6 +404,8 @@ void Terminal::write(libsystem::Codepoint codepoint)
         assert_not_reached();
         break;
     }
+
+    return libruntime::Error::SUCCEED;
 }
 
 } // namespace libterminal

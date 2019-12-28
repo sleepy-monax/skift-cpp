@@ -39,7 +39,7 @@ struct Parameter
     bool empty;
 };
 
-class Terminal
+class Terminal : public libsystem::UTF8Stream
 {
 private:
     Cursor _cursor;
@@ -56,7 +56,6 @@ private:
     int _parameters_top;
 
     ParserState _state;
-    libsystem::UTF8Decoder _decoder;
 
 public:
     int width() { return _width; }
@@ -87,8 +86,7 @@ public:
           _cells(new Cell[width * height]),
           _default_attributes(),
           _current_attributes(),
-          _state(ParserState::WAIT_FOR_ESC),
-          _decoder([&](auto codepoint) -> void { write(codepoint); })
+          _state(ParserState::WAIT_FOR_ESC)
     {
     }
 
@@ -112,12 +110,7 @@ public:
 
     void append(libsystem::Codepoint codepoint);
 
-    void write(libsystem::Codepoint codepoint);
-
-    void write(const void *buffer, size_t size)
-    {
-        _decoder.write(reinterpret_cast<const uint8_t *>(buffer), size);
-    }
+    virtual libruntime::Error write_codepoint(libsystem::Codepoint codepoint);
 
     virtual void on_cell_updated(int x, int y, Cell cell) = 0;
 

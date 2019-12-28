@@ -5,7 +5,7 @@
 /* See: LICENSE.md                                                            */
 
 #include <libruntime/Types.h>
-#include <libruntime/Callback.h>
+#include <libsystem/Stream.h>
 
 namespace libsystem
 {
@@ -48,79 +48,76 @@ public:
     bool operator==(char32_t other) { return _value == other; }
 };
 
-class UTF8Decoder
+class UTF8Stream : public Stream
 {
 private:
-    libruntime::Callback<void(Codepoint)> _callback;
-
     bool _is_decoding = false;
-    char32_t _current = 0;
-    int _width = 0;
+    char32_t _current_decoding = 0;
+    int _width_decoding = 0;
+
+    bool _is_encoding = false;
+    char32_t _current_encoding = 0;
+    int _width_encoding = 0;
 
 public:
-    template <typename Callback>
-    UTF8Decoder(Callback callback) : _callback(callback) {}
-    ~UTF8Decoder() {}
-
-    void write(const uint8_t *bytes, size_t count)
+    virtual libruntime::Error write_byte(byte byte)
     {
-        for (size_t i = 0; i < count; i++)
+        if (!_is_decoding)
         {
-            uint8_t byte = bytes[i];
-
-            if (!_is_decoding)
+            if ((byte & 0xf8) == 0xf0)
             {
-                if ((byte & 0xf8) == 0xf0)
-                {
-                    _current = (0x07 & byte) << 18;
+                _current_decoding = (0x07 & byte) << 18;
 
-                    _is_decoding = true;
-                    _width = 3;
-                }
-                else if ((byte & 0xf0) == 0xe0)
-                {
-                    _current = (0x0f & byte) << 12;
+                _is_decoding = true;
+                _width_decoding = 3;
+            }
+            else if ((byte & 0xf0) == 0xe0)
+            {
+                _current_decoding = (0x0f & byte) << 12;
 
-                    _is_decoding = true;
-                    _width = 2;
-                }
-                else if ((byte & 0xe0) == 0xc0)
-                {
-                    _current = (0x1f & byte) << 6;
+                _is_decoding = true;
+                _width_decoding = 2;
+            }
+            else if ((byte & 0xe0) == 0xc0)
+            {
+                _current_decoding = (0x1f & byte) << 6;
 
-                    _is_decoding = true;
-                    _width = 1;
-                }
-                else
-                {
-                    _current = byte;
-
-                    _is_decoding = true;
-                    _width = 0;
-                }
+                _is_decoding = true;
+                _width_decoding = 1;
             }
             else
             {
-                if ((byte & 0b11000000) == 0b10000000)
-                {
-                    _width--;
-                    _current = (0x3f & byte) << (6 * _width);
-                }
-                else
-                {
-                    // FIXME: maybe have a special callback for this case.
-                    _callback(Codepoint(U'?'));
-                    _is_decoding = false;
-                }
-            }
+                _current_decoding = byte;
 
-            if (_is_decoding && _width == 0)
-            {
-                _callback(Codepoint(_current));
-                _is_decoding = false;
+                _is_decoding = true;
+                _width_decoding = 0;
             }
         }
+        else
+        {
+            if ((byte & 0b11000000) == 0b10000000)
+            {
+                _width_decoding--;
+                _current_decoding = (0x3f & byte) << (6 * _width_decoding);
+            }
+            else
+            {
+                // FIXME: maybe have a special callback for this case.
+                _is_decoding = false;
+                return write_codepoint(Codepoint(U'?'));
+            }
+        }
+
+        if (_is_decoding && _width_decoding == 0)
+        {
+            _is_decoding = false;
+            return write_codepoint(Codepoint(_current_decoding));
+        }
+
+        return libruntime::Error::SUCCEED;
     }
+
+    virtual libruntime::Error write_codepoint(Codepoint codepoint) = 0;
 };
 
 } // namespace libsystem
