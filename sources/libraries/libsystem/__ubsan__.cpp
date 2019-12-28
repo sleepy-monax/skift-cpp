@@ -73,7 +73,8 @@ extern "C" void __ubsan_handle_out_of_bounds(UbsanOutOfBoundsData *data, unsigne
 {
     (void)index;
 
-    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Out of bounds");
+    UBSAN_LOG("Out of bounds");
+    assert_not_reached();
 }
 
 struct UbsantShiftOutOfBoundsData
@@ -86,7 +87,11 @@ struct UbsantShiftOutOfBoundsData
 extern "C" void __ubsan_handle_shift_out_of_bounds(UbsantShiftOutOfBoundsData *data,
                                                    unsigned long lhs, unsigned long rhs)
 {
-    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Shift out of bounds");
+    __unused(lhs);
+    __unused(rhs);
+
+    UBSAN_LOG("Shift out of bounds");
+    assert_not_reached();
 }
 
 struct UbsanPointerOverflowData
@@ -99,7 +104,8 @@ extern "C" void __ubsan_handle_pointer_overflow(UbsanPointerOverflowData *data, 
     (void)base;
     (void)result;
 
-    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Pointer overflow");
+    UBSAN_LOG("Pointer overflow");
+    assert_not_reached();
 }
 
 struct UbsanOverflowData
@@ -113,7 +119,8 @@ extern "C" void __ubsan_handle_add_overflow(UbsanOverflowData *data, unsigned lo
     (void)ulLHS;
     (void)ulRHS;
 
-    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Add overflow");
+    UBSAN_LOG("Add overflow");
+    assert_not_reached();
 }
 
 extern "C" void __ubsan_handle_sub_overflow(UbsanOverflowData *data, unsigned long ulLHS, unsigned long ulRHS)
@@ -121,7 +128,8 @@ extern "C" void __ubsan_handle_sub_overflow(UbsanOverflowData *data, unsigned lo
     (void)ulLHS;
     (void)ulRHS;
 
-    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Sub overflow");
+    UBSAN_LOG("Sub overflow");
+    assert_not_reached();
 }
 
 extern "C" void __ubsan_handle_mul_overflow(UbsanOverflowData *data, unsigned long ulLHS, unsigned long ulRHS)
@@ -129,7 +137,8 @@ extern "C" void __ubsan_handle_mul_overflow(UbsanOverflowData *data, unsigned lo
     (void)ulLHS;
     (void)ulRHS;
 
-    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Mul overflow");
+    UBSAN_LOG("Mul overflow");
+    assert_not_reached();
 }
 
 extern "C" void __ubsan_handle_divrem_overflow(UbsanOverflowData *data, unsigned long ulLHS, unsigned long ulRHS)
@@ -137,12 +146,14 @@ extern "C" void __ubsan_handle_divrem_overflow(UbsanOverflowData *data, unsigned
     (void)ulLHS;
     (void)ulRHS;
 
-    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Divrem overflow");
+    UBSAN_LOG("Divrem overflow");
+    assert_not_reached();
 }
 
 extern "C" void __ubsan_handle_negate_overflow(UbsanOverflowData *data, unsigned long ulLHS)
 {
     (void)ulLHS;
 
-    libsystem::log(libsystem::LogLevel::ERROR, data->location.filename, data->location.line, "Negate overflow");
+    UBSAN_LOG("Negate overflow");
+    assert_not_reached();
 }
