@@ -98,7 +98,7 @@ public:
             if ((byte & 0b11000000) == 0b10000000)
             {
                 _width_decoding--;
-                _current_decoding = (0x3f & byte) << (6 * _width_decoding);
+                _current_decoding |= (0x3f & byte) << (6 * _width_decoding);
             }
             else
             {
