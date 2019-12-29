@@ -2,10 +2,9 @@
 /* This code is licensed under the 3-Clause BSD License.                      */
 /* See: LICENSE.md                                                            */
 
-#include <libsystem/__alloc__.h>
-
 #include <libruntime/Macros.h>
 #include <libruntime/Types.h>
+#include <libsystem/__alloc__.h>
 #include <libsystem/Assert.h>
 #include <libsystem/Logger.h>
 
