@@ -7,4 +7,13 @@
 namespace system::sheduling
 {
 
+class PolicyIdle
+{
+private:
+    /* data */
+public:
+    PolicyIdle(/* args */) {}
+    ~PolicyIdle() {}
+};
+
 } // namespace system::sheduling
