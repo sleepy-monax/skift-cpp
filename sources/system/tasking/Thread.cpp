@@ -132,15 +132,6 @@ void Thread::join(libruntime::RefPtr<Thread> thread_to_join)
     }
 }
 
-void Thread::cleanup(libruntime::RefPtr<Thread> thread)
-{
-    assert(thread != nullptr);
-
-    _threads_lock.acquire();
-    _threads.remove_all(thread);
-    _threads_lock.release();
-}
-
 libruntime::RefPtr<Thread> Thread::by_id(int id)
 {
     libruntime::RefPtr<Thread> result;
@@ -161,6 +152,26 @@ libruntime::RefPtr<Thread> Thread::by_id(int id)
     _threads_lock.release();
 
     return result;
+}
+
+void Thread::cleanup(libruntime::RefPtr<Thread> thread)
+{
+    assert(thread != nullptr);
+
+    _threads_lock.acquire();
+    _threads.remove_all(thread);
+    _threads_lock.release();
+}
+
+void Thread::foreach (libruntime::Callback<libruntime::Iteration(libruntime::RefPtr<Thread>)> callback)
+{
+    _threads_lock.acquire();
+
+    _threads.foreach ([&](auto thread) {
+        return callback(thread);
+    });
+
+    _threads_lock.release();
 }
 
 } // namespace system::tasking

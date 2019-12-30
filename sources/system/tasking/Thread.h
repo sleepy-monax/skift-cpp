@@ -4,6 +4,7 @@
 /* This code is licensed under the 3-Clause BSD License.                      */
 /* See: LICENSE.md                                                            */
 
+#include <libruntime/Callback.h>
 #include <libruntime/OwnPtr.h>
 #include <libruntime/RefCounted.h>
 #include <libsystem/Time.h>
@@ -82,6 +83,7 @@ public:
 
     // Release all the ressources hold by this thread
     static void cleanup(libruntime::RefPtr<Thread> thread);
+    static void foreach (libruntime::Callback<libruntime::Iteration(libruntime::RefPtr<Thread>)> callback);
 
     libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);
 };
