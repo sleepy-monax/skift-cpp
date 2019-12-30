@@ -11,7 +11,7 @@
 
 #include "arch/Arch.h"
 #include "system/System.h"
-#include "system/sheduling/Sheduling.h"
+#include "system/scheduling/Scheduling.h"
 
 x86::IdtEntry idt_entries[IDT_ENTRY_COUNT] = {0};
 
@@ -65,7 +65,7 @@ extern "C" uint32_t interupts_handle(uint32_t esp, x86::InteruptStackFrame stack
     {
         system::tick();
 
-        esp = system::sheduling::shedule(esp);
+        esp = system::scheduling::schedule(esp);
     }
 
     x86::pic_ack(stackframe.intno);

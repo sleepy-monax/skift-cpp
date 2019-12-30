@@ -7,17 +7,17 @@
 #include "system/tasking/Process.h"
 #include "system/tasking/Thread.h"
 
-namespace system::sheduling
+namespace system::scheduling
 {
 
 void initialize();
 
 void update_thread_state(libruntime::RefPtr<system::tasking::Thread> thread, system::tasking::ThreadState new_state);
 
-uintptr_t shedule(uintptr_t stack_pointer);
+uintptr_t schedule(uintptr_t stack_pointer);
 
 libruntime::RefPtr<system::tasking::Thread> running_thread();
 
 libruntime::RefPtr<system::tasking::Process> running_process();
 
-} // namespace system::sheduling
+} // namespace system::scheduling

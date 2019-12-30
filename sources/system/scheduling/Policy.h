@@ -4,25 +4,16 @@
 /* This code is licensed under the 3-Clause BSD License.                      */
 /* See: LICENSE.md                                                            */
 
-namespace system::tasking
-{
-class Thread;
-} // namespace system::tasking
-
-namespace system::sheduling
+namespace system::scheduling
 {
 
-class Blocker
+class Policy
 {
 private:
+    /* data */
 public:
-    Blocker() {}
-
-    virtual ~Blocker() {}
-
-    virtual bool should_unblock() = 0;
-
-    virtual void unblock() = 0;
+    Policy() {}
+    virtual ~Policy() {}
 };
 
-} // namespace system::sheduling
+} // namespace system::scheduling

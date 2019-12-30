@@ -9,12 +9,12 @@
 #include <libsystem/Logger.h>
 
 #include "arch/Arch.h"
-#include "system/sheduling/Sheduling.h"
+#include "system/scheduling/Scheduling.h"
 
 using namespace libruntime;
 using namespace system::tasking;
 
-namespace system::sheduling
+namespace system::scheduling
 {
 
 static RefPtr<Thread> _running_thread;
@@ -25,7 +25,7 @@ libruntime::SpinLock _threads_lock;
 
 void initialize()
 {
-    logger_info("Initializing sheduling");
+    logger_info("Initializing scheduling");
 
     _ready_threads = new LinkedList<RefPtr<Thread>>();
     _blocked_threads = new LinkedList<RefPtr<Thread>>();
@@ -83,7 +83,7 @@ libruntime::RefPtr<system::tasking::Process> running_process()
     return _running_thread->process();
 }
 
-bool can_shedule()
+bool can_schedule()
 {
     return !__plugs__::memory_is_lock() &&
            !_threads_lock.is_acquired();
@@ -105,14 +105,14 @@ static void unblock_blocked_thread()
     });
 }
 
-uintptr_t shedule(uintptr_t stack_pointer)
+uintptr_t schedule(uintptr_t stack_pointer)
 {
     if (_running_thread == nullptr)
     {
         return stack_pointer;
     }
 
-    if (can_shedule())
+    if (can_schedule())
     {
         _threads_lock.acquire();
 
@@ -139,4 +139,4 @@ uintptr_t shedule(uintptr_t stack_pointer)
     }
 }
 
-} // namespace system::sheduling
+} // namespace system::scheduling

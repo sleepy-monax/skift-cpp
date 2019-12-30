@@ -8,9 +8,9 @@
 #include <libsystem/Logger.h>
 
 #include "arch/Arch.h"
-#include "system/sheduling/BlockerJoin.h"
-#include "system/sheduling/BlockerSleep.h"
-#include "system/sheduling/Sheduling.h"
+#include "system/scheduling/BlockerJoin.h"
+#include "system/scheduling/BlockerSleep.h"
+#include "system/scheduling/Scheduling.h"
 #include "system/tasking/Thread.h"
 
 namespace system::tasking
@@ -53,11 +53,11 @@ void Thread::start()
     switch_state(ThreadState::READY);
 }
 
-// void Thread::set_policy(libruntime::OwnPtr<system::sheduling::Policy> policy)
+// void Thread::set_policy(libruntime::OwnPtr<system::scheduling::Policy> policy)
 // {
 // }
 
-void Thread::block(libruntime::OwnPtr<system::sheduling::Blocker> blocker)
+void Thread::block(libruntime::OwnPtr<system::scheduling::Blocker> blocker)
 {
     _blocker = blocker;
     switch_state(ThreadState::BLOCKED);
@@ -66,7 +66,7 @@ void Thread::block(libruntime::OwnPtr<system::sheduling::Blocker> blocker)
 
 void Thread::switch_state(ThreadState new_state)
 {
-    sheduling::update_thread_state(*this, new_state);
+    scheduling::update_thread_state(*this, new_state);
 }
 
 bool Thread::should_unblock()
@@ -106,8 +106,8 @@ libruntime::RefPtr<Thread> Thread::create(libruntime::RefPtr<Process> process, T
 
 void Thread::exit()
 {
-    logger_info("{} kill himself.", sheduling::running_thread());
-    sheduling::update_thread_state(sheduling::running_thread(), ThreadState::STOPPED);
+    logger_info("{} kill himself.", scheduling::running_thread());
+    scheduling::update_thread_state(scheduling::running_thread(), ThreadState::STOPPED);
     arch::yield();
     assert_not_reached();
 }
@@ -116,8 +116,8 @@ void Thread::sleep(libsystem::Millisecond time)
 {
     if (time > 0)
     {
-        logger_info("{} is going to sleep for {}ms", sheduling::running_thread(), time);
-        sheduling::running_thread()->block(new system::sheduling::BlockerSleep(time));
+        logger_info("{} is going to sleep for {}ms", scheduling::running_thread(), time);
+        scheduling::running_thread()->block(new system::scheduling::BlockerSleep(time));
     }
 }
 
@@ -127,8 +127,8 @@ void Thread::join(libruntime::RefPtr<Thread> thread_to_join)
 
     if (thread_to_join->state() != ThreadState::STOPPED)
     {
-        logger_info("{} is joining {}", sheduling::running_thread(), thread_to_join);
-        sheduling::running_thread()->block(new system::sheduling::BlockerJoin(thread_to_join));
+        logger_info("{} is joining {}", scheduling::running_thread(), thread_to_join);
+        scheduling::running_thread()->block(new system::scheduling::BlockerJoin(thread_to_join));
     }
 }
 

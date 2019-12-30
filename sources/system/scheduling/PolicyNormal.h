@@ -4,16 +4,16 @@
 /* This code is licensed under the 3-Clause BSD License.                      */
 /* See: LICENSE.md                                                            */
 
-namespace system::sheduling
+namespace system::scheduling
 {
 
-class PolicyIdle
+class PolicyNormal
 {
 private:
     /* data */
 public:
-    PolicyIdle(/* args */) {}
-    ~PolicyIdle() {}
+    PolicyNormal(/* args */) {}
+    ~PolicyNormal() {}
 };
 
-} // namespace system::sheduling
+} // namespace system::scheduling

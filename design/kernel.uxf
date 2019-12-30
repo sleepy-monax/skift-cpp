@@ -31,8 +31,8 @@
       <w>100</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>Sheduler
-</panel_attributes>
+    <panel_attributes>Scheduler
+    </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -44,7 +44,7 @@
       <h>100</h>
     </coordinates>
     <panel_attributes>lt=-
-</panel_attributes>
+    </panel_attributes>
     <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
   </element>
   <element>
@@ -56,7 +56,7 @@
       <h>30</h>
     </coordinates>
     <panel_attributes>x86Platform
-</panel_attributes>
+    </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -68,7 +68,7 @@
       <h>30</h>
     </coordinates>
     <panel_attributes>x86Thread
-</panel_attributes>
+    </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -79,8 +79,7 @@
       <w>80</w>
       <h>110</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=product</panel_attributes>
+    <panel_attributes>lt=&lt;- m1=product</panel_attributes>
     <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
@@ -113,9 +112,7 @@ m1=product</panel_attributes>
       <w>40</w>
       <h>110</h>
     </coordinates>
-    <panel_attributes>lt=-
-m1=*
-m2=*</panel_attributes>
+    <panel_attributes>lt=- m1=* m2=*</panel_attributes>
     <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
   <element>
@@ -127,7 +124,7 @@ m2=*</panel_attributes>
       <h>30</h>
     </coordinates>
     <panel_attributes>x86AddressSpace
-</panel_attributes>
+    </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -150,7 +147,7 @@ m2=*</panel_attributes>
       <h>30</h>
     </coordinates>
     <panel_attributes>/Platform/
-</panel_attributes>
+    </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -207,9 +204,8 @@ m2=*</panel_attributes>
       <w>80</w>
       <h>110</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=product
-</panel_attributes>
+    <panel_attributes>lt=&lt;- m1=product
+    </panel_attributes>
     <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
   </element>
   <element>
@@ -231,10 +227,8 @@ m1=product
       <w>160</w>
       <h>140</h>
     </coordinates>
-    <panel_attributes>lt=-
-m1=1
-m2=*
-</panel_attributes>
+    <panel_attributes>lt=- m1=1 m2=*
+    </panel_attributes>
     <additional_attributes>10.0;20.0;130.0;20.0;130.0;120.0</additional_attributes>
   </element>
   <element>
@@ -245,10 +239,8 @@ m2=*
       <w>180</w>
       <h>130</h>
     </coordinates>
-    <panel_attributes>lt=-
-m1=*
-m2=1
-</panel_attributes>
+    <panel_attributes>lt=- m1=* m2=1
+    </panel_attributes>
     <additional_attributes>10.0;100.0;150.0;100.0;150.0;10.0</additional_attributes>
   </element>
   <element>
@@ -259,9 +251,7 @@ m2=1
       <w>90</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=0..1
-m2=n
+    <panel_attributes>lt=&lt;- m1=0..1 m2=n
 parent</panel_attributes>
     <additional_attributes>10.0;70.0;10.0;20.0;70.0;20.0;70.0;90.0;30.0;90.0</additional_attributes>
   </element>
@@ -285,7 +275,7 @@ parent</panel_attributes>
       <h>150</h>
     </coordinates>
     <panel_attributes>lt=-
-</panel_attributes>
+    </panel_attributes>
     <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
   </element>
   <element>
@@ -318,8 +308,7 @@ parent</panel_attributes>
       <w>40</w>
       <h>150</h>
     </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=1</panel_attributes>
+    <panel_attributes>lt=&lt;- m1=1</panel_attributes>
     <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>

@@ -5,9 +5,9 @@
 /* See: LICENSE.md                                                            */
 
 #include "system/System.h"
-#include "system/sheduling/Blocker.h"
+#include "system/scheduling/Blocker.h"
 
-namespace system::sheduling
+namespace system::scheduling
 {
 
 class BlockerSleep : public Blocker
@@ -34,4 +34,4 @@ public:
     }
 };
 
-} // namespace system::sheduling
+} // namespace system::scheduling

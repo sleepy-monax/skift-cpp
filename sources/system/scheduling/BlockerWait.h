@@ -4,7 +4,7 @@
 /* This code is licensed under the 3-Clause BSD License.                      */
 /* See: LICENSE.md                                                            */
 
-namespace system::sheduling
+namespace system::scheduling
 {
 
-} // namespace system::sheduling
+} // namespace system::scheduling

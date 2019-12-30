@@ -14,7 +14,7 @@
 
 #include "system/System.h"
 #include "system/memory/Memory.h"
-#include "system/sheduling/Sheduling.h"
+#include "system/scheduling/Scheduling.h"
 #include "system/tasking/Process.h"
 #include "system/tasking/Tasking.h"
 
@@ -107,7 +107,7 @@ extern "C" void arch_main(uint32_t multiboot_magic, uintptr_t multiboot_addr)
 
     libsystem::stdout = make<x86::CGATerminal>(reinterpret_cast<void *>(0xB8000));
 
-    sheduling::initialize();
+    scheduling::initialize();
     tasking::initialize();
 
     auto task_a = tasking::Thread::create(tasking::kernel_process(), reinterpret_cast<tasking::ThreadEntry>(taskA));

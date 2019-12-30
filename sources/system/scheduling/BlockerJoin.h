@@ -6,10 +6,10 @@
 
 #include <libruntime/RefPtr.h>
 
-#include "system/sheduling/Blocker.h"
+#include "system/scheduling/Blocker.h"
 #include "system/tasking/Thread.h"
 
-namespace system::sheduling
+namespace system::scheduling
 {
 
 class BlockerJoin : public Blocker
@@ -34,4 +34,4 @@ public:
     }
 };
 
-} // namespace system::sheduling
+} // namespace system::scheduling

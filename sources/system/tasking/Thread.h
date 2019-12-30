@@ -10,8 +10,8 @@
 #include <libsystem/Time.h>
 
 #include "system/platform/Context.h"
-#include "system/sheduling/Blocker.h"
-#include "system/sheduling/Policy.h"
+#include "system/scheduling/Blocker.h"
+#include "system/scheduling/Policy.h"
 #include "system/tasking/Process.h"
 #include "system/tasking/Stack.h"
 
@@ -46,8 +46,8 @@ private:
     Stack _stack;
     Stack _userstack;
 
-    libruntime::OwnPtr<system::sheduling::Policy> _policy;
-    libruntime::OwnPtr<system::sheduling::Blocker> _blocker;
+    libruntime::OwnPtr<system::scheduling::Policy> _policy;
+    libruntime::OwnPtr<system::scheduling::Blocker> _blocker;
 
 public:
     int id() { return _id; }
@@ -68,8 +68,8 @@ public:
     virtual void finalize() = 0;
 
     void start();
-    void set_policy(libruntime::OwnPtr<system::sheduling::Policy> policy);
-    void block(libruntime::OwnPtr<system::sheduling::Blocker> blocker);
+    void set_policy(libruntime::OwnPtr<system::scheduling::Policy> policy);
+    void block(libruntime::OwnPtr<system::scheduling::Blocker> blocker);
     void switch_state(ThreadState new_state);
 
     bool should_unblock();
