@@ -22,6 +22,8 @@ private:
 public:
     Region();
 
+    virtual ~Region(){};
+
     static Region empty();
 
     static Region from_non_aligned_address(uintptr_t addr, size_t size);
@@ -35,6 +37,10 @@ public:
     void merge(Region &other);
 
     Region take(size_t how_many_pages);
+
+    Region half_under(Region split);
+
+    Region half_over(Region split);
 
     bool is_overlaping_with(Region other);
 

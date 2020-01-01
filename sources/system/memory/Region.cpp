@@ -87,6 +87,36 @@ Region Region::take(size_t how_many_pages)
     return Region::from_page(_base_page + _page_count, how_many_pages);
 }
 
+Region Region::half_under(Region split)
+{
+    if (is_overlaping_with(split) &&
+        base_page() < split.base_page())
+    {
+        return Region::from_page(
+            base_page(),
+            split.base_page() - base_page());
+    }
+    else
+    {
+        return Region::empty();
+    }
+}
+
+Region Region::half_over(Region split)
+{
+    if (is_overlaping_with(split) &&
+        end_page() > split.end_page())
+    {
+        return Region::from_page(
+            split.end_page(),
+            end_page() - split.end_page());
+    }
+    else
+    {
+        return Region::empty();
+    }
+}
+
 bool Region::is_overlaping_with(Region other)
 {
     return _base_page < other.base_page() + other.page_count() &&

@@ -10,6 +10,7 @@
 #include "system/System.h"
 #include "system/memory/Memory.h"
 #include "system/memory/Region.h"
+#include "system/memory/RegionAllocator.h"
 
 using namespace system;
 using namespace libruntime;
@@ -19,37 +20,11 @@ namespace system::memory
 
 static bool bootstraped = false;
 static Region bootstarp;
-
-static LinkedList<Region> *free_list;
+static RegionAllocator *_allocator;
 
 bool is_bootstraped()
 {
     return bootstraped;
-}
-
-static Region take_from_free_list(size_t how_many_pages)
-{
-    Region region = Region::empty();
-
-    free_list->foreach ([&](auto &free_region) {
-        if (free_region.page_count() >= how_many_pages)
-        {
-            region = free_region.take(how_many_pages);
-
-            if (free_region.is_empty())
-            {
-                free_list->remove_all(free_region);
-            }
-
-            return Iteration::STOP;
-        }
-        else
-        {
-            return Iteration::CONTINUE;
-        }
-    });
-
-    return region;
 }
 
 Region alloc_region(size_t how_many_pages)
@@ -75,7 +50,7 @@ Region alloc_region(size_t how_many_pages)
     }
     else
     {
-        region = take_from_free_list(how_many_pages);
+        region = _allocator->alloc_region(how_many_pages);
     }
 
     if (region.is_empty())
@@ -93,23 +68,19 @@ void free_region(Region region)
     if (region.is_overlaping_with(kernel_region))
     {
         // An half of the region is under the kernel.
-        if (region.base_page() < kernel_region.base_page())
-        {
-            Region lower_half = Region::from_page(
-                region.base_page(),
-                kernel_region.base_page() - region.base_page());
+        Region lower_half = region.half_under(kernel_region);
 
+        if (!lower_half.is_empty())
+        {
             free_region(lower_half);
         }
 
         // An another half of the region is over the kernel.
-        if (region.end_page() > kernel_region.end_page())
-        {
-            Region upper_half = Region::from_page(
-                kernel_region.end_page(),
-                region.end_page() - kernel_region.end_page());
+        Region upper_half = region.half_over(kernel_region);
 
-            free_region(upper_half);
+        if (!upper_half.is_empty())
+        {
+            free_region(lower_half);
         }
     }
     else if (!bootstraped)
@@ -119,30 +90,11 @@ void free_region(Region region)
         bootstarp = region;
         bootstraped = true;
 
-        free_list = new LinkedList<Region>();
+        _allocator = new RegionAllocator();
     }
     else
     {
-        // FIXME: we should also merge if we are filling an hole.
-        bool has_been_merge_with_other_region = false;
-
-        free_list->foreach ([&](auto &other) {
-            if (other.is_contiguous_with(region))
-            {
-                other.merge(region);
-
-                has_been_merge_with_other_region = true;
-
-                return Iteration::STOP;
-            }
-
-            return Iteration::CONTINUE;
-        });
-
-        if (!has_been_merge_with_other_region)
-        {
-            free_list->push_back(region);
-        }
+        _allocator->free_region(region);
     }
 }
 
