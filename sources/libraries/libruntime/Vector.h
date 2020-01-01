@@ -41,7 +41,7 @@ public:
         delete _storage;
     }
 
-    T operator[](size_t index)
+    T &operator[](size_t index)
     {
         assert(index < _count);
 
@@ -131,12 +131,51 @@ public:
     {
         grow();
 
-        for (size_t j = _count; j > index; j++)
+        for (size_t j = _count; j > index; j--)
         {
             _storage[j] = move(_storage[j - 1]);
         }
 
         _storage[index] = move(value);
+    }
+
+    void insert_sorted(T value)
+    {
+        size_t insert_index = 0;
+
+        for (size_t i = 0; i < _count; i++)
+        {
+            if (_storage[i] < value)
+            {
+                insert_index = i;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        insert(insert_index, value);
+    }
+
+    template <typename Comparator>
+    void insert_sorted(T value, Comparator comparator)
+    {
+        size_t insert_index = 0;
+
+        for (size_t i = 0; i < _count; i++)
+        {
+            if (comparator(_storage[i], value))
+            {
+                insert_index = i;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        insert(insert_index, value);
     }
 
     void remove(size_t index)
@@ -149,6 +188,18 @@ public:
         }
 
         shrink();
+    }
+
+    void remove(T &value)
+    {
+        for (size_t i = 0; i < _count; i++)
+        {
+            if (_storage[i] == value)
+            {
+                remove(i);
+                return;
+            }
+        }
     }
 
     void push(T value)
@@ -206,18 +257,6 @@ public:
         }
 
         return false;
-    }
-
-    void remove_first(T &value)
-    {
-        for (size_t i = 0; i < _count; i++)
-        {
-            if (_storage[i] == value)
-            {
-                remove(i);
-                return;
-            }
-        }
     }
 
     void remove_all(T &value)
