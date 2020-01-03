@@ -76,7 +76,7 @@ libruntime::ErrorOr<size_t> format(Stream &stream, libruntime::String value, For
 
     if (info.prefix)
     {
-        return format(stream, "\"{}\"", value.cstring());
+        return format(stream, "\"{}\"", value);
     }
     else
     {

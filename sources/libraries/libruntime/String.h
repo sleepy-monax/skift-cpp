@@ -13,8 +13,8 @@ private:
     RefPtr<StringBuffer> _buffer;
 
 public:
-    const char *cstring() { return _buffer->cstring(); }
     size_t lenght() { return _buffer->lenght(); }
+    const char *cstring() { return _buffer->cstring(); }
 
     String(const char *cstring = "")
     {
