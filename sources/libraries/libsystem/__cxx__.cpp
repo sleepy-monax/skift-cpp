@@ -4,9 +4,9 @@
 
 #include <libruntime/Macros.h>
 #include <libruntime/Types.h>
-#include <libsystem/__alloc__.h>
 #include <libsystem/Assert.h>
 #include <libsystem/Logger.h>
+#include <libsystem/__alloc__.h>
 
 #define MAX_AT_EXIT_FUNCTION 128
 
@@ -38,14 +38,14 @@ void *operator new(size_t size)
 {
     //FIXME HACK: round size to 2 to fix ubsan checks.
 
-    return __alloc__::malloc(size + size % 2);
+    return __alloc__::malloc(size - size % 4 + 4);
 }
 
 void *operator new[](size_t size)
 {
     //FIXME HACK: round size to 2 to fix ubsan checks.
 
-    return __alloc__::malloc(size + size % 2);
+    return __alloc__::malloc(size - size % 4 + 4);
 }
 
 void operator delete(void *ptr)
