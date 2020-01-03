@@ -18,32 +18,32 @@ using namespace libruntime;
 namespace system::memory
 {
 
-static bool bootstraped = false;
-static Region bootstarp;
+static bool _bootstraped = false;
+static Region _boostrap;
 static RegionAllocator *_allocator;
 
 bool is_bootstraped()
 {
-    return bootstraped;
+    return _bootstraped;
 }
 
 Region alloc_region(size_t how_many_pages)
 {
     assert(how_many_pages > 0);
 
-    if (!bootstraped)
+    if (!_bootstraped)
     {
         PANIC("MemoryManager not bootstraped!");
     }
 
     Region region = Region::empty();
 
-    if (bootstarp.page_count() >= how_many_pages)
+    if (_boostrap.page_count() >= how_many_pages)
     {
         // Look like we have some space in the bootstrap :)
-        region = bootstarp.take(how_many_pages);
+        region = _boostrap.take(how_many_pages);
 
-        if (bootstarp.is_empty())
+        if (_boostrap.is_empty())
         {
             logger_info("The bootstrap is now empty.");
         }
@@ -83,12 +83,12 @@ void free_region(Region region)
             free_region(lower_half);
         }
     }
-    else if (!bootstraped)
+    else if (!_bootstraped)
     {
         logger_info("Bootstraping with {}", region);
 
-        bootstarp = region;
-        bootstraped = true;
+        _boostrap = region;
+        _bootstraped = true;
 
         _allocator = new RegionAllocator();
     }
