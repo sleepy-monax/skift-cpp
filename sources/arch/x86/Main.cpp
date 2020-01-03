@@ -13,6 +13,7 @@
 #include "arch/x86/segmentation/Segmentation.h"
 
 #include "system/System.h"
+#include "system/acpi/ACPI.h"
 #include "system/memory/Memory.h"
 #include "system/scheduling/Scheduling.h"
 #include "system/tasking/Process.h"
@@ -109,6 +110,14 @@ extern "C" void arch_main(uint32_t multiboot_magic, uintptr_t multiboot_addr)
 
     scheduling::initialize();
     tasking::initialize();
+
+    auto rsdp = multiboot.get_ACPI_rsdp();
+
+    if (multiboot.get_ACPI_rsdp() != nullptr)
+    {
+        logger_info("APCI rspd found!");
+        acpi::initialize(rsdp);
+    }
 
     auto task_a = tasking::Thread::create(tasking::kernel_process(), reinterpret_cast<tasking::ThreadEntry>(taskA));
     task_a->start();

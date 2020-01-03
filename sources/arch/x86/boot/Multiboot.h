@@ -166,6 +166,20 @@ public:
             }
         }
     }
+
+    void *get_ACPI_rsdp()
+    {
+        auto *tag = find_tag<multiboot2_tag_old_acpi>(MULTIBOOT2_TAG_TYPE_ACPI_OLD);
+
+        if (tag)
+        {
+            return &tag->rsdp[0];
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
 };
 
 }; // namespace x86
