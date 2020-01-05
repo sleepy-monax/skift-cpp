@@ -14,6 +14,14 @@ T &&move(T &arg)
 }
 
 template <typename T>
+void swap(T &left, T &right)
+{
+    T tmp = move(left);
+    left = move(right);
+    right = move(tmp);
+}
+
+template <typename T>
 struct Identity
 {
     typedef T Type;

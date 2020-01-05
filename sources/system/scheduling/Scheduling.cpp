@@ -45,11 +45,11 @@ void update_thread_state(RefPtr<Thread> thread, ThreadState new_state)
     }
     else if (thread->state() == ThreadState::BLOCKED)
     {
-        _blocked_threads->remove_first(thread);
+        _blocked_threads->remove(thread);
     }
     else if (thread->state() == ThreadState::READY)
     {
-        _ready_threads->remove_first(thread);
+        _ready_threads->remove(thread);
     }
 
     thread->set_state(new_state);
@@ -97,7 +97,7 @@ static void unblock_blocked_thread()
             logger_info("Unblocking {}", thread);
             thread->unblock();
             thread->set_state(ThreadState::READY);
-            _blocked_threads->remove_first(thread);
+            _blocked_threads->remove(thread);
             _ready_threads->push_back(thread);
         }
 

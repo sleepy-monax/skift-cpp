@@ -252,7 +252,7 @@ public:
         return false;
     }
 
-    void remove_first(T value)
+    void remove(T &value)
     {
         LinkedListItem<T> *current = _head;
 
@@ -290,7 +290,7 @@ public:
         }
     }
 
-    void remove_all(T value)
+    void remove_all(T &value)
     {
         LinkedListItem<T> *current = _head;
 

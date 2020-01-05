@@ -159,7 +159,7 @@ void Thread::cleanup(libruntime::RefPtr<Thread> thread)
     assert(thread != nullptr);
 
     _threads_lock.acquire();
-    _threads.remove_all(thread);
+    _threads.remove(thread);
     _threads_lock.release();
 }
 

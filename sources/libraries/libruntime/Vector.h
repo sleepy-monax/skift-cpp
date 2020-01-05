@@ -79,9 +79,7 @@ public:
             {
                 if (comparator(_storage[i], _storage[j]) > 0)
                 {
-                    T tmp = _storage[i];
-                    _storage[i] = _storage[j];
-                    _storage[j] = tmp;
+                    swap(_storage[i], _storage[j]);
                 }
             }
         }
@@ -202,6 +200,17 @@ public:
         }
     }
 
+    void remove_all(T &value)
+    {
+        for (size_t i = 0; i < _count; i++)
+        {
+            if (_storage[i] == value)
+            {
+                remove(i);
+            }
+        }
+    }
+
     void push(T value)
     {
         insert(0, value);
@@ -257,18 +266,6 @@ public:
         }
 
         return false;
-    }
-
-    void remove_all(T &value)
-    {
-        for (size_t i = 0; i < _count; i++)
-        {
-            if (_storage[i] == value)
-            {
-                remove(i);
-                return;
-            }
-        }
     }
 };
 
