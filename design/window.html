@@ -74,7 +74,12 @@
         position: relative;
     }
 
+    .window-headerbar-button:hover .window-headerbar-menu {
+        display: block;
+    }
+
     .window-headerbar-menu {
+        display: none;
         left: -8px;
 
         position: absolute;
@@ -243,9 +248,45 @@
                     folder_open
                 </div>
                 <div class="window-headerbar-button clickable">Explorer
+                    <div class="window-headerbar-menu">
+                        <div class="window-headerbar-menu-item">
+                            Manual
+                        </div>
+                        <div class="window-headerbar-menu-item">
+                            License
+                        </div>
+                        <div class="window-headerbar-menu-item">
+                            Exit
+                        </div>
+                    </div>
                 </div>
-                <div class="window-headerbar-button clickable">Edit</div>
-                <div class="window-headerbar-button clickable">View</div>
+                <div class="window-headerbar-button clickable">Edit
+                    <div class="window-headerbar-menu">
+                        <div class="window-headerbar-menu-item">
+                            Copy
+                        </div>
+                        <div class="window-headerbar-menu-item">
+                            Cut
+                        </div>
+                        <div class="window-headerbar-menu-item">
+                            Paste
+                        </div>
+                    </div>
+                </div>
+                <div class="window-headerbar-button clickable">View
+                    <div class="window-headerbar-menu">
+                        <div class="window-headerbar-menu-item">
+                            Manual
+                        </div>
+                        <div class="window-headerbar-menu-item">
+                            License
+                        </div>
+                        <div class="window-headerbar-menu-item">
+                            About
+                        </div>
+                    </div>
+                </div>
+
                 <div class="window-headerbar-button clickable">Help
                     <div class="window-headerbar-menu">
                         <div class="window-headerbar-menu-item">
