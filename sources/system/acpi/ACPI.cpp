@@ -18,7 +18,7 @@ void initialize(void *rsdp_addr)
 
     for (size_t i = 0; i < rsdt->child_count(); i++)
     {
-        SDT *current = rsdt->child(i);
+        SDTH *current = rsdt->child(i);
 
         logger_info("{#} - {#} - {#}",
                     libruntime::String(current->Signature, 4),

@@ -15,7 +15,7 @@ struct __packed RSDP
     uint32_t rsdt_address;
 };
 
-struct __packed SDT
+struct __packed SDTH
 {
     char Signature[4];
     uint32_t Length;
@@ -30,12 +30,12 @@ struct __packed SDT
 
 struct __packed RSDT
 {
-    SDT header;
+    SDTH header;
     uint32_t childs[];
 
-    SDT *child(size_t index)
+    SDTH *child(size_t index)
     {
-        return reinterpret_cast<SDT *>(childs[index]);
+        return reinterpret_cast<SDTH *>(childs[index]);
     }
 
     size_t child_count()
