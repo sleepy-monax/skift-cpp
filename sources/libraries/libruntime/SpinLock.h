@@ -28,8 +28,8 @@ public:
 
     void release()
     {
-        _locked = false;
         __sync_synchronize();
+        _locked = false;
     }
 
     bool is_acquired()
