@@ -3,7 +3,7 @@
 #include <libruntime/LinkedList.h>
 #include <libruntime/RefPtr.h>
 
-#include "system/memory/SharedObject.h"
+#include "system/memory/MemoryObject.h"
 
 namespace system::memory
 {
@@ -11,7 +11,7 @@ namespace system::memory
 class AddressSpace
 {
 private:
-    libruntime::LinkedList<libruntime::RefPtr<SharedObject>> _objects;
+    libruntime::LinkedList<libruntime::RefPtr<MemoryObject>> _objects;
 
 public:
     AddressSpace() {}

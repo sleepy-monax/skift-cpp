@@ -3,7 +3,7 @@
 #include <libsystem/Formattable.h>
 
 #include "libruntime/Iteration.h"
-#include "system/memory/Region.h"
+#include "system/memory/MemoryRegion.h"
 #include "thirdparty/multiboot/multiboot2.h"
 
 namespace x86
@@ -45,9 +45,9 @@ public:
         return _size;
     }
 
-    system::memory::Region region()
+    system::memory::MemoryRegion region()
     {
-        return system::memory::Region::from_non_aligned_address(_addr, _size);
+        return system::memory::MemoryRegion::from_non_aligned_address(_addr, _size);
     }
 
     libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info)

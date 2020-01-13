@@ -16,7 +16,7 @@ class Stack
 {
 private:
     uintptr_t _ptr;
-    memory::Region _region;
+    memory::MemoryRegion _region;
 
 public:
     Stack(size_t how_many_pages)

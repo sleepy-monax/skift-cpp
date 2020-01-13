@@ -3,6 +3,7 @@
 /* See: LICENSE.md                                                            */
 
 #include <libsystem/Logger.h>
+#include <libruntime/SpinLock.h>
 
 #include "arch/Arch.h"
 #include "system/tasking/Process.h"
@@ -11,11 +12,13 @@ namespace system::tasking
 {
 
 static volatile int _process_id_counter = -1;
+static libruntime::SpinLock _processes_lock;
+static libruntime::LinkedList<libruntime::RefPtr<Process>> _processes;
 
 Process::Process(Process *parent, libruntime::String name)
     : _id(__sync_add_and_fetch(&_process_id_counter, 1)),
-      _parent(parent),
-      _name(name)
+      _name(name),
+      _parent(parent)
 {
 }
 

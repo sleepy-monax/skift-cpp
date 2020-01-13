@@ -9,8 +9,8 @@
 #include "arch/Arch.h"
 #include "system/System.h"
 #include "system/memory/Memory.h"
-#include "system/memory/Region.h"
-#include "system/memory/RegionAllocator.h"
+#include "system/memory/MemoryRegion.h"
+#include "system/memory/MemoryRegionAllocator.h"
 
 using namespace system;
 using namespace libruntime;
@@ -19,15 +19,15 @@ namespace system::memory
 {
 
 static bool _bootstraped = false;
-static Region _boostrap;
-static RegionAllocator *_allocator;
+static MemoryRegion _boostrap;
+static MemoryRegionAllocator *_allocator;
 
 bool is_bootstraped()
 {
     return _bootstraped;
 }
 
-Region alloc_region(size_t how_many_pages)
+MemoryRegion alloc_region(size_t how_many_pages)
 {
     assert(how_many_pages > 0);
 
@@ -36,7 +36,7 @@ Region alloc_region(size_t how_many_pages)
         PANIC("MemoryManager not bootstraped!");
     }
 
-    Region region = Region::empty();
+    MemoryRegion region = MemoryRegion::empty();
 
     if (_boostrap.page_count() >= how_many_pages)
     {
@@ -61,14 +61,14 @@ Region alloc_region(size_t how_many_pages)
     return region;
 }
 
-void free_region(Region region)
+void free_region(MemoryRegion region)
 {
     auto kernel_region = arch::get_kernel_region();
 
     if (region.is_overlaping_with(kernel_region))
     {
         // An half of the region is under the kernel.
-        Region lower_half = region.half_under(kernel_region);
+        MemoryRegion lower_half = region.half_under(kernel_region);
 
         if (!lower_half.is_empty())
         {
@@ -76,7 +76,7 @@ void free_region(Region region)
         }
 
         // An another half of the region is over the kernel.
-        Region upper_half = region.half_over(kernel_region);
+        MemoryRegion upper_half = region.half_over(kernel_region);
 
         if (!upper_half.is_empty())
         {
@@ -90,7 +90,7 @@ void free_region(Region region)
         _boostrap = region;
         _bootstraped = true;
 
-        _allocator = new RegionAllocator();
+        _allocator = new MemoryRegionAllocator();
     }
     else
     {

@@ -7,29 +7,36 @@
 #include <libruntime/LinkedList.h>
 #include <libruntime/RefPtr.h>
 #include <libruntime/String.h>
+#include <libruntime/LinkedList.h>
 #include <libsystem/Formattable.h>
 
+#include "system/memory/AddressSpace.h"
 #include "system/tasking/Promotion.h"
 
 namespace system::tasking
 {
 
-class Process : public libsystem::Formattable, public libruntime::RefCounted<Process>
+class Process : public libsystem::Formattable,
+                public libruntime::RefCounted<Process>
 {
 private:
     int _id;
+    libruntime::String _name;
     Promotion _promotion = Promotion::SUPERVISOR;
     Process *_parent;
-    libruntime::String _name;
+
+    libruntime::OwnPtr<memory::AddressSpace> _address_space;
 
 public:
-    Process(Process *parent, libruntime::String name);
+    int id() { return _id; }
+    libruntime::String name() { return _name; }
+    Promotion promotion() { return _promotion; }
+    memory::AddressSpace &address_space() { return *_address_space; }
 
+    Process(Process *parent, libruntime::String name);
     ~Process();
 
     libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);
-
-    Promotion promotion() { return _promotion; }
 };
 
 } // namespace system::tasking

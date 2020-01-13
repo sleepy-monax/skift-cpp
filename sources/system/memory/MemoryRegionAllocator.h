@@ -1,29 +1,29 @@
 #pragma once
 
 #include "arch/Arch.h"
-#include "system/memory/RegionPool.h"
+#include "system/memory/MemoryPool.h"
 
 namespace system::memory
 {
 
-class RegionAllocator
+class MemoryRegionAllocator
 {
 private:
-    RegionPool _free_pool;
-    RegionPool _used_pool;
+    MemoryPool _free_pool;
+    MemoryPool _used_pool;
 
 public:
     size_t used() { return _used_pool.quantity() * arch::get_page_size(); }
     size_t free() { return _free_pool.quantity() * arch::get_page_size(); }
     size_t total() { return used() + total(); }
 
-    RegionAllocator() {}
+    MemoryRegionAllocator() {}
 
-    ~RegionAllocator() {}
+    ~MemoryRegionAllocator() {}
 
-    Region alloc_region(int how_many_pages);
+    MemoryRegion alloc_region(int how_many_pages);
 
-    void free_region(Region region);
+    void free_region(MemoryRegion region);
 };
 
 } // namespace system::memory

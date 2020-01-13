@@ -1,15 +1,15 @@
-#include "system/memory/RegionPool.h"
+#include "system/memory/MemoryPool.h"
 
 namespace system::memory
 {
 
-Region RegionPool::take(size_t how_many_pages)
+MemoryRegion MemoryPool::take(size_t how_many_pages)
 {
     for (size_t i = 0; i < _regions.count(); i++)
     {
         if (_regions[i].page_count() >= how_many_pages)
         {
-            Region region = _regions[i].take(how_many_pages);
+            MemoryRegion region = _regions[i].take(how_many_pages);
 
             if (_regions[i].is_empty())
             {
@@ -22,19 +22,19 @@ Region RegionPool::take(size_t how_many_pages)
         }
     }
 
-    return Region::empty();
+    return MemoryRegion::empty();
 }
 
-void RegionPool::take(Region region)
+void MemoryPool::take(MemoryRegion region)
 {
     for (size_t i = 0; i < _regions.count(); i++)
     {
-        Region &current_region = _regions[i];
+        MemoryRegion &current_region = _regions[i];
 
         if (current_region.is_overlaping_with(region))
         {
-            Region lower_half = current_region.half_under(region);
-            Region upper_half = current_region.half_over(region);
+            MemoryRegion lower_half = current_region.half_under(region);
+            MemoryRegion upper_half = current_region.half_over(region);
 
             _regions.remove(current_region);
 
@@ -44,14 +44,14 @@ void RegionPool::take(Region region)
     }
 }
 
-void RegionPool::put(Region region)
+void MemoryPool::put(MemoryRegion region)
 {
     if (region.is_empty())
         return;
 
     for (size_t i = 0; i < _regions.count(); i++)
     {
-        Region &current_region = _regions[i];
+        MemoryRegion &current_region = _regions[i];
 
         assert(!current_region.is_overlaping_with(region));
 
@@ -61,7 +61,7 @@ void RegionPool::put(Region region)
 
             if (i + 1 < _regions.count())
             {
-                Region &next_region = _regions[i + 1];
+                MemoryRegion &next_region = _regions[i + 1];
 
                 if (current_region.is_contiguous_with(next_region))
                 {

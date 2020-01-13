@@ -7,14 +7,14 @@
 #include <libruntime/RefPtr.h>
 #include <libruntime/Types.h>
 
-#include "system/memory/Region.h"
+#include "system/memory/MemoryRegion.h"
 
 namespace system::memory
 {
 
-Region alloc_region(size_t how_many_pages);
+MemoryRegion alloc_region(size_t how_many_pages);
 
-void free_region(Region region);
+void free_region(MemoryRegion region);
 
 bool is_bootstraped();
 

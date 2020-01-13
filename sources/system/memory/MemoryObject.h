@@ -7,21 +7,23 @@
 #include <libruntime/RefCounted.h>
 #include <libruntime/Types.h>
 
-#include "system/memory/Region.h"
+#include "system/memory/MemoryRegion.h"
 
 namespace system::memory
 {
 
-class SharedObject : public libruntime::RefCounted<SharedObject>
+class MemoryObject : public libruntime::RefCounted<MemoryObject>
 {
 private:
-    Region _region;
+    int _id;
+    MemoryRegion _region;
 
 public:
-    SharedObject(Region region);
-    ~SharedObject();
+    int id() { return _id; }
+    MemoryRegion region() { return _region; }
 
-    Region region() { return _region; }
+    MemoryObject(MemoryRegion region);
+    ~MemoryObject();
 };
 
 } // namespace system::memory

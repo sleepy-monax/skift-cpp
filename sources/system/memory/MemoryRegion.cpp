@@ -6,29 +6,29 @@
 #include <libsystem/Assert.h>
 
 #include "arch/Arch.h"
-#include "system/memory/Region.h"
+#include "system/memory/MemoryRegion.h"
 
 namespace system::memory
 {
 
-Region::Region()
+MemoryRegion::MemoryRegion()
 {
     _base_page = 0;
     _page_count = 0;
 }
 
-Region::Region(uintptr_t base_page, size_t page_count)
+MemoryRegion::MemoryRegion(uintptr_t base_page, size_t page_count)
 {
     _base_page = base_page;
     _page_count = page_count;
 }
 
-Region Region::empty()
+MemoryRegion MemoryRegion::empty()
 {
-    return Region(0, 0);
+    return MemoryRegion(0, 0);
 }
 
-Region Region::from_non_aligned_address(uintptr_t addr, size_t size)
+MemoryRegion MemoryRegion::from_non_aligned_address(uintptr_t addr, size_t size)
 {
     auto align = arch::get_page_size() - addr % arch::get_page_size();
 
@@ -45,7 +45,7 @@ Region Region::from_non_aligned_address(uintptr_t addr, size_t size)
     return from_aligned_address(addr, size);
 }
 
-Region Region::create_around_non_aligned_address(uintptr_t addr, size_t size)
+MemoryRegion MemoryRegion::create_around_non_aligned_address(uintptr_t addr, size_t size)
 {
     auto align = addr % arch::get_page_size();
 
@@ -57,20 +57,20 @@ Region Region::create_around_non_aligned_address(uintptr_t addr, size_t size)
     return from_aligned_address(addr, size);
 }
 
-Region Region::from_aligned_address(uintptr_t addr, size_t size)
+MemoryRegion MemoryRegion::from_aligned_address(uintptr_t addr, size_t size)
 {
     assert(addr % arch::get_page_size() == 0);
     assert(size % arch::get_page_size() == 0);
 
-    return Region(addr / arch::get_page_size(), size / arch::get_page_size());
+    return MemoryRegion(addr / arch::get_page_size(), size / arch::get_page_size());
 }
 
-Region Region::from_page(uintptr_t page, size_t count)
+MemoryRegion MemoryRegion::from_page(uintptr_t page, size_t count)
 {
-    return Region(page, count);
+    return MemoryRegion(page, count);
 }
 
-void Region::merge(Region &other)
+void MemoryRegion::merge(MemoryRegion &other)
 {
     assert(is_contiguous_with(other));
 
@@ -78,71 +78,71 @@ void Region::merge(Region &other)
     _page_count = _page_count + other._page_count;
 }
 
-Region Region::take(size_t how_many_pages)
+MemoryRegion MemoryRegion::take(size_t how_many_pages)
 {
     assert(_page_count >= how_many_pages);
 
     _page_count -= how_many_pages;
 
-    return Region::from_page(_base_page + _page_count, how_many_pages);
+    return MemoryRegion::from_page(_base_page + _page_count, how_many_pages);
 }
 
-Region Region::half_under(Region split)
+MemoryRegion MemoryRegion::half_under(MemoryRegion split)
 {
     if (is_overlaping_with(split) &&
         base_page() < split.base_page())
     {
-        return Region::from_page(
+        return MemoryRegion::from_page(
             base_page(),
             split.base_page() - base_page());
     }
     else
     {
-        return Region::empty();
+        return MemoryRegion::empty();
     }
 }
 
-Region Region::half_over(Region split)
+MemoryRegion MemoryRegion::half_over(MemoryRegion split)
 {
     if (is_overlaping_with(split) &&
         end_page() > split.end_page())
     {
-        return Region::from_page(
+        return MemoryRegion::from_page(
             split.end_page(),
             end_page() - split.end_page());
     }
     else
     {
-        return Region::empty();
+        return MemoryRegion::empty();
     }
 }
 
-bool Region::is_overlaping_with(Region other)
+bool MemoryRegion::is_overlaping_with(MemoryRegion other)
 {
     return _base_page < other.base_page() + other.page_count() &&
            _base_page + _page_count > other.base_page();
 }
 
-bool Region::is_contiguous_with(Region other)
+bool MemoryRegion::is_contiguous_with(MemoryRegion other)
 {
     return (_base_page + _page_count) == other._base_page || (other._base_page + other._page_count) == _base_page;
 }
 
-bool Region::is_empty() { return _page_count == 0; }
+bool MemoryRegion::is_empty() { return _page_count == 0; }
 
-uintptr_t Region::base_address() { return _base_page * arch::get_page_size(); }
+uintptr_t MemoryRegion::base_address() { return _base_page * arch::get_page_size(); }
 
-uintptr_t Region::end_address() { return base_address() + size(); }
+uintptr_t MemoryRegion::end_address() { return base_address() + size(); }
 
-size_t Region::size() { return _page_count * arch::get_page_size(); }
+size_t MemoryRegion::size() { return _page_count * arch::get_page_size(); }
 
-uintptr_t Region::base_page() { return _base_page; }
+uintptr_t MemoryRegion::base_page() { return _base_page; }
 
-uintptr_t Region::end_page() { return _base_page + _page_count; }
+uintptr_t MemoryRegion::end_page() { return _base_page + _page_count; }
 
-size_t Region::page_count() { return _page_count; }
+size_t MemoryRegion::page_count() { return _page_count; }
 
-bool Region::operator==(Region &other)
+bool MemoryRegion::operator==(MemoryRegion &other)
 {
     return _base_page == other._base_page &&
            _page_count == other._page_count;

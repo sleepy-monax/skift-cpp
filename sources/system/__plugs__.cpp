@@ -92,7 +92,7 @@ libruntime::ErrorOr<uintptr_t> memory_alloc(size_t how_many_pages)
 
 void memory_free(uintptr_t addr, size_t how_many_pages)
 {
-    system::memory::free_region(system::memory::Region::from_aligned_address(addr, how_many_pages));
+    system::memory::free_region(system::memory::MemoryRegion::from_aligned_address(addr, how_many_pages));
 }
 
 /* --- Assert --------------------------------------------------------------- */
