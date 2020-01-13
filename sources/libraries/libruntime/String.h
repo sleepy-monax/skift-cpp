@@ -51,6 +51,26 @@ public:
 
         return *this;
     }
+
+    bool operator==(String &&other)
+    {
+        if (lenght() == other.lenght())
+        {
+            for (size_t i = 0; i < lenght(); i++)
+            {
+                if (cstring()[i] != other.cstring()[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 };
 
 } // namespace libruntime
