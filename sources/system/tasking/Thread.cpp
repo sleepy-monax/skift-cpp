@@ -21,7 +21,7 @@ static libruntime::LinkedList<libruntime::RefPtr<Thread>> _threads;
 static volatile int _thread_id_counter;
 
 Thread::Thread(libruntime::RefPtr<Process> process, ThreadEntry entry)
-    : _id(__sync_add_and_fetch(&_thread_id_counter, 1)),
+    : _id(__atomic_add_fetch(&_thread_id_counter, 1, __ATOMIC_SEQ_CST)),
       _entry(entry),
       _state(ThreadState::EMBRYO),
       _process(process),
