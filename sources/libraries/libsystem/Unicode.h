@@ -64,7 +64,7 @@ private:
     int _width_encoding = 0;
 
 public:
-    virtual libruntime::Error write_byte(byte byte)
+    virtual libruntime::Error write_byte(uint8_t byte)
     {
         if (!_is_decoding)
         {
