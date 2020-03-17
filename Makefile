@@ -13,7 +13,7 @@ IMAGE_DIRECTORY=$(BUILD_DIRECTORY)/image
 
 SOURCES_DIRECTORY=sources
 
-LOG=echo [$(BUILD_SYSTEM)] 
+LOG=echo [$(BUILD_SYSTEM)]
 DIRECTORY_GUARD=@mkdir -p $(@D)
 
 SYSTEM_IMAGE=$(BUILD_DIRECTORY)/image.iso
@@ -120,10 +120,10 @@ all: $(SYSTEM_IMAGE)
 userspace: $(LIBRARIES_ARCHIVES)
 
 run: $(SYSTEM_IMAGE)
-	qemu-system-i386 -serial mon:stdio -cdrom $(SYSTEM_IMAGE)
+	qemu-system-x86_64 -serial mon:stdio -cdrom $(SYSTEM_IMAGE)
 
 run-headless: $(SYSTEM_IMAGE)
-	qemu-system-i386 -nographic -serial mon:stdio -cdrom $(SYSTEM_IMAGE)
+	qemu-system-x86_64 -serial mon:stdio -cdrom $(SYSTEM_IMAGE) -nographic
 
 clean:
 	rm -rf $(BUILD_DIRECTORY)
@@ -163,7 +163,7 @@ $(BUILD_DIRECTORY)/libraries/libsystem.a: $(filter $(BUILD_DIRECTORY)/libraries/
 								          $(filter $(BUILD_DIRECTORY)/targets/$(BUILD_SYSTEM)/%.o, $(LIBRARIES_OBJECTS)) \
 									      $(filter $(BUILD_DIRECTORY)/targets/$(BUILD_SYSTEM)/$(BUILD_ARCH)/%.o, $(LIBRARIES_OBJECTS))
 
-$(BUILD_DIRECTORY)/libraries/libc.a: $(filter $(BUILD_DIRECTORY)/libraries/libc/%.o, $(LIBRARIES_OBJECTS)) 
+$(BUILD_DIRECTORY)/libraries/libc.a: $(filter $(BUILD_DIRECTORY)/libraries/libc/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libgraphic.a: $(filter $(BUILD_DIRECTORY)/libraries/libgraphic/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libmath.a: $(filter $(BUILD_DIRECTORY)/libraries/libmath/%.o, $(LIBRARIES_OBJECTS))
 $(BUILD_DIRECTORY)/libraries/libruntime.a: $(filter $(BUILD_DIRECTORY)/libraries/libruntime/%.o, $(LIBRARIES_OBJECTS))
