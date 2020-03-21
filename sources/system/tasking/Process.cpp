@@ -15,10 +15,9 @@ static int _process_id_counter = -1;
 static libruntime::SpinLock _processes_lock;
 static libruntime::LinkedList<libruntime::RefPtr<Process>> _processes;
 
-Process::Process(Process *parent, libruntime::String name)
+Process::Process(libruntime::String name)
     : _id(__atomic_add_fetch(&_process_id_counter, 1, __ATOMIC_SEQ_CST)),
-      _name(name),
-      _parent(parent)
+      _name(name)
 {
 }
 

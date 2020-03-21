@@ -15,7 +15,7 @@ private:
 public:
     size_t used() { return _used_pool.quantity() * arch::get_page_size(); }
     size_t free() { return _free_pool.quantity() * arch::get_page_size(); }
-    size_t total() { return used() + total(); }
+    size_t total() { return used() + free(); }
 
     MemoryRegionAllocator() {}
 

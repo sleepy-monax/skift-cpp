@@ -59,9 +59,9 @@ private:
     char32_t _current_decoding = 0;
     int _width_decoding = 0;
 
-    bool _is_encoding = false;
-    char32_t _current_encoding = 0;
-    int _width_encoding = 0;
+    //bool _is_encoding = false;
+    //char32_t _current_encoding = 0;
+    //int _width_encoding = 0;
 
 public:
     virtual libruntime::Error write_byte(uint8_t byte)

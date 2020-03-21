@@ -56,7 +56,7 @@ public:
         return true;
     }
 
-    virtual libruntime::Error write_byte(byte byte)
+    virtual libruntime::Error write_byte(byte byte) override
     {
         wait_write();
 

@@ -2,7 +2,7 @@
 
 using namespace libsystem;
 
-int main(int argc, char const *argv[])
+extern "C" int main(int argc, char const *argv[])
 {
     __unused(argc), __unused(argv);
 

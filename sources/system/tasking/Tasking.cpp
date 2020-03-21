@@ -22,7 +22,7 @@ void initialize()
 {
     logger_info("Initializing tasking");
 
-    _kernel_process = libruntime::make<Process>(nullptr, "Kernel");
+    _kernel_process = libruntime::make<Process>("Kernel");
 
     // Create the main kernel thread...
     tasking::Thread::create(_kernel_process, nullptr)->start();

@@ -157,3 +157,14 @@ extern "C" void __ubsan_handle_negate_overflow(UbsanOverflowData *data, unsigned
     UBSAN_LOG("Negate overflow");
     assert_not_reached();
 }
+
+struct UbsanUnreachableData
+{
+    UbsanSourceLocation location;
+};
+
+extern "C" void __ubsan_handle_builtin_unreachable(UbsanUnreachableData *data)
+{
+    UBSAN_LOG("Unreachable reached");
+    assert_not_reached();
+}

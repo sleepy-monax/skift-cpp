@@ -23,7 +23,6 @@ private:
     int _id;
     libruntime::String _name;
     Promotion _promotion = Promotion::SUPERVISOR;
-    Process *_parent;
 
     libruntime::OwnPtr<memory::AddressSpace> _address_space;
 
@@ -33,7 +32,7 @@ public:
     Promotion promotion() { return _promotion; }
     memory::AddressSpace &address_space() { return *_address_space; }
 
-    Process(Process *parent, libruntime::String name);
+    Process(libruntime::String name);
     ~Process();
 
     libruntime::ErrorOr<size_t> format(libsystem::Stream &stream, libsystem::FormatInfo &info);

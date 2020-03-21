@@ -13,7 +13,7 @@
 #include "system/System.h"
 #include "system/scheduling/Scheduling.h"
 
-x86::IdtEntry idt_entries[IDT_ENTRY_COUNT] = {0};
+x86::IdtEntry idt_entries[IDT_ENTRY_COUNT] = {};
 
 x86::IdtDescriptor idt_descriptor = {
     .size = sizeof(x86::IdtEntry) * IDT_ENTRY_COUNT,

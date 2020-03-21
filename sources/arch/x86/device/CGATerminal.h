@@ -26,24 +26,23 @@ enum CGAColor
     BRIGHT_GREY,
 };
 
-class __packed CGACell
+struct __packed CGACell
 {
-private:
-    char _codepoint;
-    CGAColor _foreground : 4;
-    CGAColor _background : 4;
-
 public:
+    char codepoint;
+    CGAColor foreground : 4;
+    CGAColor background : 4;
+    
     CGACell() {}
 
     CGACell(char codepoint, CGAColor foreground, CGAColor background)
-        : _codepoint(static_cast<char>(codepoint)),
-          _foreground(foreground),
-          _background(background) {}
+        : codepoint(codepoint),
+          foreground(foreground),
+          background(background) {}
 
     void clear()
     {
-        _codepoint = ' ';
+        codepoint = ' ';
     }
 };
 

@@ -31,14 +31,14 @@ CDEFINES=-D__BUILD_TARGET__=\""$(BUILD_TARGET)"\" \
 
 CWARNINGS= -Wall -Wextra -Werror
 
-COMMON_CXX=i686-elf-g++
-COMMON_CC=i686-elf-gcc
-COMMON_LD=i686-elf-ld
+COMMON_CXX=clang++
+COMMON_CC=clang
+COMMON_LD=ld
 COMMON_AS=nasm
-COMMON_AR=i686-elf-ar
+COMMON_AR=ar
 
-COMMON_CXXFLAGS=-std=c++17 -MD -O3 $(CWARNINGS) $(CINCLUDES) $(CDEFINES) -fsanitize=undefined -fno-rtti -fno-exceptions
-COMMON_CFLAGS  =-std=c11   -MD -O3 $(CWARNINGS) $(CINCLUDES) $(CDEFINES) -fsanitize=undefined
+COMMON_CXXFLAGS=--target=i686-pc-none-elf -march=i686 -std=c++17 -MD -O3 $(CWARNINGS) $(CINCLUDES) $(CDEFINES) -fsanitize=undefined -fno-rtti -fno-exceptions
+COMMON_CFLAGS  =--target=i686-pc-none-elf -march=i686 -std=c11   -MD -O3 $(CWARNINGS) $(CINCLUDES) $(CDEFINES) -fsanitize=undefined
 COMMON_LDFLAGS=
 COMMON_ASFLAGS=-f elf32
 COMMON_ARFLAGS=
