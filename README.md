@@ -1,3 +1,5 @@
+# This repo is archived, the new one is here https://github.com/skiftOS/skift
+
 <p align="center">
 <br>
 <br>
